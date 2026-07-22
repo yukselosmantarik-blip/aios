@@ -1,6 +1,6 @@
 # AIOS CRM Data Model
 
-> **Status:** Proposal — not yet migrated  
+> **Status:** Migration-ready — SQL in `supabase/migrations/20260721143000_create_customers.sql` (not yet applied)  
 > **Scope:** First CRM entity (`customers`)  
 > **Last updated:** July 2026
 
@@ -186,25 +186,24 @@ Signals recency of activity. Should be maintained by a database trigger on `UPDA
 
 ---
 
-## Constraints and Indexes (for migration phase)
+## Constraints and Indexes
 
-Not implemented yet. Documented here for the migration that follows approval.
+Defined in `supabase/migrations/20260721143000_create_customers.sql`. Not yet applied to the remote database.
 
 | Constraint / Index | Purpose |
 |--------------------|---------|
 | `PRIMARY KEY (id)` | Row identity |
 | `FOREIGN KEY (owner_id) REFERENCES auth.users(id)` | Ownership integrity |
-| `CHECK (status IN ('lead', 'contacted', 'meeting', 'proposal', 'customer', 'inactive'))` | Valid pipeline stages |
-| `CHECK (char_length(company_name) > 0)` | Non-empty company name |
-| `CHECK (char_length(email) > 0)` | Non-empty email |
-| `INDEX (owner_id)` | Fast per-user list queries |
-| `INDEX (owner_id, status)` | Filtered dashboard counts and pipeline views |
-| `INDEX (owner_id, source)` | Acquisition channel reporting |
-| `INDEX (owner_id, created_at DESC)` | Default list sort |
+| `CHECK (status IN (...))` | Valid pipeline stages |
+| `CHECK (char_length(trim(...)) > 0)` | Non-empty company name, contact names, email |
+| `INDEX customers_owner_id_idx` | Fast per-user list queries |
+| `INDEX customers_owner_id_status_idx` | Filtered dashboard counts and pipeline views |
+| `INDEX customers_owner_id_source_idx` | Acquisition channel reporting |
+| `INDEX customers_owner_id_created_at_desc_idx` | Default list sort |
 
-### Row Level Security (planned)
+### Row Level Security
 
-When migrations ship, RLS policies should mirror the intended `projects` model:
+Implemented in the migration (`customers_*_own` policies):
 
 | Operation | Policy |
 |-----------|--------|
@@ -344,11 +343,12 @@ Resolve before migration:
 
 ## Approval Checklist
 
-Before creating the Supabase migration:
+Before applying the migration to Supabase:
 
-- [ ] Schema reviewed and field list confirmed
-- [ ] Status values aligned with UI copy (German labels)
-- [ ] RLS policy approach agreed
-- [ ] Extension path accepted for v1 simplicity
+- [x] Schema reviewed and field list confirmed
+- [x] Status values aligned with UI copy (German labels)
+- [x] RLS policy approach agreed
+- [x] Extension path accepted for v1 simplicity
+- [ ] Migration applied and verified on Supabase
 - [ ] Open questions resolved
 - [ ] ADR added to DECISIONS.md

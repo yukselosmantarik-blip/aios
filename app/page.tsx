@@ -2,8 +2,6 @@ import Sidebar from "@/components/Sidebar";
 import QuickActions from "@/components/QuickActions";
 import Header from "@/components/Header";
 import StatsCard from "@/components/StatsCard";
-import ProjectList from "@/components/ProjectList";
-import CreateProjectForm from "@/components/CreateProjectForm";
 import { getProjects } from "@/lib/projects";
 
 export const dynamic = "force-dynamic";
@@ -24,13 +22,8 @@ export default async function Home() {
           <StatsCard title="KI-Agenten" value={0} />
         </div>
 
-        <CreateProjectForm />
-
         <div className="mt-8">
           <QuickActions />
-        </div>
-        <div className="mt-8">
-          <ProjectList projects={projects} />
         </div>
       </section>
     </main>
