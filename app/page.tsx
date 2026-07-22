@@ -11,6 +11,8 @@ import {
 import ProjectStatusOverview from "@/components/dashboard/ProjectStatusOverview";
 import RecentCustomersPanel from "@/components/dashboard/RecentCustomersPanel";
 import RecentProjectsPanel from "@/components/dashboard/RecentProjectsPanel";
+import TaskInsightsPanel from "@/components/dashboard/TaskInsightsPanel";
+import UpcomingTasksPanel from "@/components/dashboard/UpcomingTasksPanel";
 import { getDashboardData } from "@/lib/dashboard";
 
 export const dynamic = "force-dynamic";
@@ -53,10 +55,12 @@ export default async function Home() {
             <div className="space-y-6 lg:col-span-2">
               <RecentCustomersPanel customers={dashboard.recentCustomers} />
               <RecentProjectsPanel projects={dashboard.recentProjects} />
+              <UpcomingTasksPanel tasks={dashboard.upcomingTasks} />
             </div>
 
-            <div className="lg:col-span-1">
+            <div className="lg:col-span-1 space-y-6">
               <QuickActions />
+              <TaskInsightsPanel insights={dashboard.taskInsights} />
             </div>
           </div>
 
