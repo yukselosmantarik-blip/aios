@@ -20,6 +20,9 @@ export default function Sidebar() {
         <Link href="/customers" className={linkClassName}>
           Kunden
         </Link>
+        <Link href="/tasks" className={linkClassName}>
+          Aufgaben
+        </Link>
         <span className="block rounded-md px-3 py-2 text-sm text-zinc-500">
           KI-Agenten
         </span>
