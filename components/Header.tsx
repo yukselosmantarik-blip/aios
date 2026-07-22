@@ -7,28 +7,26 @@ export default async function Header() {
     data: { user },
   } = await supabase.auth.getUser();
 
-  const displayName = user?.email?.split("@")[0] ?? "Tarik";
+  const displayName = user?.email?.split("@")[0] ?? "Nutzer";
 
   return (
-    <header className="flex items-center justify-between mb-8">
+    <header className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
       <div>
-        <h1 className="text-4xl font-bold">Willkommen bei AIOS 👋</h1>
-        <p className="text-gray-600 mt-2">
-          Dein AI Operating System für moderne Unternehmen.
+        <h1 className="text-2xl font-semibold tracking-tight text-zinc-50">
+          Dashboard
+        </h1>
+        <p className="mt-1 text-sm text-zinc-400">
+          Willkommen zurück, {displayName}. Hier ist dein Überblick.
         </p>
       </div>
 
-      <div className="flex items-center gap-4">
-        <input
-          type="text"
-          placeholder="🔍 Suche..."
-          className="rounded-lg border px-4 py-2"
-        />
-
-        <button className="text-2xl">🔔</button>
-
-        <div className="font-semibold">{displayName}</div>
-        <LogoutButton />
+      <div className="flex items-center gap-3 self-start sm:self-auto">
+        <span className="hidden rounded-md border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-sm text-zinc-400 sm:inline">
+          {user?.email}
+        </span>
+        <div className="[&_button]:text-zinc-400 [&_button]:hover:text-zinc-200">
+          <LogoutButton />
+        </div>
       </div>
     </header>
   );

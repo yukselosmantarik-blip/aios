@@ -21,43 +21,39 @@ export {
   PROJECT_STATUSES,
 } from "@/lib/projects.types";
 
+type ProjectRow = Project & {
+  customers: { company_name: string } | null;
+};
+
+function mapProjectRow(row: ProjectRow): ProjectWithCustomer {
+  const { customers, ...project } = row;
+
+  return {
+    ...project,
+    customer_company_name: customers?.company_name ?? "—",
+  };
+}
+
 export async function getProjects(): Promise<ProjectWithCustomer[]> {
   const supabase = await createClient();
 
-  const { data: projects, error } = await supabase
+  const { data, error } = await supabase
     .from("projects")
-    .select("*")
+    .select(
+      `
+      *,
+      customers!projects_customer_id_fkey (
+        company_name
+      )
+    `,
+    )
     .order("created_at", { ascending: false });
 
   if (error) {
     throw new Error(error.message);
   }
 
-  if (!projects?.length) {
-    return [];
-  }
-
-  const customerIds = [
-    ...new Set(projects.map((project) => project.customer_id)),
-  ];
-
-  const { data: customers, error: customersError } = await supabase
-    .from("customers")
-    .select("id, company_name")
-    .in("id", customerIds);
-
-  if (customersError) {
-    throw new Error(customersError.message);
-  }
-
-  const customerNames = new Map(
-    (customers ?? []).map((customer) => [customer.id, customer.company_name]),
-  );
-
-  return projects.map((project) => ({
-    ...(project as Project),
-    customer_company_name: customerNames.get(project.customer_id) ?? "—",
-  }));
+  return ((data ?? []) as ProjectRow[]).map(mapProjectRow);
 }
 
 export async function createProject(

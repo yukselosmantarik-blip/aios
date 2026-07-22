@@ -2,28 +2,67 @@ import Sidebar from "@/components/Sidebar";
 import QuickActions from "@/components/QuickActions";
 import Header from "@/components/Header";
 import StatsCard from "@/components/StatsCard";
-import { getProjects } from "@/lib/projects";
+import {
+  AgentsIcon,
+  CustomersIcon,
+  ProjectsIcon,
+  TasksIcon,
+} from "@/components/dashboard/DashboardIcons";
+import ProjectStatusOverview from "@/components/dashboard/ProjectStatusOverview";
+import RecentCustomersPanel from "@/components/dashboard/RecentCustomersPanel";
+import RecentProjectsPanel from "@/components/dashboard/RecentProjectsPanel";
+import { getDashboardData } from "@/lib/dashboard";
 
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
-  const projects = await getProjects();
+  const dashboard = await getDashboardData();
 
   return (
-    <main className="min-h-screen bg-gray-100 flex">
+    <main className="flex min-h-screen bg-[#09090B]">
       <Sidebar />
 
-      <section className="flex-1 p-10">
-        <Header />
+      <section className="flex-1 overflow-auto">
+        <div className="mx-auto max-w-[1200px] px-4 py-8 md:px-6 lg:px-12 lg:py-10">
+          <Header />
 
-        <div className="grid grid-cols-3 gap-6">
-          <StatsCard title="Projekte" value={projects.length} />
-          <StatsCard title="Kunden" value={0} />
-          <StatsCard title="KI-Agenten" value={0} />
-        </div>
+          <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+            <StatsCard
+              title="Kunden"
+              value={dashboard.stats.customers}
+              icon={<CustomersIcon className="h-5 w-5" />}
+            />
+            <StatsCard
+              title="Projekte"
+              value={dashboard.stats.projects}
+              icon={<ProjectsIcon className="h-5 w-5" />}
+            />
+            <StatsCard
+              title="KI-Agenten"
+              value={dashboard.stats.aiAgents}
+              icon={<AgentsIcon className="h-5 w-5" />}
+            />
+            <StatsCard
+              title="Aufgaben"
+              value={dashboard.stats.tasks}
+              icon={<TasksIcon className="h-5 w-5" />}
+            />
+          </div>
 
-        <div className="mt-8">
-          <QuickActions />
+          <div className="mt-8 grid gap-6 lg:grid-cols-3">
+            <div className="space-y-6 lg:col-span-2">
+              <RecentCustomersPanel customers={dashboard.recentCustomers} />
+              <RecentProjectsPanel projects={dashboard.recentProjects} />
+            </div>
+
+            <div className="lg:col-span-1">
+              <QuickActions />
+            </div>
+          </div>
+
+          <div className="mt-8">
+            <ProjectStatusOverview counts={dashboard.projectStatusCounts} />
+          </div>
         </div>
       </section>
     </main>
