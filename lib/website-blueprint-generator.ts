@@ -10,6 +10,10 @@ import {
   buildPageContentDna,
   type ContentDnaContext,
 } from "@/lib/website-blueprint-content-dna";
+import {
+  buildBlueprintIntelligenceChecklistItems,
+  buildBlueprintIntelligenceMarkdown,
+} from "@/lib/website-blueprint-intelligence";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -1271,26 +1275,36 @@ export function generateWebsiteBlueprintContent(
     recommendedSitemap,
   );
   const technicalRecommendation = `${designSystemDna}\n\n---\n\n${technicalStack}`;
-  const implementationChecklist = buildDevelopmentNotes(
+  const developmentNotes = buildDevelopmentNotes(
     brief,
     recommendedSitemap,
   );
+  const implementationChecklist = [
+    ...buildBlueprintIntelligenceChecklistItems(brief),
+    ...developmentNotes,
+  ];
 
-  const masterPrompt = buildMasterPrompt(brief, {
-    businessDna,
-    executiveSummary,
-    visualDna,
-    designSystemDna,
-    uxDna,
-    contentDna: buildGlobalContentDnaMarkdown(contentDnaContext),
-    motionDna,
-    navigation,
-    pageSpecs: recommendedPageSections,
-    features,
-    seo: seoBasics,
-    technical: technicalStack,
-    developmentNotes: implementationChecklist,
-  });
+  const masterPrompt = [
+    buildBlueprintIntelligenceMarkdown(brief),
+    "",
+    "---",
+    "",
+    buildMasterPrompt(brief, {
+      businessDna,
+      executiveSummary,
+      visualDna,
+      designSystemDna,
+      uxDna,
+      contentDna: buildGlobalContentDnaMarkdown(contentDnaContext),
+      motionDna,
+      navigation,
+      pageSpecs: recommendedPageSections,
+      features,
+      seo: seoBasics,
+      technical: technicalStack,
+      developmentNotes,
+    }),
+  ].join("\n");
 
   return enforceBlueprintLimits({
     projectSummary: `${businessDna}\n\n${executiveSummary}`,
