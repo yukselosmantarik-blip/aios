@@ -1,6 +1,6 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 
-export const GENERATOR_VERSION = "8.2.3";
+export const GENERATOR_VERSION = "8.3.0";
 
 export type ProjectGeneratorInput = {
   project: CompiledWebsiteProject;
@@ -33,7 +33,7 @@ export type VirtualFileMetadata = {
   componentName?: string;
   assetRole?: string;
   isPlaceholder?: boolean;
-  implementationStatus: "metadata-only" | "placeholder" | "descriptor";
+  implementationStatus: "metadata-only" | "placeholder" | "descriptor" | "generated";
 };
 
 export type VirtualFile = {
@@ -147,6 +147,30 @@ export type ReactPageSampleReport = {
   deadInternalLinkCount: number;
   determinismResult: boolean;
   verificationPassed: boolean;
+  failedChecks: GeneratorVerificationCheck[];
+};
+
+export type VisualComponentSampleReport = {
+  changedSourceFiles: number;
+  generatedVisualComponentCount: number;
+  generatedPrimitiveCount: number;
+  generatedClientComponentCount: number;
+  generatedServerComponentCount: number;
+  componentVariantCount: number;
+  placeholderCountByCategory: Record<string, number>;
+  unresolvedImportCount: number;
+  duplicateExportCount: number;
+  unknownTokenReferenceCount: number;
+  fakeLinkCount: number;
+  anyCount: number;
+  unsafeHtmlCount: number;
+  deterministicOutputResult: boolean;
+  responsiveVerificationResult: boolean;
+  accessibilityVerificationResult: boolean;
+  lintResult: boolean;
+  buildResult: boolean;
+  visualComponentVerificationPassed: boolean;
+  fullProjectGeneratorVerificationPassed: boolean;
   failedChecks: GeneratorVerificationCheck[];
 };
 

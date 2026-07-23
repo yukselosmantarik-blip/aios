@@ -100,11 +100,20 @@ export type TailwindVariantMap = {
   placeholder: string;
   textMutedSmall: string;
   header: string;
+  headerStatic: string;
+  headerTransparent: string;
   footer: string;
   mobileSticky: string;
   input: string;
   skipLink: string;
   bodyRoot: string;
+  motionSafe: string;
+  cardElevated: string;
+  cardInteractive: string;
+  buttonText: string;
+  buttonDestructive: string;
+  faqDetails: string;
+  reveal: string;
 };
 
 function tokenValue(
@@ -395,6 +404,10 @@ export function buildTailwindVariantMap(): TailwindVariantMap {
     textMutedSmall: "text-[var(--font-size-sm)] text-[var(--color-text-muted)]",
     header:
       "sticky top-0 z-[var(--z-index-header)] border-b border-[var(--color-border)] bg-[var(--color-background)]",
+    headerStatic:
+      "relative z-[var(--z-index-header)] border-b border-[var(--color-border)] bg-[var(--color-background)]",
+    headerTransparent:
+      "fixed inset-x-0 top-0 z-[var(--z-index-header)] border-b border-transparent bg-transparent motion-safe:transition-colors motion-reduce:transition-none",
     footer: "border-t border-[var(--color-border)] bg-[var(--color-surface)]",
     mobileSticky:
       "fixed inset-x-0 bottom-0 z-[var(--z-index-sticky)] border-t border-[var(--color-border)] bg-[var(--color-background)] p-[var(--spacing-md)] md:hidden",
@@ -403,6 +416,16 @@ export function buildTailwindVariantMap(): TailwindVariantMap {
     skipLink:
       "sr-only focus:not-sr-only focus:absolute focus:left-[var(--spacing-md)] focus:top-[var(--spacing-md)] focus:z-[var(--z-index-modal)] focus:rounded-[var(--radius-md)] focus:bg-[var(--color-background)] focus:px-[var(--spacing-md)] focus:py-[var(--spacing-sm)]",
     bodyRoot: "bg-[var(--color-background)] text-[var(--color-text-primary)] font-[family-name:var(--font-body)]",
+    motionSafe:
+      "motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none",
+    cardElevated: `rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-[var(--spacing-md)] md:p-[var(--spacing-lg)] shadow-[var(--shadow-md)] ${focusRing}`,
+    cardInteractive: `rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-[var(--spacing-md)] md:p-[var(--spacing-lg)] shadow-[var(--shadow-sm)] motion-safe:transition-all motion-safe:duration-200 motion-reduce:transition-none hover:shadow-[var(--shadow-md)] focus-within:shadow-[var(--shadow-md)] ${focusRing}`,
+    buttonText: `inline-flex items-center justify-center px-[var(--spacing-sm)] py-[var(--spacing-xs)] text-[var(--font-size-sm)] font-[var(--font-weight-medium)] ${focusRing} text-[var(--color-primary)] bg-transparent rounded-[var(--radius-md)]`,
+    buttonDestructive: `inline-flex items-center justify-center px-[var(--spacing-md)] py-[var(--spacing-sm)] text-[var(--font-size-sm)] font-[var(--font-weight-medium)] ${focusRing} bg-[var(--color-error)] text-[var(--color-background)] rounded-[var(--radius-md)]`,
+    faqDetails:
+      "group rounded-[var(--radius-lg)] border border-[var(--color-border)] bg-[var(--color-surface)] p-[var(--spacing-md)] open:shadow-[var(--shadow-sm)]",
+    reveal:
+      "motion-safe:animate-none motion-safe:opacity-100 motion-reduce:opacity-100",
   };
 }
 

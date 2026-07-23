@@ -1,11 +1,11 @@
 import { buildAllVirtualFiles } from "@/lib/project-generator/files";
 import { buildStyleEngineFiles } from "@/lib/project-generator/style-files";
-import { buildReactComponentRegistry } from "@/lib/project-generator/react-component-registry";
+import { buildVisualComponentRegistry } from "@/lib/project-generator/visual-component-registry";
 import {
-  buildReactComponentFiles,
+  buildVisualComponentFiles,
   countClientComponents,
-  countReactComponentFiles,
-} from "@/lib/project-generator/react-components";
+  countVisualComponentFiles,
+} from "@/lib/project-generator/visual-components";
 import {
   buildReactPageFiles,
   countPageConfigFiles,
@@ -42,8 +42,8 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
     includeJsonPageContent: false,
   });
   const styleFiles = buildStyleEngineFiles(project);
-  const componentFiles = buildReactComponentFiles(project);
-  const registryFile = buildReactComponentRegistry(project);
+  const componentFiles = buildVisualComponentFiles(project);
+  const registryFile = buildVisualComponentRegistry(project);
   const reactFiles = buildReactPageFiles(project);
   const sortedFiles = sortVirtualFiles([
     ...baseFiles,
@@ -85,7 +85,7 @@ export function summarizeReactGeneration(generated: GeneratedNextJsProject): {
     generatedTsxFileCount: countTsxFiles(generated.files),
     generatedPageCount: countReactPages(generated.files),
     generatedPageConfigCount: countPageConfigFiles(generated.files),
-    generatedComponentCount: countReactComponentFiles(generated.files),
+    generatedComponentCount: countVisualComponentFiles(generated.files),
     generatedClientComponentCount: countClientComponents(generated.files),
   };
 }
