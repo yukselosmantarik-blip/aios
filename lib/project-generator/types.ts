@@ -1,6 +1,7 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
+import type { ExportableWebsiteProject, ExportManifest } from "@/lib/project-export/types";
 
-export const GENERATOR_VERSION = "8.4.0";
+export const GENERATOR_VERSION = "8.5.0";
 
 export type ProjectGeneratorInput = {
   project: CompiledWebsiteProject;
@@ -87,7 +88,10 @@ export type GeneratedNextJsProject = {
 
 export type ProjectGeneratorResult = {
   generated: GeneratedNextJsProject;
+  exportPackage: ExportableWebsiteProject;
 };
+
+export type { ExportableWebsiteProject as ExportedProjectPackage, ExportManifest };
 
 export type SerializedProjectTree = {
   generatorVersion: string;

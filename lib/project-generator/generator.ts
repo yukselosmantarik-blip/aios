@@ -1,3 +1,4 @@
+import { buildExportableWebsiteProject } from "@/lib/project-export/export-package";
 import { buildAllVirtualFiles } from "@/lib/project-generator/files";
 import { buildAssetEngineFiles } from "@/lib/project-generator/asset-files";
 import { buildStyleEngineFiles } from "@/lib/project-generator/style-files";
@@ -74,7 +75,11 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
     requiredFolders: [...REQUIRED_FOLDERS],
   };
 
-  return { generated };
+  return { generated, exportPackage: buildExportableWebsiteProject(generated) };
+}
+
+export function generateProjectExport(input: ProjectGeneratorInput): ProjectGeneratorResult {
+  return generateNextJsProject(input);
 }
 
 export function summarizeReactGeneration(generated: GeneratedNextJsProject): {
