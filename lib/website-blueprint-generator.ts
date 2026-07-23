@@ -4,6 +4,12 @@ import { WEBSITE_BLUEPRINT_LIMITS } from "@/lib/website-blueprint-validator";
 import { buildPageDnaSpecification, createPageDnaContext } from "@/lib/website-blueprint-page-dna";
 import { buildDesignSystemDna } from "@/lib/website-blueprint-design-system-dna";
 import { buildPageComponentDna } from "@/lib/website-blueprint-component-dna";
+import {
+  buildGlobalContentDnaItems,
+  buildGlobalContentDnaMarkdown,
+  buildPageContentDna,
+  type ContentDnaContext,
+} from "@/lib/website-blueprint-content-dna";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -925,10 +931,12 @@ function buildDetailedPageSpecification(
     prefersMotion: prefersMotion(brief),
   };
 
+  const pageCtx = createPageDnaContext(input);
   const pageDna = buildPageDnaSpecification(input);
-  const componentDna = buildPageComponentDna(createPageDnaContext(input));
+  const componentDna = buildPageComponentDna(pageCtx);
+  const pageContentDna = buildPageContentDna(pageCtx);
 
-  return [...pageDna, "", ...componentDna];
+  return [...pageDna, "", ...componentDna, "", ...pageContentDna];
 }
 
 function buildPageSpecifications(
@@ -951,11 +959,36 @@ function buildPageSpecifications(
   return specs;
 }
 
+function buildContentDnaContext(
+  brief: WebsiteBrief,
+  profile: BusinessProfile,
+  sitemap: string[],
+): ContentDnaContext {
+  return {
+    brief,
+    profile,
+    sitemap,
+    services: briefServices(brief),
+    primaryCta: primaryCta(brief, profile),
+    secondaryCta: secondaryCta(brief, profile),
+    usp: briefUsp(brief),
+    style: briefStyle(brief),
+    tier: detectStyleTier(brief),
+    requestedFeatures: parseList(
+      brief.required_features?.replace(/\r/g, "") ?? null,
+    ),
+  };
+}
+
 function buildFeatures(
   brief: WebsiteBrief,
   profile: BusinessProfile,
+  sitemap: string[],
 ): string[] {
   const requested = parseList(brief.required_features?.replace(/\r/g, "") ?? null);
+  const contentDna = buildGlobalContentDnaItems(
+    buildContentDnaContext(brief, profile, sitemap),
+  );
 
   const conversion = [
     "# Conversion Strategy",
@@ -969,6 +1002,7 @@ function buildFeatures(
   ];
 
   return [
+    ...contentDna,
     ...buildMotionDna(brief),
     ...conversion,
     ...requested.map((feature) => `Required feature from brief: ${feature}`),
@@ -1096,6 +1130,7 @@ function buildMasterPrompt(
     visualDna: string;
     designSystemDna: string;
     uxDna: string;
+    contentDna: string;
     motionDna: string[];
     navigation: string[];
     pageSpecs: Record<string, string[]>;
@@ -1132,6 +1167,8 @@ function buildMasterPrompt(
     "",
     sections.uxDna,
     "",
+    sections.contentDna,
+    "",
     "# Motion DNA",
     "",
     ...sections.motionDna.map((item) => `- ${item}`),
@@ -1144,7 +1181,7 @@ function buildMasterPrompt(
     "",
     pageSpecBlocks,
     "",
-    "# Conversion & Features",
+    "# Conversion, Motion & Features",
     "",
     ...sections.features.map((item) => `- ${item}`),
     "",
@@ -1212,7 +1249,12 @@ export function generateWebsiteBlueprintContent(
     recommendedSitemap,
     profile,
   );
-  const features = buildFeatures(brief, profile);
+  const contentDnaContext = buildContentDnaContext(
+    brief,
+    profile,
+    recommendedSitemap,
+  );
+  const features = buildFeatures(brief, profile, recommendedSitemap);
   const seoBasics = buildSeoStrategy(brief, recommendedSitemap);
   const designSystemDna = buildDesignSystemDna({
     brief,
@@ -1240,6 +1282,7 @@ export function generateWebsiteBlueprintContent(
     visualDna,
     designSystemDna,
     uxDna,
+    contentDna: buildGlobalContentDnaMarkdown(contentDnaContext),
     motionDna,
     navigation,
     pageSpecs: recommendedPageSections,
