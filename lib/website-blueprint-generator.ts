@@ -19,6 +19,13 @@ import {
   buildPagePatternLibrary,
   createPatternLibraryContext,
 } from "@/lib/website-blueprint-pattern-library";
+import {
+  buildComponentHierarchyRefs,
+  buildPageDnaHierarchyIntegration,
+  buildPageVisualHierarchyBlock,
+  buildPatternLibraryHierarchyIntegration,
+  buildVisualHierarchyEngineOverview,
+} from "@/lib/website-blueprint-visual-hierarchy";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -942,18 +949,30 @@ function buildDetailedPageSpecification(
 
   const pageCtx = createPageDnaContext(input);
   const pageDna = buildPageDnaSpecification(input);
+  const pageDnaHierarchy = buildPageDnaHierarchyIntegration(pageCtx);
   const componentDna = buildPageComponentDna(pageCtx);
+  const componentHierarchyRefs = buildComponentHierarchyRefs(pageCtx);
   const pageContentDna = buildPageContentDna(pageCtx);
   const pagePatternLibrary = buildPagePatternLibrary(pageCtx);
+  const patternHierarchy = buildPatternLibraryHierarchyIntegration(pageCtx);
+  const pageVisualHierarchy = buildPageVisualHierarchyBlock(pageCtx);
 
   return [
     ...pageDna,
     "",
+    ...pageDnaHierarchy,
+    "",
     ...componentDna,
+    "",
+    ...componentHierarchyRefs,
     "",
     ...pageContentDna,
     "",
     ...pagePatternLibrary,
+    "",
+    ...patternHierarchy,
+    "",
+    ...pageVisualHierarchy,
   ];
 }
 
@@ -1150,6 +1169,7 @@ function buildMasterPrompt(
     uxDna: string;
     contentDna: string;
     patternLibrary: string;
+    visualHierarchy: string;
     motionDna: string[];
     navigation: string[];
     pageSpecs: Record<string, string[]>;
@@ -1189,6 +1209,8 @@ function buildMasterPrompt(
     sections.contentDna,
     "",
     sections.patternLibrary,
+    "",
+    sections.visualHierarchy,
     "",
     "# Motion DNA",
     "",
@@ -1323,6 +1345,7 @@ export function generateWebsiteBlueprintContent(
       uxDna,
       contentDna: buildGlobalContentDnaMarkdown(contentDnaContext),
       patternLibrary: buildGlobalPatternLibraryMarkdown(patternLibraryContext),
+      visualHierarchy: buildVisualHierarchyEngineOverview().join("\n"),
       motionDna,
       navigation,
       pageSpecs: recommendedPageSections,
