@@ -6,6 +6,7 @@ import type {
 } from "@/lib/project-generator/types";
 
 export const EXPORT_VERSION = "8.5.0";
+export const ZIP_EXPORT_VERSION = "8.6.0";
 
 export const EXPORT_MANIFEST_PATH = "export-manifest.json";
 export const EXPORT_PLACEHOLDER_REPORT_PATH = "export-placeholder-report.json";
@@ -198,6 +199,36 @@ export type ExportableWebsiteProject = {
   componentDescriptors: ComponentDescriptor[];
 };
 
+export type ZipExportMetadata = {
+  archiveSize: number;
+  fileCount: number;
+  directoryCount: number;
+  checksum: string;
+  generationTime: string;
+};
+
+export type ZipExportResult = {
+  exportVersion: string;
+  archive: Buffer;
+  metadata: ZipExportMetadata;
+  suggestedFilename: string;
+  mimeType: "application/zip";
+  verified: boolean;
+};
+
+export type ZipExportVerificationCheck = {
+  name: string;
+  passed: boolean;
+  detail: string;
+};
+
+export type ZipExportVerificationReport = {
+  passed: boolean;
+  metadata: ZipExportMetadata;
+  checks: ZipExportVerificationCheck[];
+  deterministicChecksumMatch: boolean;
+};
+
 export type ExportSampleReport = {
   changedSourceFiles: number;
   exportFileCount: number;
@@ -221,5 +252,11 @@ export type ExportSampleReport = {
   buildResult: boolean;
   exportVerificationResult: boolean;
   fullProjectGeneratorVerificationResult: boolean;
+  zipArchiveSize: number;
+  zipFileCount: number;
+  zipDirectoryCount: number;
+  zipChecksum: string;
+  zipDeterministicResult: boolean;
+  zipVerificationResult: boolean;
   failedChecks: Array<{ name: string; passed: boolean; detail: string }>;
 };

@@ -10,6 +10,10 @@ export function computeContentChecksum(content: string): string {
   return createHash(CHECKSUM_ALGORITHM).update(content).digest("hex");
 }
 
+export function computeBufferChecksum(buffer: Buffer): string {
+  return createHash(CHECKSUM_ALGORITHM).update(buffer).digest("hex");
+}
+
 export function computeTreeChecksum(files: NormalizedExportFile[]): string {
   const payload = files
     .filter((file) => file.path !== EXPORT_MANIFEST_PATH)

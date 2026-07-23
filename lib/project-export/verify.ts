@@ -8,6 +8,8 @@ import {
 } from "@/lib/project-export/export-package";
 import { REQUIRED_ROOT_FILES } from "@/lib/project-export/normalize";
 import type { ExportableWebsiteProject, ExportSampleReport } from "@/lib/project-export/types";
+import { createZipExport } from "@/lib/project-export/zip-export";
+import { verifyDeterministicZipExport } from "@/lib/project-export/zip-verify";
 import { verifyDeterministicProjectGeneration } from "@/lib/project-generator/verify";
 import { compileSmashburgerSampleProject } from "@/lib/website-compiler/verify";
 
@@ -177,6 +179,14 @@ export function verifyDeterministicExport(input: {
 export function buildExportSampleReport(input: {
   project: ReturnType<typeof compileSmashburgerSampleProject>["project"];
   generatedAt?: string;
+  zipVerification?: {
+    archiveSize: number;
+    fileCount: number;
+    directoryCount: number;
+    checksum: string;
+    deterministicChecksumMatch: boolean;
+    passed: boolean;
+  };
 }): ExportSampleReport {
   const generatedAt = input.generatedAt ?? "1970-01-01T00:00:00.000Z";
   const first = buildExportableWebsiteProject(
@@ -219,8 +229,51 @@ export function buildExportSampleReport(input: {
     buildResult: runBuild(),
     exportVerificationResult: exportVerification.passed,
     fullProjectGeneratorVerificationResult: deterministicVerification.passed,
+    zipArchiveSize: input.zipVerification?.archiveSize ?? 0,
+    zipFileCount: input.zipVerification?.fileCount ?? 0,
+    zipDirectoryCount: input.zipVerification?.directoryCount ?? 0,
+    zipChecksum: input.zipVerification?.checksum ?? "",
+    zipDeterministicResult: input.zipVerification?.deterministicChecksumMatch ?? false,
+    zipVerificationResult: input.zipVerification?.passed ?? false,
     failedChecks: exportVerification.checks.filter((check) => !check.passed),
   };
+}
+
+export async function buildExportSampleReportWithZip(input: {
+  project: ReturnType<typeof compileSmashburgerSampleProject>["project"];
+  generatedAt?: string;
+}): Promise<ExportSampleReport> {
+  const generatedAt = input.generatedAt ?? "1970-01-01T00:00:00.000Z";
+  const { generated } = generateNextJsProject({ project: input.project, generatedAt });
+  const exportPackage = buildExportableWebsiteProject(generated);
+
+  const zipVerification = await verifyDeterministicZipExport(
+    exportPackage,
+    async (packageToExport, generationTime) => {
+      const result = await createZipExport(packageToExport, {
+        generationTime,
+        skipVerification: true,
+      });
+
+      return {
+        archive: result.archive,
+        metadata: result.metadata,
+      };
+    },
+  );
+
+  return buildExportSampleReport({
+    project: input.project,
+    generatedAt,
+    zipVerification: {
+      archiveSize: zipVerification.metadata.archiveSize,
+      fileCount: zipVerification.metadata.fileCount,
+      directoryCount: zipVerification.metadata.directoryCount,
+      checksum: zipVerification.metadata.checksum,
+      deterministicChecksumMatch: zipVerification.deterministicChecksumMatch,
+      passed: zipVerification.passed,
+    },
+  });
 }
 
 export function generateSmashburgerExportSample(): {
