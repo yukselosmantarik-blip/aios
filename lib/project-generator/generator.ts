@@ -1,4 +1,17 @@
 import { buildAllVirtualFiles } from "@/lib/project-generator/files";
+import { buildStyleEngineFiles } from "@/lib/project-generator/style-files";
+import { buildReactComponentRegistry } from "@/lib/project-generator/react-component-registry";
+import {
+  buildReactComponentFiles,
+  countClientComponents,
+  countReactComponentFiles,
+} from "@/lib/project-generator/react-components";
+import {
+  buildReactPageFiles,
+  countPageConfigFiles,
+  countReactPages,
+  countTsxFiles,
+} from "@/lib/project-generator/react-pages";
 import {
   assertUniqueFilePaths,
   collectDirectoriesFromFiles,
@@ -24,8 +37,21 @@ const REQUIRED_FOLDERS = [
 export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGeneratorResult {
   const { project } = input;
   const generatedAt = input.generatedAt ?? project.metadata.generatedAt;
-  const { files, routes, componentDescriptors } = buildAllVirtualFiles(project);
-  const sortedFiles = sortVirtualFiles(files);
+  const { files: baseFiles, routes, componentDescriptors } = buildAllVirtualFiles(project, {
+    includeAppShells: false,
+    includeJsonPageContent: false,
+  });
+  const styleFiles = buildStyleEngineFiles(project);
+  const componentFiles = buildReactComponentFiles(project);
+  const registryFile = buildReactComponentRegistry(project);
+  const reactFiles = buildReactPageFiles(project);
+  const sortedFiles = sortVirtualFiles([
+    ...baseFiles,
+    ...styleFiles,
+    ...componentFiles,
+    registryFile,
+    ...reactFiles,
+  ]);
 
   assertUniqueFilePaths(sortedFiles);
 
@@ -46,4 +72,20 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
   };
 
   return { generated };
+}
+
+export function summarizeReactGeneration(generated: GeneratedNextJsProject): {
+  generatedTsxFileCount: number;
+  generatedPageCount: number;
+  generatedPageConfigCount: number;
+  generatedComponentCount: number;
+  generatedClientComponentCount: number;
+} {
+  return {
+    generatedTsxFileCount: countTsxFiles(generated.files),
+    generatedPageCount: countReactPages(generated.files),
+    generatedPageConfigCount: countPageConfigFiles(generated.files),
+    generatedComponentCount: countReactComponentFiles(generated.files),
+    generatedClientComponentCount: countClientComponents(generated.files),
+  };
 }

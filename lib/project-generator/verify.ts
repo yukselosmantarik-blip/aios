@@ -104,13 +104,13 @@ export function verifyGeneratedNextJsProject(
   });
 
   checks.push({
-    name: "No JSX component implementations generated",
+    name: "Component descriptors remain metadata-only",
     passed: !generated.files.some(
       (file) =>
         file.kind === "component-descriptor" &&
         /return\s*\(|<[A-Z][A-Za-z0-9]*/.test(file.content),
     ),
-    detail: "Descriptor sprint must remain JSX-free",
+    detail: "Descriptor files must remain JSX-free",
   });
 
   checks.push({

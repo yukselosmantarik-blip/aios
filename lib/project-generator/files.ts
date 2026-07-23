@@ -354,7 +354,10 @@ export function buildAppShellFiles(project: CompiledWebsiteProject): VirtualFile
   return files;
 }
 
-export function buildSupportFiles(project: CompiledWebsiteProject): VirtualFile[] {
+export function buildSupportFiles(
+  project: CompiledWebsiteProject,
+  options?: { includeJsonPageContent?: boolean },
+): VirtualFile[] {
   const siteConfig = {
     metadata: project.metadata,
     business: project.business,
@@ -371,17 +374,6 @@ export function buildSupportFiles(project: CompiledWebsiteProject): VirtualFile[
     designTokens: project.designTokens,
     source: "compiled-website-project",
   };
-
-  const globalsCss = [
-    "/* Generated design token placeholders */",
-    ":root {",
-    `  --color-primary: ${project.theme.primaryColor};`,
-    `  --color-secondary: ${project.theme.secondaryColor};`,
-    "}",
-    "",
-    "@import 'tailwindcss';",
-    "",
-  ].join("\n");
 
   const siteTypes = metadataShellExport(
     "siteTypesMetadata",
@@ -412,34 +404,36 @@ export function buildSupportFiles(project: CompiledWebsiteProject): VirtualFile[
     "Shared component type metadata",
   );
 
-  const contentFiles = project.pages.map((page) => {
-    const route = project.routes.find((entry) => entry.id === page.routeId);
-    const slug = route ? routePathToAppSegment(route.routePath) || "home" : page.pageName;
-    return buildVirtualFile(
-      joinProjectPath("content", "pages", `${slug}.json`),
-      "content",
-      `${json(
-        {
-          pageId: page.id,
-          pageName: page.pageName,
-          contentBlocks: project.contentBlocks
-            .filter((block) => block.pageUsage.includes(page.id))
-            .map((block) => ({
-              id: block.id,
-              type: block.type,
-              isPlaceholder: block.isPlaceholder,
-              content: block.content,
-            })),
-        },
-        2,
-      )}\n`,
-      {
-        description: `Structured content placeholder for ${page.pageName}`,
-        pageId: page.id,
-        implementationStatus: "placeholder",
-      },
-    );
-  });
+  const contentFiles = options?.includeJsonPageContent === false
+    ? []
+    : project.pages.map((page) => {
+        const route = project.routes.find((entry) => entry.id === page.routeId);
+        const slug = route ? routePathToAppSegment(route.routePath) || "home" : page.pageName;
+        return buildVirtualFile(
+          joinProjectPath("content", "pages", `${slug}.json`),
+          "content",
+          `${json(
+            {
+              pageId: page.id,
+              pageName: page.pageName,
+              contentBlocks: project.contentBlocks
+                .filter((block) => block.pageUsage.includes(page.id))
+                .map((block) => ({
+                  id: block.id,
+                  type: block.type,
+                  isPlaceholder: block.isPlaceholder,
+                  content: block.content,
+                })),
+            },
+            2,
+          )}\n`,
+          {
+            description: `Structured content placeholder for ${page.pageName}`,
+            pageId: page.id,
+            implementationStatus: "placeholder",
+          },
+        );
+      });
 
   return [
     buildVirtualFile(
@@ -460,10 +454,6 @@ export function buildSupportFiles(project: CompiledWebsiteProject): VirtualFile[
         implementationStatus: "metadata-only",
       },
     ),
-    buildVirtualFile("styles/globals.css", "styles", globalsCss, {
-      description: "Global stylesheet placeholders",
-      implementationStatus: "placeholder",
-    }),
     buildVirtualFile("types/site.ts", "types", siteTypes, {
       description: "Site-level type metadata",
       implementationStatus: "metadata-only",
@@ -636,16 +626,21 @@ export function buildRouteDescriptors(project: CompiledWebsiteProject): Generate
     .sort((left, right) => left.routePath.localeCompare(right.routePath));
 }
 
-export function buildAllVirtualFiles(project: CompiledWebsiteProject): {
+export function buildAllVirtualFiles(
+  project: CompiledWebsiteProject,
+  options?: { includeAppShells?: boolean; includeJsonPageContent?: boolean },
+): {
   files: VirtualFile[];
   routes: GeneratedRouteDescriptor[];
   componentDescriptors: ComponentDescriptor[];
 } {
+  const includeAppShells = options?.includeAppShells ?? true;
+  const includeJsonPageContent = options?.includeJsonPageContent ?? true;
   const { files: componentFiles, descriptors } = buildComponentDescriptorFiles(project);
   const files = [
     ...buildRootConfigFiles(project),
-    ...buildAppShellFiles(project),
-    ...buildSupportFiles(project),
+    ...(includeAppShells ? buildAppShellFiles(project) : []),
+    ...buildSupportFiles(project, { includeJsonPageContent }),
     ...buildPublicAssetFiles(project),
     ...componentFiles,
   ];

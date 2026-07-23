@@ -1,6 +1,6 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 
-export const GENERATOR_VERSION = "8.2.0";
+export const GENERATOR_VERSION = "8.2.3";
 
 export type ProjectGeneratorInput = {
   project: CompiledWebsiteProject;
@@ -17,7 +17,13 @@ export type VirtualFileKind =
   | "content"
   | "types"
   | "styles"
-  | "documentation";
+  | "documentation"
+  | "react-page"
+  | "react-layout"
+  | "react-route"
+  | "react-component-placeholder"
+  | "react-component"
+  | "page-config";
 
 export type VirtualFileMetadata = {
   description: string;
@@ -126,4 +132,38 @@ export type GeneratorSampleReport = {
   verificationPassed: boolean;
   failedChecks: GeneratorVerificationCheck[];
   identicalRuns: boolean;
+};
+
+export type ReactPageSampleReport = {
+  changedFiles: number;
+  generatedTsxFileCount: number;
+  generatedPageCount: number;
+  generatedRouteCount: number;
+  generatedPageConfigCount: number;
+  generatedLoadingFileCount: number;
+  generatedErrorFileCount: number;
+  generatedPlaceholderComponentCount: number;
+  unresolvedImportCount: number;
+  deadInternalLinkCount: number;
+  determinismResult: boolean;
+  verificationPassed: boolean;
+  failedChecks: GeneratorVerificationCheck[];
+};
+
+export type ReactComponentSampleReport = {
+  changedSourceFiles: number;
+  generatedComponentFileCount: number;
+  generatedSharedPrimitiveCount: number;
+  generatedClientComponentCount: number;
+  generatedServerComponentCount: number;
+  placeholderCountByCategory: Record<string, number>;
+  unresolvedImportCount: number;
+  duplicateExportCount: number;
+  anyCount: number;
+  unsafeHtmlCount: number;
+  inventedBusinessFactCheckPassed: boolean;
+  deterministicOutputResult: boolean;
+  verificationPassed: boolean;
+  failedChecks: GeneratorVerificationCheck[];
+  fullProjectGeneratorVerificationPassed: boolean;
 };
