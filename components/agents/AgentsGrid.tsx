@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState, useTransition } from "react";
 import {
@@ -173,7 +174,12 @@ export default function AgentsGrid({
             >
               <div className="flex items-start justify-between gap-3">
                 <h2 className="min-w-0 text-base font-semibold text-zinc-50">
-                  {agent.name}
+                  <Link
+                    href={`/agents/${agent.id}`}
+                    className="transition-colors hover:text-blue-400"
+                  >
+                    {agent.name}
+                  </Link>
                 </h2>
                 <AgentStatusBadge status={agent.status} />
               </div>
