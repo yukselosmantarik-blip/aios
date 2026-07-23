@@ -7,7 +7,11 @@ import {
   useTransition,
 } from "react";
 import { useRouter } from "next/navigation";
-import { createWebsiteBriefAction } from "@/app/actions/website-briefs";
+import {
+  createWebsiteBriefAction,
+  updateWebsiteBriefAction,
+} from "@/app/actions/website-briefs";
+import type { WebsiteBrief } from "@/lib/website-briefs.types";
 
 const fieldClassName =
   "w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
@@ -17,6 +21,7 @@ const labelClassName = "mb-1.5 block text-sm font-medium text-zinc-300";
 type WebsiteBriefFormValues = {
   business_name: string;
   industry: string;
+  location: string;
   website_goal: string;
   target_audience: string;
   services: string;
@@ -33,6 +38,7 @@ type WebsiteBriefFormValues = {
 const initialFormValues: WebsiteBriefFormValues = {
   business_name: "",
   industry: "",
+  location: "",
   website_goal: "",
   target_audience: "",
   services: "",
@@ -48,8 +54,28 @@ const initialFormValues: WebsiteBriefFormValues = {
 
 type CreateWebsiteBriefDialogProps = {
   agentId: string;
+  brief?: WebsiteBrief;
   onSuccess?: () => void;
 };
+
+function briefToFormValues(brief: WebsiteBrief): WebsiteBriefFormValues {
+  return {
+    business_name: brief.business_name,
+    industry: brief.industry,
+    location: brief.location ?? "",
+    website_goal: brief.website_goal,
+    target_audience: brief.target_audience,
+    services: brief.services ?? "",
+    unique_selling_points: brief.unique_selling_points ?? "",
+    preferred_style: brief.preferred_style ?? "",
+    primary_color: brief.primary_color ?? "",
+    secondary_color: brief.secondary_color ?? "",
+    required_pages: brief.required_pages ?? "",
+    required_features: brief.required_features ?? "",
+    reference_websites: brief.reference_websites ?? "",
+    additional_notes: brief.additional_notes ?? "",
+  };
+}
 
 function validateClient(values: WebsiteBriefFormValues): string | undefined {
   if (!values.business_name.trim()) {
@@ -73,8 +99,10 @@ function validateClient(values: WebsiteBriefFormValues): string | undefined {
 
 export default function CreateWebsiteBriefDialog({
   agentId,
+  brief,
   onSuccess,
 }: CreateWebsiteBriefDialogProps) {
+  const isEditMode = brief !== undefined;
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -99,7 +127,7 @@ export default function CreateWebsiteBriefDialog({
 
   function handleOpen() {
     setError(undefined);
-    setValues(initialFormValues);
+    setValues(brief ? briefToFormValues(brief) : initialFormValues);
     setOpen(true);
   }
 
@@ -127,10 +155,26 @@ export default function CreateWebsiteBriefDialog({
     }
 
     const formData = new FormData();
-    formData.set("agent_id", agentId);
-    formData.set("status", "draft");
+
+    if (isEditMode) {
+      formData.set("id", brief.id);
+      formData.set("status", brief.status);
+
+      if (brief.customer_id) {
+        formData.set("customer_id", brief.customer_id);
+      }
+
+      if (brief.project_id) {
+        formData.set("project_id", brief.project_id);
+      }
+    } else {
+      formData.set("agent_id", agentId);
+      formData.set("status", "draft");
+    }
+
     formData.set("business_name", values.business_name);
     formData.set("industry", values.industry);
+    formData.set("location", values.location);
     formData.set("website_goal", values.website_goal);
     formData.set("target_audience", values.target_audience);
     formData.set("services", values.services);
@@ -144,7 +188,9 @@ export default function CreateWebsiteBriefDialog({
     formData.set("additional_notes", values.additional_notes);
 
     startTransition(async () => {
-      const result = await createWebsiteBriefAction({}, formData);
+      const result = isEditMode
+        ? await updateWebsiteBriefAction({}, formData)
+        : await createWebsiteBriefAction({}, formData);
 
       if (result.error) {
         setError(result.error);
@@ -164,9 +210,13 @@ export default function CreateWebsiteBriefDialog({
       <button
         type="button"
         onClick={handleOpen}
-        className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 self-start"
+        className={
+          isEditMode
+            ? "rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50 self-start"
+            : "rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 self-start"
+        }
       >
-        Website Brief erstellen
+        {isEditMode ? "Website Brief bearbeiten" : "Website Brief erstellen"}
       </button>
 
       {open ? (
@@ -186,10 +236,12 @@ export default function CreateWebsiteBriefDialog({
           >
             <div className="shrink-0 border-b border-zinc-800 px-6 py-4">
               <h2 id={titleId} className="text-lg font-semibold text-zinc-50">
-                Website Brief erstellen
+                {isEditMode ? "Website Brief bearbeiten" : "Website Brief erstellen"}
               </h2>
               <p className="mt-1 text-sm text-zinc-400">
-                Erfasse die Anforderungen für die Website-Planung.
+                {isEditMode
+                  ? "Aktualisiere die Anforderungen für die Website-Planung."
+                  : "Erfasse die Anforderungen für die Website-Planung."}
               </p>
             </div>
 
@@ -244,6 +296,22 @@ export default function CreateWebsiteBriefDialog({
                     </div>
 
                     <div>
+                      <label htmlFor="location" className={labelClassName}>
+                        Standort
+                      </label>
+                      <input
+                        id="location"
+                        name="location"
+                        type="text"
+                        value={values.location}
+                        onChange={(event) =>
+                          updateField("location", event.target.value)
+                        }
+                        className={fieldClassName}
+                      />
+                    </div>
+
+                    <div className="sm:col-span-2">
                       <label htmlFor="website_goal" className={labelClassName}>
                         Website-Ziel *
                       </label>
@@ -450,7 +518,11 @@ export default function CreateWebsiteBriefDialog({
                   disabled={isPending}
                   className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
                 >
-                  {isPending ? "Wird gespeichert…" : "Brief anlegen"}
+                  {isPending
+                    ? "Wird gespeichert…"
+                    : isEditMode
+                      ? "Änderungen speichern"
+                      : "Brief anlegen"}
                 </button>
               </div>
             </form>

@@ -1,9 +1,12 @@
 import { getWebsiteBrief } from "@/lib/website-briefs";
+import {
+  isWebsiteBlueprintContent,
+  validateWebsiteBlueprintContent,
+} from "@/lib/website-blueprint-validator";
 import { createClient } from "@/lib/supabase/server";
 import type {
   UpsertWebsiteBlueprintInput,
   WebsiteBlueprint,
-  WebsiteBlueprintContent,
 } from "@/lib/website-blueprints.types";
 
 export type {
@@ -12,47 +15,11 @@ export type {
   WebsiteBlueprintContent,
 } from "@/lib/website-blueprints.types";
 
-function isNonEmptyString(value: unknown): value is string {
-  return typeof value === "string" && value.trim().length > 0;
-}
-
-function isStringArray(value: unknown): value is string[] {
-  return Array.isArray(value) && value.every((item) => typeof item === "string");
-}
-
-function isPageSectionsRecord(
-  value: unknown,
-): value is Record<string, string[]> {
-  if (!value || typeof value !== "object" || Array.isArray(value)) {
-    return false;
-  }
-
-  return Object.values(value).every((sections) => isStringArray(sections));
-}
-
-export function isWebsiteBlueprintContent(
-  value: unknown,
-): value is WebsiteBlueprintContent {
-  if (!value || typeof value !== "object") {
-    return false;
-  }
-
-  const content = value as WebsiteBlueprintContent;
-
-  return (
-    isNonEmptyString(content.projectSummary) &&
-    isNonEmptyString(content.targetAudienceSummary) &&
-    isNonEmptyString(content.brandDirection) &&
-    isStringArray(content.recommendedSitemap) &&
-    isPageSectionsRecord(content.recommendedPageSections) &&
-    isStringArray(content.features) &&
-    isStringArray(content.contentRequirements) &&
-    isStringArray(content.seoBasics) &&
-    isNonEmptyString(content.technicalRecommendation) &&
-    isStringArray(content.implementationChecklist) &&
-    isNonEmptyString(content.masterPrompt)
-  );
-}
+export {
+  isWebsiteBlueprintContent,
+  validateWebsiteBlueprintContent,
+  WEBSITE_BLUEPRINT_LIMITS,
+} from "@/lib/website-blueprint-validator";
 
 export async function getWebsiteBlueprintByBrief(
   briefId: string,
@@ -87,8 +54,10 @@ export async function getWebsiteBlueprintByBrief(
 export async function upsertWebsiteBlueprint(
   input: UpsertWebsiteBlueprintInput,
 ): Promise<WebsiteBlueprint> {
-  if (!isWebsiteBlueprintContent(input.content)) {
-    throw new Error("Blueprint-Inhalt ist ungültig.");
+  const validated = validateWebsiteBlueprintContent(input.content);
+
+  if (!validated.ok) {
+    throw new Error(validated.error);
   }
 
   const brief = await getWebsiteBrief(input.brief_id, input.user_id);
@@ -100,22 +69,49 @@ export async function upsertWebsiteBlueprint(
   const supabase = await createClient();
   const generatedAt = new Date().toISOString();
 
-  const { data, error } = await supabase
+  const payload = {
+    content: validated.data,
+    generated_at: generatedAt,
+    generation_source: input.generation_source ?? "deterministic",
+    generation_provider: input.generation_provider ?? null,
+    generation_model: input.generation_model ?? null,
+  };
+
+  const { data: existing, error: existingError } = await supabase
     .from("website_blueprints")
-    .upsert(
-      {
-        user_id: input.user_id,
-        brief_id: input.brief_id,
-        content: input.content,
-        generated_at: generatedAt,
-      },
-      { onConflict: "brief_id" },
-    )
-    .select()
-    .single();
+    .select("id")
+    .eq("brief_id", input.brief_id)
+    .eq("user_id", input.user_id)
+    .maybeSingle();
+
+  if (existingError) {
+    throw new Error(existingError.message);
+  }
+
+  const { data, error } = existing
+    ? await supabase
+        .from("website_blueprints")
+        .update(payload)
+        .eq("brief_id", input.brief_id)
+        .eq("user_id", input.user_id)
+        .select()
+        .single()
+    : await supabase
+        .from("website_blueprints")
+        .insert({
+          user_id: input.user_id,
+          brief_id: input.brief_id,
+          ...payload,
+        })
+        .select()
+        .single();
 
   if (error) {
     throw new Error(error.message);
+  }
+
+  if (!data) {
+    throw new Error("Blueprint konnte nicht gespeichert werden.");
   }
 
   return data as WebsiteBlueprint;

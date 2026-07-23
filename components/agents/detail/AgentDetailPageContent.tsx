@@ -6,6 +6,7 @@ import { useState, useTransition, type ReactNode } from "react";
 import { generateWebsiteBlueprintAction } from "@/app/actions/website-blueprints";
 import AgentStatusBadge from "@/components/agents/AgentStatusBadge";
 import CreateWebsiteBriefDialog from "@/components/website-briefs/CreateWebsiteBriefDialog";
+import ImproveWebsiteBlueprintDialog from "@/components/website-blueprints/ImproveWebsiteBlueprintDialog";
 import LogoutButton from "@/components/LogoutButton";
 import type { Agent, AgentProvider } from "@/lib/agents.types";
 import { AGENT_PROVIDER_OPTIONS } from "@/lib/agents.types";
@@ -159,6 +160,21 @@ function BlueprintView({ content }: { content: WebsiteBlueprintContent }) {
   );
 }
 
+function formatGenerationMetadata(blueprint: WebsiteBlueprint): string {
+  if (blueprint.generation_source === "ai") {
+    const providerLabel =
+      blueprint.generation_provider &&
+      providerLabels[blueprint.generation_provider as AgentProvider]
+        ? providerLabels[blueprint.generation_provider as AgentProvider]
+        : blueprint.generation_provider ?? "—";
+    const model = blueprint.generation_model ?? "—";
+
+    return `Quelle: KI (${providerLabel} · ${model})`;
+  }
+
+  return "Quelle: Deterministisch";
+}
+
 export default function AgentDetailPageContent({
   agent,
   brief,
@@ -167,11 +183,26 @@ export default function AgentDetailPageContent({
   const router = useRouter();
   const [successMessage, setSuccessMessage] = useState<string | undefined>();
   const [errorMessage, setErrorMessage] = useState<string | undefined>();
+  const [improveDialogOpen, setImproveDialogOpen] = useState(false);
+  const [isEnhancing, setIsEnhancing] = useState(false);
   const [isGenerating, startGenerateTransition] = useTransition();
+
+  const canImproveWithAi =
+    agent.status === "active" &&
+    brief !== null &&
+    blueprint !== null &&
+    blueprint.generation_source === "deterministic";
+
+  const isBlueprintBusy = isGenerating || isEnhancing;
 
   function handleCreateBriefSuccess() {
     setErrorMessage(undefined);
     setSuccessMessage("Website Brief wurde erfolgreich erstellt.");
+  }
+
+  function handleEditBriefSuccess() {
+    setErrorMessage(undefined);
+    setSuccessMessage("Website Brief wurde erfolgreich aktualisiert.");
   }
 
   function handleGenerateBlueprint() {
@@ -195,6 +226,23 @@ export default function AgentDetailPageContent({
         router.refresh();
       }
     });
+  }
+
+  function handleImproveSuccess(message: string) {
+    setImproveDialogOpen(false);
+    setErrorMessage(undefined);
+    setSuccessMessage(message);
+    router.refresh();
+  }
+
+  function handleOpenImproveDialog() {
+    if (!brief || !canImproveWithAi) {
+      return;
+    }
+
+    setSuccessMessage(undefined);
+    setErrorMessage(undefined);
+    setImproveDialogOpen(true);
   }
 
   return (
@@ -297,7 +345,13 @@ export default function AgentDetailPageContent({
                 agentId={agent.id}
                 onSuccess={handleCreateBriefSuccess}
               />
-            ) : null}
+            ) : (
+              <CreateWebsiteBriefDialog
+                agentId={agent.id}
+                brief={brief}
+                onSuccess={handleEditBriefSuccess}
+              />
+            )}
           </div>
 
           {brief ? (
@@ -373,24 +427,43 @@ export default function AgentDetailPageContent({
               </p>
             </div>
             {brief ? (
-              <button
-                type="button"
-                onClick={handleGenerateBlueprint}
-                disabled={isGenerating}
-                className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 self-start"
-              >
-                {isGenerating
-                  ? "Blueprint wird erstellt..."
-                  : "Blueprint generieren"}
-              </button>
+              <div className="flex flex-wrap gap-2 self-start">
+                <button
+                  type="button"
+                  onClick={handleGenerateBlueprint}
+                  disabled={isBlueprintBusy}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
+                >
+                  {isGenerating
+                    ? "Blueprint wird erstellt..."
+                    : "Blueprint generieren"}
+                </button>
+                {canImproveWithAi ? (
+                  <button
+                    type="button"
+                    onClick={handleOpenImproveDialog}
+                    disabled={isBlueprintBusy}
+                    className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-800 disabled:cursor-not-allowed disabled:opacity-50"
+                  >
+                    {isEnhancing
+                      ? "KI verbessert Blueprint..."
+                      : "Mit KI verbessern"}
+                  </button>
+                ) : null}
+              </div>
             ) : null}
           </div>
 
           {blueprint ? (
             <div className="mt-6">
-              <p className="mb-4 text-xs tabular-nums text-zinc-500">
-                Generiert am {formatDateTime(blueprint.generated_at)}
-              </p>
+              <div className="mb-4 space-y-1">
+                <p className="text-xs tabular-nums text-zinc-500">
+                  Generiert am {formatDateTime(blueprint.generated_at)}
+                </p>
+                <p className="text-xs text-zinc-500">
+                  {formatGenerationMetadata(blueprint)}
+                </p>
+              </div>
               <BlueprintView content={blueprint.content} />
             </div>
           ) : (
@@ -402,6 +475,20 @@ export default function AgentDetailPageContent({
           )}
         </section>
       </div>
+
+      {brief ? (
+        <ImproveWebsiteBlueprintDialog
+          briefId={brief.id}
+          open={improveDialogOpen}
+          onClose={() => {
+            if (!isEnhancing) {
+              setImproveDialogOpen(false);
+            }
+          }}
+          onSuccess={handleImproveSuccess}
+          onPendingChange={setIsEnhancing}
+        />
+      ) : null}
     </>
   );
 }

@@ -2,6 +2,16 @@
 
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import { enhanceWebsiteBlueprint } from "@/lib/ai/enhance-blueprint";
+import { AIProviderError } from "@/lib/ai/types";
+import {
+  AI_V1_PROVIDER,
+  createAIUsageLog,
+  getGermanAIEnhancementErrorMessage,
+  isAIEnhancementRateLimited,
+} from "@/lib/ai-usage";
+import type { AIUsageErrorCode } from "@/lib/ai-usage.types";
+import { getAgent } from "@/lib/agents";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import {
   getWebsiteBrief,
@@ -9,10 +19,19 @@ import {
 } from "@/lib/website-briefs";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { UpdateWebsiteBriefInput } from "@/lib/website-briefs.types";
-import { upsertWebsiteBlueprint } from "@/lib/website-blueprints";
+import {
+  getWebsiteBlueprintByBrief,
+  upsertWebsiteBlueprint,
+} from "@/lib/website-blueprints";
 import { createClient } from "@/lib/supabase/server";
 
 export type GenerateWebsiteBlueprintState = {
+  error?: string;
+  success?: boolean;
+  message?: string;
+};
+
+export type ImproveWebsiteBlueprintState = {
   error?: string;
   success?: boolean;
   message?: string;
@@ -119,10 +138,14 @@ export async function generateWebsiteBlueprintAction(
     });
 
     if (brief.status === "draft") {
-      await updateWebsiteBrief(brief.id, user.id, {
-        ...toUpdateInput(brief),
-        status: "ready",
-      });
+      try {
+        await updateWebsiteBrief(brief.id, user.id, {
+          ...toUpdateInput(brief),
+          status: "ready",
+        });
+      } catch {
+        // Blueprint was saved; brief status update must not block success.
+      }
     }
 
     revalidateAgentPaths(brief.agent_id);
@@ -136,6 +159,162 @@ export async function generateWebsiteBlueprintAction(
       error instanceof Error
         ? error.message
         : "Website Blueprint konnte nicht generiert werden.";
+    return { error: message };
+  }
+}
+
+type AIUsageLogContext = {
+  userId: string;
+  agentId: string;
+  briefId: string;
+  provider: string;
+  model: string;
+};
+
+async function logAIUsageFailure(
+  context: AIUsageLogContext,
+  errorCode: AIUsageErrorCode,
+): Promise<void> {
+  try {
+    await createAIUsageLog({
+      user_id: context.userId,
+      agent_id: context.agentId,
+      brief_id: context.briefId,
+      provider: context.provider,
+      model: context.model,
+      status: "failed",
+      error_code: errorCode,
+    });
+  } catch {
+    // Usage logging must not block the user-facing error response.
+  }
+}
+
+export async function improveWebsiteBlueprintAction(
+  briefId: string,
+): Promise<ImproveWebsiteBlueprintState> {
+  const user = await requireUser();
+  const trimmedId = briefId.trim();
+
+  if (!trimmedId || !isValidUuid(trimmedId)) {
+    return { error: "Ungültiger Website Brief." };
+  }
+
+  let usageContext: AIUsageLogContext | null = null;
+
+  try {
+    const brief = await getWebsiteBrief(trimmedId, user.id);
+
+    if (!brief) {
+      return { error: "Website Brief wurde nicht gefunden." };
+    }
+
+    const agent = await getAgent(brief.agent_id);
+
+    if (!agent || agent.user_id !== user.id) {
+      return { error: "Agent wurde nicht gefunden." };
+    }
+
+    usageContext = {
+      userId: user.id,
+      agentId: agent.id,
+      briefId: brief.id,
+      provider: agent.provider,
+      model: agent.model,
+    };
+
+    if (agent.status !== "active") {
+      await logAIUsageFailure(usageContext, "agent_not_active");
+      return {
+        error: getGermanAIEnhancementErrorMessage("agent_not_active"),
+      };
+    }
+
+    if (agent.provider !== AI_V1_PROVIDER) {
+      await logAIUsageFailure(usageContext, "unsupported_provider");
+      return {
+        error: getGermanAIEnhancementErrorMessage("unsupported_provider"),
+      };
+    }
+
+    const existingBlueprint = await getWebsiteBlueprintByBrief(
+      brief.id,
+      user.id,
+    );
+
+    if (!existingBlueprint) {
+      await logAIUsageFailure(usageContext, "no_blueprint");
+      return {
+        error: getGermanAIEnhancementErrorMessage("no_blueprint"),
+      };
+    }
+
+    if (await isAIEnhancementRateLimited(user.id)) {
+      await logAIUsageFailure(usageContext, "rate_limited");
+      return {
+        error: getGermanAIEnhancementErrorMessage("rate_limited"),
+      };
+    }
+
+    const enhancement = await enhanceWebsiteBlueprint({
+      brief,
+      agent,
+      blueprint: existingBlueprint.content,
+    });
+
+    try {
+      await upsertWebsiteBlueprint({
+        user_id: user.id,
+        brief_id: brief.id,
+        content: enhancement.content,
+        generation_source: "ai",
+        generation_provider: enhancement.provider,
+        generation_model: enhancement.model,
+      });
+    } catch {
+      await logAIUsageFailure(usageContext, "save_failed");
+      return {
+        error: getGermanAIEnhancementErrorMessage("save_failed"),
+      };
+    }
+
+    try {
+      await createAIUsageLog({
+        user_id: user.id,
+        agent_id: agent.id,
+        brief_id: brief.id,
+        provider: enhancement.provider,
+        model: enhancement.model,
+        status: "success",
+        input_tokens: enhancement.usage.inputTokens,
+        output_tokens: enhancement.usage.outputTokens,
+      });
+    } catch {
+      // Blueprint was saved; logging failure must not undo user success.
+    }
+
+    revalidateAgentPaths(brief.agent_id);
+
+    return {
+      success: true,
+      message: "Blueprint wurde mit KI verbessert.",
+    };
+  } catch (error) {
+    if (error instanceof AIProviderError) {
+      if (usageContext) {
+        await logAIUsageFailure(usageContext, error.code);
+      }
+
+      return {
+        error: getGermanAIEnhancementErrorMessage(error.code),
+      };
+    }
+
+    const message =
+      error instanceof Error
+        ? error.message
+        : "Blueprint konnte nicht mit KI verbessert werden.";
+
     return { error: message };
   }
 }

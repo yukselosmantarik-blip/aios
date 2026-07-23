@@ -173,10 +173,10 @@ export default function AgentsGrid({
               className="flex flex-col rounded-xl border border-zinc-800 bg-zinc-900 p-5"
             >
               <div className="flex items-start justify-between gap-3">
-                <h2 className="min-w-0 text-base font-semibold text-zinc-50">
+                <h2 className="min-w-0 text-base font-semibold">
                   <Link
                     href={`/agents/${agent.id}`}
-                    className="transition-colors hover:text-blue-400"
+                    className="text-blue-400 transition-colors hover:text-blue-300"
                   >
                     {agent.name}
                   </Link>
