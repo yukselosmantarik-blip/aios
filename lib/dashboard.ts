@@ -1,3 +1,4 @@
+import { getAgents } from "@/lib/agents";
 import { getCustomers } from "@/lib/customers";
 import type { Customer } from "@/lib/customers.types";
 import { getProjects } from "@/lib/projects";
@@ -118,17 +119,18 @@ function getUpcomingTasks(
 }
 
 export async function getDashboardData(): Promise<DashboardData> {
-  const [customers, projects, tasks] = await Promise.all([
+  const [customers, projects, tasks, agents] = await Promise.all([
     getCustomers(),
     getProjects(),
     getTasks(),
+    getAgents(),
   ]);
 
   return {
     stats: {
       customers: customers.length,
       projects: projects.length,
-      aiAgents: 0,
+      aiAgents: agents.length,
       tasks: tasks.length,
     },
     taskInsights: countTaskInsights(tasks),
