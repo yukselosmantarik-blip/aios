@@ -14,6 +14,11 @@ import {
   buildBlueprintIntelligenceChecklistItems,
   buildBlueprintIntelligenceMarkdown,
 } from "@/lib/website-blueprint-intelligence";
+import {
+  buildGlobalPatternLibraryMarkdown,
+  buildPagePatternLibrary,
+  createPatternLibraryContext,
+} from "@/lib/website-blueprint-pattern-library";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -939,8 +944,17 @@ function buildDetailedPageSpecification(
   const pageDna = buildPageDnaSpecification(input);
   const componentDna = buildPageComponentDna(pageCtx);
   const pageContentDna = buildPageContentDna(pageCtx);
+  const pagePatternLibrary = buildPagePatternLibrary(pageCtx);
 
-  return [...pageDna, "", ...componentDna, "", ...pageContentDna];
+  return [
+    ...pageDna,
+    "",
+    ...componentDna,
+    "",
+    ...pageContentDna,
+    "",
+    ...pagePatternLibrary,
+  ];
 }
 
 function buildPageSpecifications(
@@ -1135,6 +1149,7 @@ function buildMasterPrompt(
     designSystemDna: string;
     uxDna: string;
     contentDna: string;
+    patternLibrary: string;
     motionDna: string[];
     navigation: string[];
     pageSpecs: Record<string, string[]>;
@@ -1172,6 +1187,8 @@ function buildMasterPrompt(
     sections.uxDna,
     "",
     sections.contentDna,
+    "",
+    sections.patternLibrary,
     "",
     "# Motion DNA",
     "",
@@ -1284,6 +1301,15 @@ export function generateWebsiteBlueprintContent(
     ...developmentNotes,
   ];
 
+  const patternLibraryContext = createPatternLibraryContext({
+    brief,
+    profile,
+    tier: detectStyleTier(brief),
+    prefersMotion: prefersMotion(brief),
+    primaryCta: primaryCta(brief, profile),
+    secondaryCta: secondaryCta(brief, profile),
+  });
+
   const masterPrompt = [
     buildBlueprintIntelligenceMarkdown(brief),
     "",
@@ -1296,6 +1322,7 @@ export function generateWebsiteBlueprintContent(
       designSystemDna,
       uxDna,
       contentDna: buildGlobalContentDnaMarkdown(contentDnaContext),
+      patternLibrary: buildGlobalPatternLibraryMarkdown(patternLibraryContext),
       motionDna,
       navigation,
       pageSpecs: recommendedPageSections,
