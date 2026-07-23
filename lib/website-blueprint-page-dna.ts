@@ -1008,7 +1008,7 @@ export function pageStructuredData(
   return byRole[role] ?? base;
 }
 
-export function componentHierarchy(role: PageRole, ctx: PageDnaContext): string[] {
+export function getComponentTreeNodes(role: PageRole, ctx: PageDnaContext): string[] {
   const sections = getPageSections(ctx).map((s) => s.name);
   const trees: Record<PageRole, string[]> = {
     home: [
@@ -1090,8 +1090,11 @@ export function componentHierarchy(role: PageRole, ctx: PageDnaContext): string[
     generic: ["SiteHeader", "PageHero", ...sections, "SiteFooter"],
   };
 
-  const tree = trees[role] ?? trees.generic;
-  return tree.map((node, index) =>
+  return trees[role] ?? trees.generic;
+}
+
+export function componentHierarchy(role: PageRole, ctx: PageDnaContext): string[] {
+  return getComponentTreeNodes(role, ctx).map((node, index) =>
     index === 0 ? `Component tree: ${node}` : `Component tree: └─ ${node}`,
   );
 }
@@ -1219,35 +1222,7 @@ export function buildPageDnaSpecification(input: {
   tier: "premium" | "modern" | "default";
   prefersMotion: boolean;
 }): string[] {
-  const pageLink = (targetRole: PageRole): string =>
-    input.sitemap.find((entry) => input.detectPageRole(entry) === targetRole) ??
-    "[PLACEHOLDER: page]";
-
-  const ctx: PageDnaContext = {
-    page: input.page,
-    role: input.role,
-    brief: input.brief,
-    profile: input.profile,
-    sitemap: input.sitemap,
-    services: input.brief.services
-      ? input.brief.services
-          .replace(/\r/g, "")
-          .split(/[\n,;]+/)
-          .map((s) => s.trim())
-          .filter(Boolean)
-      : [],
-    primaryCta: input.primaryCta,
-    secondaryCta: input.secondaryCta,
-    slug: input.slugFromPage(input.page),
-    usp: input.usp,
-    style: input.style,
-    requestedFeatures: input.requestedFeatures,
-    tier: input.tier,
-    prefersMotion: input.prefersMotion,
-    pageLink,
-    otherLinks:
-      input.sitemap.filter((entry) => entry !== input.page).join(", ") || "none",
-  };
+  const ctx = createPageDnaContext(input);
 
   const sections = getPageSections(ctx);
   const metaTitle = input.pageMetaTitle(input.page, input.brief);
@@ -1291,4 +1266,38 @@ export function buildPageDnaSpecification(input: {
     "## 8. Conversion specification",
     ...buildPageConversionDnaLines(ctx).map((line) => `Conversion | ${line}`),
   ];
+}
+
+export function createPageDnaContext(
+  input: Parameters<typeof buildPageDnaSpecification>[0],
+): PageDnaContext {
+  const pageLink = (targetRole: PageRole): string =>
+    input.sitemap.find((entry) => input.detectPageRole(entry) === targetRole) ??
+    "[PLACEHOLDER: page]";
+
+  return {
+    page: input.page,
+    role: input.role,
+    brief: input.brief,
+    profile: input.profile,
+    sitemap: input.sitemap,
+    services: input.brief.services
+      ? input.brief.services
+          .replace(/\r/g, "")
+          .split(/[\n,;]+/)
+          .map((s) => s.trim())
+          .filter(Boolean)
+      : [],
+    primaryCta: input.primaryCta,
+    secondaryCta: input.secondaryCta,
+    slug: input.slugFromPage(input.page),
+    usp: input.usp,
+    style: input.style,
+    requestedFeatures: input.requestedFeatures,
+    tier: input.tier,
+    prefersMotion: input.prefersMotion,
+    pageLink,
+    otherLinks:
+      input.sitemap.filter((entry) => entry !== input.page).join(", ") || "none",
+  };
 }

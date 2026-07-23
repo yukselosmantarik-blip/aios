@@ -1,8 +1,9 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import { WEBSITE_BLUEPRINT_LIMITS } from "@/lib/website-blueprint-validator";
-import { buildPageDnaSpecification } from "@/lib/website-blueprint-page-dna";
+import { buildPageDnaSpecification, createPageDnaContext } from "@/lib/website-blueprint-page-dna";
 import { buildDesignSystemDna } from "@/lib/website-blueprint-design-system-dna";
+import { buildPageComponentDna } from "@/lib/website-blueprint-component-dna";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -903,7 +904,7 @@ function buildDetailedPageSpecification(
   sitemap: string[],
   profile: BusinessProfile,
 ): string[] {
-  return buildPageDnaSpecification({
+  const input = {
     page,
     role,
     brief,
@@ -922,7 +923,12 @@ function buildDetailedPageSpecification(
     ),
     tier: detectStyleTier(brief),
     prefersMotion: prefersMotion(brief),
-  });
+  };
+
+  const pageDna = buildPageDnaSpecification(input);
+  const componentDna = buildPageComponentDna(createPageDnaContext(input));
+
+  return [...pageDna, "", ...componentDna];
 }
 
 function buildPageSpecifications(
@@ -1053,8 +1059,8 @@ function buildDevelopmentNotes(
 ): string[] {
   const notes = [
     "# Development Notes",
-    "Implement Website DNA before page builds: Business DNA → Visual DNA tokens → Motion DNA → UX DNA flows.",
-    "Create design tokens file from Visual DNA (colors, spacing, radius, typography, shadows).",
+    "Implement Website DNA before page builds: Business DNA → Design System DNA tokens → Motion DNA → UX DNA → Page DNA → Component DNA.",
+    "Implement one reusable component per Component DNA type; compose pages from content modules.",
     "Apply Motion DNA via CSS transitions; gate behind prefers-reduced-motion.",
     "Implement pages in sitemap order; start with shared layout, tokens, and section components.",
     "Map each page to a typed content file — do not hardcode copy inside components.",
@@ -1171,7 +1177,7 @@ function buildMasterPrompt(
     "",
     "## Delivery checklist",
     "- Next.js + TypeScript + Tailwind CSS",
-    "- Design System DNA tokens implemented in Tailwind/CSS variables",
+    "- Design System DNA tokens + Component DNA reusable components implemented",
     "- Motion DNA with prefers-reduced-motion support",
     "- All pages in sitemap implemented",
     "- Responsive, accessible, SEO metadata complete",
