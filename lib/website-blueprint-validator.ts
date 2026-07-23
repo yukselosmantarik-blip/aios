@@ -1,8 +1,8 @@
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 
 export const WEBSITE_BLUEPRINT_LIMITS = {
-  textFieldMaxLength: 10000,
-  masterPromptMaxLength: 150000,
+  textFieldMaxLength: 150000,
+  masterPromptMaxLength: 250000,
   arrayItemMaxLength: 1200,
   pageKeyMaxLength: 100,
 } as const;

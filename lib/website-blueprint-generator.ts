@@ -2,6 +2,7 @@ import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import { WEBSITE_BLUEPRINT_LIMITS } from "@/lib/website-blueprint-validator";
 import { buildPageDnaSpecification } from "@/lib/website-blueprint-page-dna";
+import { buildDesignSystemDna } from "@/lib/website-blueprint-design-system-dna";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -628,6 +629,10 @@ function buildVisualDna(brief: WebsiteBrief): string {
     "Outlined: 1px border neutral, no shadow, hover shadow-sm transition.",
     "Flat: background secondary surface (#F9FAFB), no shadow.",
     "Interactive cards: hover lift (translateY -2px) + shadow increase on desktop only.",
+    "",
+    "## Token reference",
+    "Implementation-ready semantic tokens, scales, and component specs: see Design System DNA (technicalRecommendation field and master prompt).",
+    "Page DNA component specs reference these shared tokens — do not duplicate hex values per page.",
   ]
     .filter(Boolean)
     .join("\n");
@@ -961,7 +966,7 @@ function buildFeatures(
     ...buildMotionDna(brief),
     ...conversion,
     ...requested.map((feature) => `Required feature from brief: ${feature}`),
-    "Apply Visual DNA tokens consistently across all components",
+    "Apply Design System DNA tokens consistently across all components",
     "Follow UX DNA journey and CTA placement on every page",
   ];
 }
@@ -1004,7 +1009,7 @@ function buildTechnicalRecommendations(
     "# Technical Recommendations",
     "",
     "## Website DNA implementation",
-    "Encode Visual DNA as Tailwind theme extensions or CSS variables (colors, spacing, radius, shadows, typography).",
+    "Implement Design System DNA as Tailwind theme extensions or CSS variables — single source of truth for colors, spacing, radius, shadows, typography.",
     "Implement Motion DNA with CSS transitions and intersection observer; respect prefers-reduced-motion.",
     "Follow UX DNA conversion flow and CTA placement on every page template.",
     "",
@@ -1083,6 +1088,7 @@ function buildMasterPrompt(
     businessDna: string;
     executiveSummary: string;
     visualDna: string;
+    designSystemDna: string;
     uxDna: string;
     motionDna: string[];
     navigation: string[];
@@ -1115,6 +1121,8 @@ function buildMasterPrompt(
     sections.executiveSummary,
     "",
     sections.visualDna,
+    "",
+    sections.designSystemDna,
     "",
     sections.uxDna,
     "",
@@ -1163,7 +1171,7 @@ function buildMasterPrompt(
     "",
     "## Delivery checklist",
     "- Next.js + TypeScript + Tailwind CSS",
-    "- Website DNA design tokens implemented",
+    "- Design System DNA tokens implemented in Tailwind/CSS variables",
     "- Motion DNA with prefers-reduced-motion support",
     "- All pages in sitemap implemented",
     "- Responsive, accessible, SEO metadata complete",
@@ -1200,10 +1208,21 @@ export function generateWebsiteBlueprintContent(
   );
   const features = buildFeatures(brief, profile);
   const seoBasics = buildSeoStrategy(brief, recommendedSitemap);
-  const technicalRecommendation = buildTechnicalRecommendations(
+  const designSystemDna = buildDesignSystemDna({
+    brief,
+    profile,
+    tier: detectStyleTier(brief),
+    prefersMotion: prefersMotion(brief),
+    primary: primaryColor(brief),
+    secondary: secondaryColor(brief),
+    style: briefStyle(brief),
+    primaryCta: primaryCta(brief, profile),
+  });
+  const technicalStack = buildTechnicalRecommendations(
     brief,
     recommendedSitemap,
   );
+  const technicalRecommendation = `${designSystemDna}\n\n---\n\n${technicalStack}`;
   const implementationChecklist = buildDevelopmentNotes(
     brief,
     recommendedSitemap,
@@ -1213,13 +1232,14 @@ export function generateWebsiteBlueprintContent(
     businessDna,
     executiveSummary,
     visualDna,
+    designSystemDna,
     uxDna,
     motionDna,
     navigation,
     pageSpecs: recommendedPageSections,
     features,
     seo: seoBasics,
-    technical: technicalRecommendation,
+    technical: technicalStack,
     developmentNotes: implementationChecklist,
   });
 
