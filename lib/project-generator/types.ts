@@ -1,6 +1,6 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 
-export const GENERATOR_VERSION = "8.3.0";
+export const GENERATOR_VERSION = "8.4.0";
 
 export type ProjectGeneratorInput = {
   project: CompiledWebsiteProject;

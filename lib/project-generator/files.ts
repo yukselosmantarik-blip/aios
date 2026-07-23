@@ -641,7 +641,6 @@ export function buildAllVirtualFiles(
     ...buildRootConfigFiles(project),
     ...(includeAppShells ? buildAppShellFiles(project) : []),
     ...buildSupportFiles(project, { includeJsonPageContent }),
-    ...buildPublicAssetFiles(project),
     ...componentFiles,
   ];
 

@@ -1,4 +1,5 @@
 import { buildAllVirtualFiles } from "@/lib/project-generator/files";
+import { buildAssetEngineFiles } from "@/lib/project-generator/asset-files";
 import { buildStyleEngineFiles } from "@/lib/project-generator/style-files";
 import { buildVisualComponentRegistry } from "@/lib/project-generator/visual-component-registry";
 import {
@@ -42,12 +43,14 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
     includeJsonPageContent: false,
   });
   const styleFiles = buildStyleEngineFiles(project);
+  const assetFiles = buildAssetEngineFiles(project);
   const componentFiles = buildVisualComponentFiles(project);
   const registryFile = buildVisualComponentRegistry(project);
   const reactFiles = buildReactPageFiles(project);
   const sortedFiles = sortVirtualFiles([
     ...baseFiles,
     ...styleFiles,
+    ...assetFiles,
     ...componentFiles,
     registryFile,
     ...reactFiles,

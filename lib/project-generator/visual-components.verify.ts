@@ -10,7 +10,6 @@ import {
 } from "@/lib/project-generator/visual-components";
 import {
   PLACEHOLDER_PREFIX,
-  collectRequiredComponents,
 } from "@/lib/project-generator/react-component-utils";
 import {
   countComponentVariants,
@@ -51,10 +50,6 @@ const INVENTED_FACT_PATTERNS = [
 const RESPONSIVE_PATTERNS = [
   /md:|sm:|lg:/,
   /flex-col|grid|sectionContainer|ResponsiveGrid|Container|mobileSticky|hidden md:/,
-];
-
-const ACCESSIBILITY_PATTERNS = [
-  /aria-|role=|focus-visible:|sr-only|htmlFor=|SectionShell|skipLink|aria-label|<details|<summary/,
 ];
 
 const KEY_RESPONSIVE_COMPONENTS = [
@@ -410,7 +405,6 @@ export function buildVisualComponentSampleReport(
   const fullVerification = verifyDeterministicProjectGeneration(input);
   const registry = first.generated.files.find((file) => file.path === "components/generated/index.ts");
   const unresolvedImports = findUnresolvedImports(first.generated.files);
-  const required = collectRequiredComponents(input.project);
 
   return {
     changedSourceFiles: 7,
