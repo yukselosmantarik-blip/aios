@@ -30,5 +30,12 @@
     ".next/dev/types/**/*.ts",
     "**/*.mts"
   ],
-  "exclude": ["node_modules"]
+  "exclude": [
+    "node_modules",
+    "by-nanis-s-smashburger-export",
+    "by-nanis-s-smashburger-export 2",
+    ".tmp-export-build-test",
+    ".tmp-smashburger-content-export",
+    ".tmp-smashburger-export-build"
+  ]
 }

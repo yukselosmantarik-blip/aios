@@ -1,6 +1,6 @@
 export const ASSET_SPRINT = "8.4";
 
-export type AssetType = "logo" | "favicon" | "hero" | "gallery" | "map" | "avatar";
+export type AssetType = "logo" | "favicon" | "hero" | "gallery" | "product" | "map" | "avatar";
 
 export type AssetDefinition = {
   id: AssetId;
@@ -14,7 +14,7 @@ export type AssetDefinition = {
   label: string;
 };
 
-export const ASSET_IDS = ["logo", "favicon", "hero", "gallery", "map", "avatar"] as const;
+export const ASSET_IDS = ["logo", "favicon", "hero", "gallery", "product", "map", "avatar"] as const;
 
 export type AssetId = (typeof ASSET_IDS)[number];
 
@@ -26,9 +26,9 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "logo",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Logo placeholder — replace before production",
+    altText: "Logo asset missing — LOGO REQUIRED",
     viewBox: "0 0 120 32",
-    label: "LOGO PLACEHOLDER",
+    label: "LOGO REQUIRED",
   },
   {
     id: "favicon",
@@ -37,9 +37,9 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "favicon",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Favicon placeholder — replace before production",
+    altText: "Favicon asset missing",
     viewBox: "0 0 32 32",
-    label: "FAVICON",
+    label: "FAVICON REQUIRED",
   },
   {
     id: "hero",
@@ -48,9 +48,9 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "hero",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Hero image placeholder — replace before production",
+    altText: "Hero image missing — HERO IMAGE REQUIRED",
     viewBox: "0 0 640 360",
-    label: "HERO PLACEHOLDER",
+    label: "HERO IMAGE REQUIRED",
   },
   {
     id: "gallery",
@@ -59,9 +59,20 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "gallery",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Gallery image placeholder — replace before production",
+    altText: "Gallery image missing — GALLERY IMAGE REQUIRED",
     viewBox: "0 0 480 360",
-    label: "GALLERY PLACEHOLDER",
+    label: "GALLERY IMAGE REQUIRED",
+  },
+  {
+    id: "product",
+    fileName: "product-placeholder.svg",
+    publicPath: "/images/product-placeholder.svg",
+    assetType: "product",
+    placeholder: true,
+    replaceBeforeProduction: true,
+    altText: "Product image missing — PRODUCT IMAGE REQUIRED",
+    viewBox: "0 0 480 360",
+    label: "PRODUCT IMAGE REQUIRED",
   },
   {
     id: "map",
@@ -70,9 +81,9 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "map",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Map placeholder — replace before production",
+    altText: "Map asset missing",
     viewBox: "0 0 640 360",
-    label: "MAP PLACEHOLDER",
+    label: "MAP REQUIRED",
   },
   {
     id: "avatar",
@@ -81,9 +92,9 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     assetType: "avatar",
     placeholder: true,
     replaceBeforeProduction: true,
-    altText: "Avatar placeholder — replace before production",
+    altText: "Avatar image missing",
     viewBox: "0 0 128 128",
-    label: "AVATAR PLACEHOLDER",
+    label: "AVATAR REQUIRED",
   },
 ] as const;
 

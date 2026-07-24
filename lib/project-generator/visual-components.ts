@@ -705,7 +705,7 @@ function generateHeroSection(project: CompiledWebsiteProject): string {
       "import { Placeholder } from './Placeholder';",
     ]),
     "",
-    `const heroVariant = ${JSON.stringify(variant)} as const;`,
+    `const heroVariant = ${JSON.stringify(variant)} as string;`,
     "",
     "export function HeroSection({ section }: SectionComponentProps) {",
     "  const mediaLabel = section.media[0] ?? " + JSON.stringify(heroMedia) + ";",
@@ -972,7 +972,7 @@ function generateProductGridSection(project: CompiledWebsiteProject): string {
     '                <li key={item.id}>',
     '                  <Card variant={item.featured ? "elevated" : "product"} as="article">',
     '                    <Stack gap="sm">',
-    "                      <MediaPlaceholder media={{ id: `${item.id}-media`, label: " + JSON.stringify(placeholderLabel("Produktbild")) + ", altText: item.name, aspectRatio: '4/3', assetId: 'gallery' }} />",
+    "                      <MediaPlaceholder media={{ id: `${item.id}-media`, label: 'PRODUCT IMAGE REQUIRED', altText: item.name, aspectRatio: '4/3', assetId: 'product' }} />",
     '                      <div className="flex items-start justify-between gap-[var(--spacing-sm)]">',
     '                        <h3 className="font-[var(--font-weight-medium)]">{item.name}</h3>',
     "                        {item.featured ? <Badge>Featured</Badge> : null}",
@@ -1246,7 +1246,7 @@ function generateMapSection(): string {
 function generateOpeningHours(): string {
   return [
     headerComment("OpeningHours"),
-    ...premiumSectionImports(["import { Placeholder } from './Placeholder';", "import { Stack } from './Stack';"]),
+    ...premiumSectionImports(["import { Placeholder } from './Placeholder';"]),
     "",
     "export function OpeningHours({ section }: SectionComponentProps) {",
     "  return (",

@@ -5,6 +5,7 @@ import type {
   FeatureFlag,
   PageSeoModel,
 } from "@/lib/website-compiler/types";
+import { buildEnrichedPageSections } from "@/lib/project-generator/content-export";
 import { joinProjectPath, routePathToAppSegment } from "@/lib/project-generator/tree";
 
 export const SECTION_COMPONENT_NAMES = [
@@ -25,6 +26,19 @@ export const SECTION_COMPONENT_NAMES = [
 
 export type SectionComponentName = (typeof SECTION_COMPONENT_NAMES)[number];
 
+export type ExportedMenuItemConfig = {
+  id: string;
+  name: string;
+  category: string;
+  description: string;
+};
+
+export type ExportedFaqItemConfig = {
+  id: string;
+  question: string;
+  answer: string;
+};
+
 export type PageSectionConfig = {
   id: string;
   title: string;
@@ -41,6 +55,11 @@ export type PageSectionConfig = {
   isPlaceholder: boolean;
   missingData: string[];
   contentBlocks: string[];
+  contentBody: string;
+  contentLines: string[];
+  trustBadges: string[];
+  menuItems: ExportedMenuItemConfig[];
+  faqItems: ExportedFaqItemConfig[];
   primaryCTA: string | null;
   secondaryCTA: string | null;
   media: string[];
@@ -182,6 +201,11 @@ export function buildPageSectionConfig(
     isPlaceholder,
     missingData: section.missingData,
     contentBlocks: section.contentBlocks,
+    contentBody: "",
+    contentLines: [],
+    trustBadges: [],
+    menuItems: [],
+    faqItems: [],
     primaryCTA: section.ctaReferences[0] ?? null,
     secondaryCTA: section.ctaReferences[1] ?? null,
     media: section.mediaReferences,
@@ -194,14 +218,7 @@ export function buildPageSectionConfig(
 
 export function buildPageConfig(page: CompiledPage, project: CompiledWebsiteProject): GeneratedPageConfig {
   const route = project.routes.find((entry) => entry.id === page.routeId);
-  const visibleSections = page.orderedSections.filter(shouldIncludeSectionInPage);
-  let firstVisible = true;
-
-  const sections = visibleSections.map((section) => {
-    const config = buildPageSectionConfig(section, page.pageRole, firstVisible);
-    firstVisible = false;
-    return config;
-  });
+  const sections = buildEnrichedPageSections(page, project);
 
   const missingDataReferences = project.missingData
     .filter((entry) => entry.affectedPages.includes(page.id))
