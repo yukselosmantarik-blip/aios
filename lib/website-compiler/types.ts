@@ -1,4 +1,5 @@
 import type { RestaurantAssets } from "@/lib/assets/types";
+import type { WebsiteTheme } from "@/lib/themes/types";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import type { PageRole } from "@/lib/website-blueprint-page-dna";
@@ -22,6 +23,8 @@ export type WebsiteCompilerInput = {
   generationMode?: CompilerGenerationMode;
   /** Optional customer media paths (AIOS `public/`); not inferred at runtime. */
   restaurantAssets?: RestaurantAssets;
+  /** Optional brand theme tokens for generated sites; not inferred at runtime. */
+  websiteTheme?: WebsiteTheme;
 };
 
 export type DetectedCompilerInputSections = {
@@ -405,6 +408,8 @@ export type CompiledWebsiteProject = {
   detectedInputSections: DetectedCompilerInputSections;
   /** Carried from compiler input when provided; used by the project generator. */
   restaurantAssets?: RestaurantAssets;
+  /** Carried from compiler input when provided; used by the project generator. */
+  websiteTheme?: WebsiteTheme;
 };
 
 export type CompileResult = {

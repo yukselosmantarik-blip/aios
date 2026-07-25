@@ -976,6 +976,7 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
     missingData,
     detectedInputSections: detectInputSections(brief, blueprint),
     ...(input.restaurantAssets ? { restaurantAssets: input.restaurantAssets } : {}),
+    ...(input.websiteTheme ? { websiteTheme: input.websiteTheme } : {}),
   };
 
   return { project, warnings };

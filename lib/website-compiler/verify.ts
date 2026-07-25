@@ -3,6 +3,8 @@ import {
   collectRestaurantAssetPaths,
   verifyRestaurantAssetsOnDisk,
 } from "@/lib/assets/verify";
+import { BY_NANIS_WEBSITE_THEME } from "@/lib/themes/by-nanis";
+import { verifyWebsiteThemeSerializable } from "@/lib/themes/verify";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import { compileWebsiteProject, serializeCompiledWebsiteProject } from "@/lib/website-compiler/compile";
@@ -242,6 +244,15 @@ export function verifyCompiledWebsiteProject(
     });
   }
 
+  if (project.websiteTheme) {
+    const themeCheck = verifyWebsiteThemeSerializable(project.websiteTheme);
+    checks.push({
+      name: "Website theme is serializable",
+      passed: themeCheck.passed,
+      detail: themeCheck.detail,
+    });
+  }
+
   return {
     passed: checks.every((check) => check.passed),
     checks,
@@ -260,6 +271,26 @@ export function verifyDeterministicCompilation(input: WebsiteCompilerInput): Com
     },
     ...verifyCompiledWebsiteProject(first).checks,
   ];
+
+  const inputWithoutOptionalThemeAssets: WebsiteCompilerInput = {
+    brief: input.brief,
+    blueprint: input.blueprint,
+    sourceBlueprintId: input.sourceBlueprintId,
+    sourceBriefId: input.sourceBriefId,
+    generatedAt: input.generatedAt,
+    generationMode: input.generationMode,
+  };
+  const withoutOptional = compileWebsiteProject({
+    ...inputWithoutOptionalThemeAssets,
+    generatedAt: "1970-01-01T00:00:00.000Z",
+  }).project;
+  checks.push({
+    name: "Compile succeeds without optional theme or assets",
+    passed: withoutOptional.metadata.projectName.length > 0 &&
+      withoutOptional.websiteTheme === undefined &&
+      withoutOptional.restaurantAssets === undefined,
+    detail: "Optional websiteTheme and restaurantAssets must not be required",
+  });
 
   return {
     passed: checks.every((check) => check.passed),
@@ -309,6 +340,7 @@ export function createSmashburgerCompilerInput(
     generatedAt: "1970-01-01T00:00:00.000Z",
     generationMode: "deterministic",
     restaurantAssets: BY_NANIS_RESTAURANT_ASSETS,
+    websiteTheme: BY_NANIS_WEBSITE_THEME,
   };
 }
 

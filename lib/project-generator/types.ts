@@ -15,6 +15,13 @@ export function restaurantAssetsFromProject(
   return project.restaurantAssets;
 }
 
+/** Brand theme for the compiled project, when defined on `CompiledWebsiteProject`. */
+export function websiteThemeFromProject(
+  project: CompiledWebsiteProject,
+): CompiledWebsiteProject["websiteTheme"] {
+  return project.websiteTheme;
+}
+
 export type VirtualFileKind =
   | "config"
   | "route-shell"
