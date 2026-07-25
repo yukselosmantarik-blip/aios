@@ -1,3 +1,8 @@
+import { BY_NANIS_RESTAURANT_ASSETS } from "@/lib/assets/by-nanis";
+import {
+  collectRestaurantAssetPaths,
+  verifyRestaurantAssetsOnDisk,
+} from "@/lib/assets/verify";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import { compileWebsiteProject, serializeCompiledWebsiteProject } from "@/lib/website-compiler/compile";
@@ -226,6 +231,17 @@ export function verifyCompiledWebsiteProject(
     detail: "Responsive rules must mention mobile-specific hierarchy",
   });
 
+  if (project.restaurantAssets) {
+    const assetCheck = verifyRestaurantAssetsOnDisk(project.restaurantAssets);
+    checks.push({
+      name: "Restaurant asset paths exist on disk",
+      passed: assetCheck.passed,
+      detail: assetCheck.passed
+        ? `${collectRestaurantAssetPaths(project.restaurantAssets).length} public files`
+        : `Missing: ${assetCheck.missing.join(", ")}`,
+    });
+  }
+
   return {
     passed: checks.every((check) => check.passed),
     checks,
@@ -292,6 +308,7 @@ export function createSmashburgerCompilerInput(
     sourceBriefId: brief.id,
     generatedAt: "1970-01-01T00:00:00.000Z",
     generationMode: "deterministic",
+    restaurantAssets: BY_NANIS_RESTAURANT_ASSETS,
   };
 }
 

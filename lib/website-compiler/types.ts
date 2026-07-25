@@ -1,3 +1,4 @@
+import type { RestaurantAssets } from "@/lib/assets/types";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import type { PageRole } from "@/lib/website-blueprint-page-dna";
@@ -19,6 +20,8 @@ export type WebsiteCompilerInput = {
   sourceBriefId?: string;
   generatedAt?: string;
   generationMode?: CompilerGenerationMode;
+  /** Optional customer media paths (AIOS `public/`); not inferred at runtime. */
+  restaurantAssets?: RestaurantAssets;
 };
 
 export type DetectedCompilerInputSections = {
@@ -400,6 +403,8 @@ export type CompiledWebsiteProject = {
   warnings: CompilerWarning[];
   missingData: MissingDataEntry[];
   detectedInputSections: DetectedCompilerInputSections;
+  /** Carried from compiler input when provided; used by the project generator. */
+  restaurantAssets?: RestaurantAssets;
 };
 
 export type CompileResult = {

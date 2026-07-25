@@ -8,6 +8,13 @@ export type ProjectGeneratorInput = {
   generatedAt?: string;
 };
 
+/** Customer media for the compiled project, when defined on `CompiledWebsiteProject`. */
+export function restaurantAssetsFromProject(
+  project: CompiledWebsiteProject,
+): CompiledWebsiteProject["restaurantAssets"] {
+  return project.restaurantAssets;
+}
+
 export type VirtualFileKind =
   | "config"
   | "route-shell"
