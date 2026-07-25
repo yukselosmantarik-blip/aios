@@ -27,7 +27,7 @@ export type ExportFileCategory =
   | "manifest"
   | "other";
 
-export type ExportFileEncoding = "utf-8";
+export type ExportFileEncoding = "utf-8" | "base64";
 
 export type PlaceholderCategory =
   | "logo"

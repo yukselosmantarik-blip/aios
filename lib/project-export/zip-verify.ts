@@ -243,8 +243,25 @@ export async function verifyZipArchive(input: {
   let utf8Failures = 0;
   let crcFailures = 0;
   let checksumFailures = 0;
+  const encodingLookup = new Map(input.entries.map((entry) => [entry.relativePath, entry.encoding]));
 
   for (const entry of archiveFiles) {
+    const encoding = encodingLookup.get(entry.fileName) ?? "utf-8";
+
+    if (encoding === "base64") {
+      const expectedChecksum = checksumLookup.get(entry.fileName);
+      const actualChecksum = computeBufferChecksum(entry.content);
+      if (!expectedChecksum || actualChecksum !== expectedChecksum) {
+        checksumFailures += 1;
+      }
+
+      const actualCrc = crc32(entry.content) >>> 0;
+      if (actualCrc !== (entry.crc32 >>> 0)) {
+        crcFailures += 1;
+      }
+      continue;
+    }
+
     const utf8Content = entry.content.toString("utf-8");
     const roundTrip = Buffer.from(utf8Content, "utf-8");
     if (!roundTrip.equals(entry.content)) {

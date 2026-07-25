@@ -1,4 +1,5 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
+import { mergeWebsiteThemeIntoCssVariables } from "@/lib/project-generator/website-theme-css";
 
 export type ThemeColors = {
   primaryColor: string;
@@ -303,7 +304,7 @@ export function buildDesignTokenRecord(
 export function buildCssVariableMap(theme: GeneratedTheme, project: CompiledWebsiteProject): CssVariableMap {
   const borderColor = tokenValue(project, "colors", "color.border", "#E5E7EB");
 
-  return {
+  const base: CssVariableMap = {
     "--color-primary": theme.colors.primaryColor,
     "--color-secondary": theme.colors.secondaryColor,
     "--color-accent": theme.colors.accentColor,
@@ -360,6 +361,8 @@ export function buildCssVariableMap(theme: GeneratedTheme, project: CompiledWebs
     "--dark-color-text": theme.darkMode.colors.textColor,
     "--dark-color-muted": theme.darkMode.colors.mutedColor,
   };
+
+  return mergeWebsiteThemeIntoCssVariables(base, project.websiteTheme);
 }
 
 export function buildTailwindVariantMap(): TailwindVariantMap {

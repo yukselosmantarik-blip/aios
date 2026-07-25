@@ -68,6 +68,12 @@ export type PageSectionConfig = {
   headingLevel: 1 | 2 | 3;
   sourcePatternIds: string[];
   className?: string;
+  heroLayout?: "premium-restaurant" | "legacy";
+  tagline?: string | null;
+  primaryCtaHref?: string;
+  secondaryCtaHref?: string;
+  phone?: string | null;
+  address?: string | null;
 };
 
 export type GeneratedPageConfig = {

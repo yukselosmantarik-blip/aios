@@ -21,6 +21,14 @@ export type CreateZipExportOptions = {
 };
 
 function bufferFromZipEntry(entry: ZipReadyEntry): Buffer {
+  if (entry.encoding === "base64") {
+    const buffer = Buffer.from(entry.content, "base64");
+    if (buffer.length !== entry.byteLength) {
+      throw new Error(`Base64 byte length mismatch for ${entry.relativePath}`);
+    }
+    return buffer;
+  }
+
   const buffer = Buffer.from(entry.content, "utf-8");
   if (buffer.length !== entry.byteLength) {
     throw new Error(`UTF-8 byte length mismatch for ${entry.relativePath}`);

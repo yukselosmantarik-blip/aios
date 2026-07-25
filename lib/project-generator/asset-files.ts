@@ -10,11 +10,16 @@ import {
   assetVirtualPath,
   buildPlaceholderSvg,
 } from "@/lib/project-generator/asset-utils";
+import {
+  buildCustomerAssetVirtualFiles,
+  skippedPlaceholderAssetIds,
+} from "@/lib/project-generator/customer-asset-export";
 import { buildVirtualFile } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
 
-export function buildAssetPlaceholderFiles(): VirtualFile[] {
+export function buildAssetPlaceholderFiles(project: CompiledWebsiteProject): VirtualFile[] {
   const files: VirtualFile[] = [];
+  const skipIds = skippedPlaceholderAssetIds(project.restaurantAssets);
 
   for (const directory of ASSET_PUBLIC_DIRECTORIES) {
     if (directory !== "public/fonts") {
@@ -31,6 +36,9 @@ export function buildAssetPlaceholderFiles(): VirtualFile[] {
   }
 
   for (const definition of ASSET_DEFINITIONS) {
+    if (skipIds.has(definition.id)) {
+      continue;
+    }
     files.push(
       buildVirtualFile(assetVirtualPath(definition), "asset-placeholder", buildPlaceholderSvg(definition), {
         description: `${definition.assetType} asset placeholder`,
@@ -44,9 +52,9 @@ export function buildAssetPlaceholderFiles(): VirtualFile[] {
   return files;
 }
 
-export function buildAssetRegistryFiles(): VirtualFile[] {
+export function buildAssetRegistryFiles(project: CompiledWebsiteProject): VirtualFile[] {
   return [
-    buildVirtualFile("lib/assets/registry.ts", "registry", buildAssetRegistryFile(), {
+    buildVirtualFile("lib/assets/registry.ts", "registry", buildAssetRegistryFile(project), {
       description: "Generated asset registry",
       implementationStatus: "generated",
     }),
@@ -62,8 +70,15 @@ export function buildAssetRegistryFiles(): VirtualFile[] {
 }
 
 export function buildAssetEngineFiles(project: CompiledWebsiteProject): VirtualFile[] {
-  void project;
-  return [...buildAssetPlaceholderFiles(), ...buildAssetRegistryFiles()];
+  const customerAssets = project.restaurantAssets
+    ? buildCustomerAssetVirtualFiles(project, project.restaurantAssets)
+    : [];
+
+  return [
+    ...buildAssetPlaceholderFiles(project),
+    ...customerAssets,
+    ...buildAssetRegistryFiles(project),
+  ];
 }
 
 export function countAssetPlaceholderFiles(files: VirtualFile[]): number {

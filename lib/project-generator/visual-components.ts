@@ -439,6 +439,11 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
     "cta-focused": "variants.header",
   };
   const headerClassExpr = headerClassMap[headerVariant] ?? "variants.header";
+  const useBrandLogo = Boolean(project.restaurantAssets);
+  const logoClassName = useBrandLogo ? "h-10 w-auto max-w-[9rem]" : "h-8 w-auto";
+  const wordmarkClassName = useBrandLogo
+    ? "sr-only"
+    : "text-lg font-[var(--font-weight-semibold)]";
 
   return [
     headerComment("SiteHeader"),
@@ -482,12 +487,12 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
     "              <img",
     "                src={logoAsset.path}",
     "                alt={logoAsset.altText}",
-    '                className="h-8 w-auto"',
+    `                className=${JSON.stringify(logoClassName)}`,
     "                data-asset-type={logoAsset.assetType}",
     "                data-placeholder={String(logoAsset.placeholder)}",
     "                data-replace-before-production={String(logoAsset.replaceBeforeProduction)}",
     "              />",
-    '              <span className="text-lg font-[var(--font-weight-semibold)]">',
+    `              <span className=${JSON.stringify(wordmarkClassName)}>`,
     `                ${JSON.stringify(project.business.businessName)}`,
     "              </span>",
     "            </Link>",
@@ -690,7 +695,7 @@ function generateMobileStickyCTA(project: CompiledWebsiteProject): string {
   ].join("\n");
 }
 
-function generateHeroSection(project: CompiledWebsiteProject): string {
+function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
   const variant = heroVariantForPage("home", project.site.styleTier);
   const trustCue = placeholderLabel("Trust cue");
   const heroMedia = placeholderLabel("Hero media");
@@ -707,7 +712,7 @@ function generateHeroSection(project: CompiledWebsiteProject): string {
     "",
     `const heroVariant = ${JSON.stringify(variant)} as string;`,
     "",
-    "export function HeroSection({ section }: SectionComponentProps) {",
+    "function HeroSectionLegacy({ section }: SectionComponentProps) {",
     "  const mediaLabel = section.media[0] ?? " + JSON.stringify(heroMedia) + ";",
     "",
     "  return (",
@@ -801,6 +806,116 @@ function generateHeroSection(project: CompiledWebsiteProject): string {
     "}",
     "",
   ].join("\n");
+}
+
+function legacyHeroSectionSource(project: CompiledWebsiteProject): string {
+  const legacy = generateLegacyHeroSection(project);
+  const marker = "const heroVariant = ";
+  const index = legacy.indexOf(marker);
+  if (index === -1) {
+    throw new Error("Expected heroVariant in legacy hero generator output");
+  }
+  return legacy.slice(index).trim();
+}
+
+function generatePremiumRestaurantHeroSection(project: CompiledWebsiteProject): string {
+  const addressPlaceholder = placeholderLabel("Adresse");
+  const phonePlaceholder = placeholderLabel("Telefon");
+
+  return [
+    headerComment("HeroSection"),
+    ...premiumSectionImports([
+      "import { Badge } from './Badge';",
+      "import { ButtonLink } from './ButtonLink';",
+      "import { Cluster } from './Cluster';",
+      "import { MediaPlaceholder } from './MediaPlaceholder';",
+      "import { Placeholder } from './Placeholder';",
+      "import { resolveAsset } from '@/lib/assets/resolve-asset';",
+    ]),
+    "",
+    legacyHeroSectionSource(project),
+    "",
+    "export function HeroSection({ section }: SectionComponentProps) {",
+    "  if (section.heroLayout === 'premium-restaurant') {",
+    "    const heroAsset = resolveAsset('hero');",
+    "    const primaryHref = section.primaryCtaHref ?? section.ctaReferences[0] ?? '/';",
+    "    const secondaryHref = section.secondaryCtaHref ?? section.ctaReferences[1] ?? '/';",
+    "",
+    "    return (",
+    "      <SectionShell",
+    "        id={section.id}",
+    "        headingId={`${section.id}-heading`}",
+    "        className={cn('hero-premium', section.className)}",
+    "      >",
+    '        <div className="hero-premium__inner">',
+    '          <div className="hero-premium__content">',
+    '            <div className="hero-premium__animate">',
+    "              {section.tagline ? (",
+    '                <p className="hero-premium__tagline">{section.tagline}</p>',
+    "              ) : null}",
+    "              <h1 id={`${section.id}-heading`} className=\"hero-premium__title\">",
+    "                {section.title}",
+    "              </h1>",
+    "              {section.description ? (",
+    '                <p className="hero-premium__description">{section.description}</p>',
+    "              ) : null}",
+    "            </div>",
+    '            <div className="hero-premium__meta hero-premium__animate">',
+    "              {section.address ? (",
+    '                <p>{section.address}</p>',
+    "              ) : (",
+    "                <Placeholder label=" + JSON.stringify(addressPlaceholder) + " category=\"address\" />",
+    "              )}",
+    "              {section.phone ? (",
+    '                <p><a href={`tel:${section.phone.replace(/\\s+/g, "")}`}>{section.phone}</a></p>',
+    "              ) : (",
+    "                <Placeholder label=" + JSON.stringify(phonePlaceholder) + " category=\"phone\" />",
+    "              )}",
+    "            </div>",
+    '            <div className="hero-premium__actions hero-premium__animate">',
+    "              {section.primaryCTA ? (",
+    "                <a className=\"hero-premium__cta-primary\" href={primaryHref}>",
+    "                  {section.primaryCTA}",
+    "                </a>",
+    "              ) : null}",
+    "              {section.secondaryCTA ? (",
+    "                <a className=\"hero-premium__cta-secondary\" href={secondaryHref}>",
+    "                  {section.secondaryCTA}",
+    "                </a>",
+    "              ) : null}",
+    "            </div>",
+    "          </div>",
+    '          <div className="hero-premium__media hero-premium__animate hero-premium__animate--delay">',
+    "            <img",
+    "              src={heroAsset.path}",
+    "              alt={heroAsset.altText}",
+    '              className="hero-premium__image"',
+    '              loading="eager"',
+    '              fetchPriority="high"',
+    "              decoding=\"async\"",
+    "              data-asset-type={heroAsset.assetType}",
+    "              data-placeholder={String(heroAsset.placeholder)}",
+    "            />",
+    "          </div>",
+    "        </div>",
+    "      </SectionShell>",
+    "    );",
+    "  }",
+    "",
+    "  return <HeroSectionLegacy section={section} />;",
+    "}",
+    "",
+  ].join("\n");
+}
+
+function generateHeroSection(project: CompiledWebsiteProject): string {
+  if (project.websiteTheme && project.restaurantAssets) {
+    return generatePremiumRestaurantHeroSection(project);
+  }
+  return generateLegacyHeroSection(project).replace(
+    "function HeroSectionLegacy({ section }: SectionComponentProps) {",
+    "export function HeroSection({ section }: SectionComponentProps) {",
+  );
 }
 
 function generateTrustSection(): string {

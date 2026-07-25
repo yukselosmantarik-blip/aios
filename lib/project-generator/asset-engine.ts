@@ -3,6 +3,10 @@ import {
   type AssetDefinition,
   type AssetId,
 } from "@/lib/project-generator/asset-utils";
+import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
+import {
+  buildCustomerAssetRegistryOverrides,
+} from "@/lib/project-generator/customer-asset-export";
 
 export type AssetSource = "placeholder" | "ai-generated" | "upload";
 
@@ -16,11 +20,17 @@ export type RegistryAssetEntry = {
   source: AssetSource;
 };
 
-export function buildRegistryAssetEntries(): Record<AssetId, RegistryAssetEntry> {
+export function buildRegistryAssetEntries(
+  project?: CompiledWebsiteProject,
+): Record<AssetId, RegistryAssetEntry> {
   const entries = {} as Record<AssetId, RegistryAssetEntry>;
+  const overrides = project?.restaurantAssets
+    ? buildCustomerAssetRegistryOverrides(project, project.restaurantAssets)
+    : {};
 
   for (const definition of ASSET_DEFINITIONS) {
-    entries[definition.id] = {
+    const override = overrides[definition.id];
+    entries[definition.id] = override ?? {
       id: definition.id,
       path: definition.publicPath,
       assetType: definition.assetType,
@@ -34,8 +44,8 @@ export function buildRegistryAssetEntries(): Record<AssetId, RegistryAssetEntry>
   return entries;
 }
 
-export function buildAssetRegistryFile(): string {
-  const entries = buildRegistryAssetEntries();
+export function buildAssetRegistryFile(project?: CompiledWebsiteProject): string {
+  const entries = buildRegistryAssetEntries(project);
   const serializedEntries = ASSET_DEFINITIONS.map((definition) => {
     const entry = entries[definition.id];
     return [

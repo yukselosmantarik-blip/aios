@@ -327,6 +327,12 @@ export function verifyGeneratedVisualComponents(
   });
 
   checks.push({
+    name: "No AIOS customer public paths in export",
+    passed: !generated.files.some((file) => file.content.includes("/customers/")),
+    detail: "Customer assets use export-local /images or /icons paths",
+  });
+
+  checks.push({
     name: "Responsive layout patterns present",
     passed: verifyResponsiveComponents(generated),
     detail: "Mobile-first responsive utilities detected",

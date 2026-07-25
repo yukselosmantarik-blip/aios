@@ -56,6 +56,8 @@ export type VirtualFile = {
   kind: VirtualFileKind;
   content: string;
   metadata: VirtualFileMetadata;
+  /** When set to base64, `content` is encoded binary for export ZIP packaging. */
+  contentEncoding?: "base64";
 };
 
 export type VirtualDirectory = {

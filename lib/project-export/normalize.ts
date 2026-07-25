@@ -1,6 +1,6 @@
 import { fileNameFromPath } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
-import { computeContentChecksum } from "@/lib/project-export/checksum";
+import { computeBufferChecksum, computeContentChecksum } from "@/lib/project-export/checksum";
 import type {
   ExportFileCategory,
   NormalizedExportDirectory,
@@ -134,18 +134,25 @@ export function shouldReplaceBeforeProduction(file: VirtualFile): boolean {
 }
 
 export function normalizeExportFile(file: VirtualFile): NormalizedExportFile {
-  const content = normalizeLineEndings(file.content);
   const path = file.path.replace(/^\/+/, "");
+  const isBase64 = file.contentEncoding === "base64";
+  const content = isBase64 ? file.content : normalizeLineEndings(file.content);
+  const byteLength = isBase64
+    ? Buffer.from(content, "base64").length
+    : Buffer.byteLength(content, "utf8");
+  const checksum = isBase64
+    ? computeBufferChecksum(Buffer.from(content, "base64"))
+    : computeContentChecksum(content);
 
   return {
     path,
     fileName: fileNameFromPath(path),
     extension: fileExtension(path),
     category: categorizeExportPath(path, file.kind),
-    encoding: "utf-8",
+    encoding: isBase64 ? "base64" : "utf-8",
     content,
-    byteLength: Buffer.byteLength(content, "utf8"),
-    checksum: computeContentChecksum(content),
+    byteLength,
+    checksum,
     executable: path.endsWith(".sh"),
     required: isRequiredExportFile(path),
     generated: isGeneratedExportFile(file),

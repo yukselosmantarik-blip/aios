@@ -227,19 +227,72 @@ export function enrichPageSectionConfig(
   };
 }
 
+function routePathForPageRole(
+  project: CompiledWebsiteProject,
+  role: string,
+): string | undefined {
+  return project.routes.find((route) => route.pageRole === role)?.routePath;
+}
+
+export function resolveHeroCtaHref(
+  project: CompiledWebsiteProject,
+  label: string | null,
+  intent: "primary" | "secondary",
+): string {
+  if (!label) {
+    return "/";
+  }
+
+  const lower = label.toLowerCase();
+  const menuPath =
+    routePathForPageRole(project, "menu") ??
+    project.routes.find((route) => /speise|menu/i.test(route.pageName))?.routePath;
+  const contactPath =
+    routePathForPageRole(project, "contact") ??
+    project.routes.find((route) => /kontakt|contact/i.test(route.pageName))?.routePath;
+
+  if (intent === "primary") {
+    if (/speise|menu|bestell|order/i.test(lower)) {
+      return menuPath ?? contactPath ?? "/";
+    }
+    if (/kontakt|contact|anfrage/i.test(lower)) {
+      return contactPath ?? "/";
+    }
+    return menuPath ?? contactPath ?? "/";
+  }
+
+  if (/standort|öffnung|location|kontakt|contact/i.test(lower)) {
+    return contactPath ?? "/";
+  }
+
+  return contactPath ?? menuPath ?? "/";
+}
+
+function extractPhoneFromProject(): string | null {
+  return null;
+}
+
+function extractAddressFromProject(project: CompiledWebsiteProject): string | null {
+  const location = sanitizeCompiledText(project.business.location);
+  return location || null;
+}
+
 export function buildHeroSectionForPage(
   page: CompiledPage,
   project: CompiledWebsiteProject,
 ): PageSectionConfig {
-  const eyebrow = sanitizeCompiledText(project.business.usp?.split(",")[0] ?? "");
+  const uspLines = splitUspStatements(project.business.usp);
+  const tagline = sanitizeCompiledText(uspLines[0] ?? project.business.usp?.split(",")[0] ?? "");
   const title = sanitizeCompiledText(project.business.businessName);
   const description = sanitizeCompiledText(project.business.websiteGoal);
+  const premiumHome =
+    page.pageRole === "home" && Boolean(project.websiteTheme && project.restaurantAssets);
 
   return {
     id: `section:${page.id.replace(/^page:/, "")}-hero`,
     title,
     name: "HeroSection",
-    eyebrow: eyebrow || null,
+    eyebrow: tagline || null,
     description,
     type: "hero",
     order: 0,
@@ -254,15 +307,25 @@ export function buildHeroSectionForPage(
     primaryCTA: page.primaryCta,
     secondaryCTA: page.secondaryCta,
     media: [],
-    ctaReferences: [page.primaryCta, page.secondaryCta].filter(Boolean),
+    ctaReferences: [
+      resolveHeroCtaHref(project, page.primaryCta, "primary"),
+      resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
+    ],
     mediaReferences: [],
     headingLevel: 1,
     sourcePatternIds: ["hero"],
     contentBody: description,
-    contentLines: splitUspStatements(project.business.usp),
-    trustBadges: splitUspStatements(project.business.usp),
+    contentLines: uspLines,
+    trustBadges: uspLines,
     menuItems: [],
     faqItems: [],
+    heroLayout: premiumHome ? "premium-restaurant" : "legacy",
+    tagline: tagline || null,
+    primaryCtaHref: resolveHeroCtaHref(project, page.primaryCta, "primary"),
+    secondaryCtaHref: resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
+    phone: extractPhoneFromProject(),
+    address: extractAddressFromProject(project),
+    className: premiumHome ? "hero-premium" : undefined,
   };
 }
 
