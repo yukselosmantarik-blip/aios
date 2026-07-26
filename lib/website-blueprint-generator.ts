@@ -29,8 +29,8 @@ import {
 import { resolveIndustryRegistrationFromBrief } from "@/lib/core/registries/industry-registry";
 import { ensureWebsiteEngineBootstrapped } from "@/lib/core/bootstrap";
 import { detectBusinessProfile } from "@/lib/website-compiler/normalize";
+import type { BusinessProfile } from "@/lib/website-blueprint-page-dna";
 
-type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
   | "home"
   | "menu"
@@ -288,6 +288,7 @@ function brandPersonality(brief: WebsiteBrief, profile: BusinessProfile): string
     restaurant: "Hospitality-focused, appetizing, welcoming",
     dentist: "Calm, reassuring, competent, hygienic",
     agency: "Creative, results-oriented, expert, collaborative",
+    business: "Service-led, dependable, local, relationship-focused",
     default: "Customer-centric, reliable, knowledgeable",
   };
 
@@ -345,6 +346,10 @@ function customerPainPoints(
     agency: [
       "Hard to assess capability without clear proof or portfolio.",
       "Unclear process for starting a project or getting a quote.",
+    ],
+    business: [
+      "Unclear service scope, pricing, or response times.",
+      "Difficulty reaching a reliable local provider quickly.",
     ],
     default: [
       "Cannot quickly understand what the business offers.",
@@ -419,6 +424,7 @@ function brandToneOfVoice(brief: WebsiteBrief, profile: BusinessProfile): string
     restaurant: "Sensory, inviting language tied to food and experience — no invented dish descriptions.",
     dentist: "Reassuring, calm, factual — no fear-based messaging.",
     agency: "Confident, outcome-focused — reference brief services only.",
+    business: "Clear, practical, trust-building — emphasize reliability and local service.",
     default: "Helpful and credible — stick to brief-provided copy.",
   };
 

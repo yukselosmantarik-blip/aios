@@ -4,6 +4,7 @@ import type { VirtualFile } from "@/lib/project-generator/types";
 import { buildStyleSystem } from "@/lib/project-generator/style-engine";
 import { buildPremiumHeroStylesheet, buildPremiumLandingSectionStyles } from "@/lib/project-generator/website-theme-css";
 import { isPremiumRestaurantLanding } from "@/lib/industries/restaurant/landing";
+import { isBusinessServiceLanding } from "@/lib/industries/business/landing";
 
 function serializeObjectExport(name: string, value: unknown, typeName?: string): string {
   const lines = [
@@ -263,7 +264,9 @@ export function buildStyleEngineFiles(project: CompiledWebsiteProject): VirtualF
       "styles",
       buildGlobalsCss(styleSystem.cssVariables, styleSystem.theme, {
         includePremiumLandingStyles:
-          isPremiumRestaurantLanding(project) || Boolean(project.restaurantBusinessProfile),
+          isPremiumRestaurantLanding(project) ||
+          isBusinessServiceLanding(project) ||
+          Boolean(project.restaurantBusinessProfile),
       }),
       {
         description: "Generated global stylesheet with CSS variables",

@@ -7,6 +7,10 @@ import type {
 import type { PageSectionConfig } from "@/lib/project-generator/react-utils";
 import { isPremiumRestaurantLanding, premiumLandingContent } from "@/lib/industries/restaurant/landing";
 import {
+  isBusinessServiceLanding,
+} from "@/lib/industries/business/landing";
+import { buildBusinessHomeSections } from "@/lib/industries/business/sections";
+import {
   buildPageSectionConfig,
   shouldIncludeSectionInPage,
 } from "@/lib/project-generator/react-utils";
@@ -270,11 +274,12 @@ export function resolveHeroCtaHref(
 }
 
 function extractPhoneFromProject(project: CompiledWebsiteProject): string | null {
-  return project.restaurantBusinessProfile?.phone ?? null;
+  return project.businessProfile?.phone ?? project.restaurantBusinessProfile?.phone ?? null;
 }
 
 function extractAddressFromProject(project: CompiledWebsiteProject): string | null {
-  const profileAddress = project.restaurantBusinessProfile?.address;
+  const profileAddress =
+    project.businessProfile?.address ?? project.restaurantBusinessProfile?.address;
   if (profileAddress) {
     return sanitizeCompiledText(profileAddress);
   }
@@ -419,6 +424,10 @@ export function buildEnrichedPageSections(
   page: CompiledPage,
   project: CompiledWebsiteProject,
 ): PageSectionConfig[] {
+  if (page.pageRole === "home" && isBusinessServiceLanding(project) && project.businessProfile) {
+    return buildBusinessHomeSections(page, project.businessProfile);
+  }
+
   if (page.pageRole === "home" && isPremiumRestaurantLanding(project)) {
     return [buildHeroSectionForPage(page, project), buildMenuImageSection(project), buildBusinessInfoSection(project)].map(
       (section, index) => ({

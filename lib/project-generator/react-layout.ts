@@ -6,18 +6,31 @@ import {
   premiumLandingContent,
 } from "@/lib/industries/restaurant/landing";
 import {
+  businessLandingContent,
+  isBusinessServiceLanding,
+} from "@/lib/industries/business/landing";
+import {
   isFeatureEnabled,
   primaryLanguageCopy,
 } from "@/lib/project-generator/react-utils";
 
 function layoutMetadata(project: CompiledWebsiteProject): string {
   const landing = premiumLandingContent(project);
+  const businessLanding = businessLandingContent(project);
   const premiumLanding = isPremiumRestaurantLanding(project);
+  const businessLandingActive = isBusinessServiceLanding(project);
   const defaultDescription =
     premiumLanding && landing
       ? landing.homeMetaDescription
-      : project.business.websiteGoal.slice(0, 160);
-  const defaultTitle = premiumLanding && landing ? landing.brandName : project.metadata.projectName;
+      : businessLandingActive && businessLanding
+        ? businessLanding.description.slice(0, 160)
+        : project.business.websiteGoal.slice(0, 160);
+  const defaultTitle =
+    premiumLanding && landing
+      ? landing.brandName
+      : businessLandingActive && businessLanding
+        ? businessLanding.companyName
+        : project.metadata.projectName;
 
   const seo = project.seo[0] ?? project.pages[0]?.seo;
   if (!seo) {

@@ -1,6 +1,6 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 
-export type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
+export type BusinessProfile = "restaurant" | "dentist" | "agency" | "business" | "default";
 
 export type PageRole =
   | "home"
@@ -898,6 +898,7 @@ export function pageBusinessGoal(
     restaurant: "Prioritize menu visibility and order path.",
     dentist: "Prioritize reassurance and appointment path.",
     agency: "Prioritize portfolio proof and inquiry path.",
+    business: "Prioritize services clarity and contact path.",
     default: "Prioritize clarity and contact path.",
   };
 

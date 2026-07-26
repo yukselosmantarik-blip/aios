@@ -1,4 +1,4 @@
-import type { PageRole } from "@/lib/website-blueprint-page-dna";
+import type { BusinessProfile, PageRole } from "@/lib/website-blueprint-page-dna";
 
 const PAGE_ROLE_ALIASES: Record<string, PageRole> = {
   home: "home",
@@ -148,7 +148,7 @@ export function sortByOrder<T extends { order: number }>(items: T[]): T[] {
 export function detectBusinessProfile(
   industry: string,
   businessName: string,
-): "restaurant" | "dentist" | "agency" | "default" {
+): BusinessProfile {
   const haystack = `${industry} ${businessName}`.toLowerCase();
 
   if (/burger|restaurant|imbiss|gastro|café|cafe|bistro|food|smashburger/.test(
@@ -165,6 +165,14 @@ export function detectBusinessProfile(
     haystack,
   )) {
     return "agency";
+  }
+
+  if (
+    /gebäude|gebaeude|handwerk|facility|local service|lokaler dienst|dienstleistung|gebäudeservice|gebaeudeservice|reinigungsservice|business website/.test(
+      haystack,
+    )
+  ) {
+    return "business";
   }
 
   return "default";

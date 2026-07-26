@@ -1,4 +1,5 @@
 import { registerRestaurantIndustryModule } from "@/lib/industries/restaurant/register";
+import { registerBusinessIndustryModule } from "@/lib/industries/business/register";
 
 let bootstrapped = false;
 
@@ -9,6 +10,7 @@ export function ensureIndustryModulesRegistered(): void {
   }
 
   registerRestaurantIndustryModule();
+  registerBusinessIndustryModule();
   bootstrapped = true;
 }
 

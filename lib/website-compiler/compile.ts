@@ -900,6 +900,9 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
   const industryAttachments = resolveIndustryCompileAttachments(input, industryId);
   const resolvedRestaurantAssets = industryAttachments.restaurantAssets;
   const resolvedRestaurantBusinessProfile = industryAttachments.restaurantBusinessProfile;
+  const resolvedBusinessProfile =
+    industryAttachments.businessProfile ?? input.businessProfile;
+  const resolvedWebsiteTheme = industryAttachments.websiteTheme ?? input.websiteTheme;
 
   const project: CompiledWebsiteProject = {
     metadata: {
@@ -984,10 +987,11 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
     missingData,
     detectedInputSections: detectInputSections(brief, blueprint),
     ...(resolvedRestaurantAssets ? { restaurantAssets: resolvedRestaurantAssets } : {}),
-    ...(input.websiteTheme ? { websiteTheme: input.websiteTheme } : {}),
+    ...(resolvedWebsiteTheme ? { websiteTheme: resolvedWebsiteTheme } : {}),
     ...(resolvedRestaurantBusinessProfile
       ? { restaurantBusinessProfile: resolvedRestaurantBusinessProfile }
       : {}),
+    ...(resolvedBusinessProfile ? { businessProfile: resolvedBusinessProfile } : {}),
   };
 
   return { project, warnings };

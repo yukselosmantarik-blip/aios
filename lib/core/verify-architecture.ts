@@ -22,6 +22,7 @@ import { stableSerializeGeneratedProjectTreeJson } from "@/lib/project-generator
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import { detectBusinessProfile } from "@/lib/website-compiler/normalize";
 import { resetIndustryModulesBootstrapForTests } from "@/lib/industries/bootstrap";
+import { resetBusinessIndustryModuleRegistrationForTests } from "@/lib/industries/business/register";
 import { resetRestaurantIndustryModuleRegistrationForTests } from "@/lib/industries/restaurant/register";
 
 export type ArchitectureVerificationCheck = {
@@ -43,6 +44,7 @@ function resetWebsiteEngineForVerify(): void {
   resetIndustryModuleRegistryForTests();
   resetIndustryModulesBootstrapForTests();
   resetRestaurantIndustryModuleRegistrationForTests();
+  resetBusinessIndustryModuleRegistrationForTests();
 }
 
 export function verifyWebsiteEngineArchitecture(): ArchitectureVerificationResult {
@@ -53,7 +55,7 @@ export function verifyWebsiteEngineArchitecture(): ArchitectureVerificationResul
 
   checks.push({
     name: "Industry registry bootstrapped",
-    passed: getIndustryRegistrySnapshot().count === 4,
+    passed: getIndustryRegistrySnapshot().count === 5,
     detail: `industries=${getIndustryRegistrySnapshot().count}`,
   });
 

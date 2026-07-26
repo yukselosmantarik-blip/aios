@@ -1,6 +1,4 @@
 export {
-  synthesizeRestaurantBusinessProfile,
   resolveFooterBusinessProfile,
-  formatPhoneTelHref,
-  splitAddressLines,
-} from "@/lib/industries/restaurant/business-profile";
+  synthesizeRestaurantBusinessProfile,
+} from "@/lib/industries/footer-profile";

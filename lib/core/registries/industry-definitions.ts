@@ -27,6 +27,14 @@ export const BUILTIN_INDUSTRY_DEFINITIONS: readonly IndustryRegistration[] = [
     },
   },
   {
+    id: "business",
+    label: "Business Website",
+    defaultSitemap: ["Home"],
+    metadata: {
+      description: "Local service companies and general business websites.",
+    },
+  },
+  {
     id: "default",
     label: "General business",
     defaultSitemap: ["Home", "About", "Services", "Contact"],

@@ -35,6 +35,7 @@ const INDUSTRY_PROBE_FIXTURES: { id: IndustryId; industry: string; businessName:
   { id: "restaurant", industry: "Restaurant", businessName: "Probe Kitchen" },
   { id: "dentist", industry: "Dental Practice", businessName: "Probe Dental" },
   { id: "agency", industry: "Creative Agency", businessName: "Probe Studio" },
+  { id: "business", industry: "Lokaler Gebäudeservice", businessName: "Probe Facility GmbH" },
   { id: "default", industry: "General Services", businessName: "Probe Business" },
 ];
 

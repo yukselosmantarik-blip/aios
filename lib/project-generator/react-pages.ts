@@ -2,6 +2,7 @@ import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 import { buildVirtualFile, routePathToPageFilePath } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
 import { isPremiumRestaurantLanding } from "@/lib/industries/restaurant/landing";
+import { isBusinessServiceLanding } from "@/lib/industries/business/landing";
 import { buildRootLayoutFile } from "@/lib/project-generator/react-layout";
 import { buildRouteBoundaryFiles } from "@/lib/project-generator/react-route-files";
 import {
@@ -42,7 +43,9 @@ function buildPageFile(config: GeneratedPageConfig, project: CompiledWebsiteProj
     .join("\n");
 
   const internalLinksBlock =
-    !isPremiumRestaurantLanding(project) && config.internalLinks.length > 0
+    !isPremiumRestaurantLanding(project) &&
+    !isBusinessServiceLanding(project) &&
+    config.internalLinks.length > 0
       ? [
           '      <nav aria-label="Interne Links">',
           "        <ul>",

@@ -20,6 +20,7 @@ export * as exportEngine from "@/lib/core/export";
 export * as samples from "@/lib/core/samples";
 export * as registries from "@/lib/core/registries";
 export * as industries from "@/lib/industries";
+export * as business from "@/lib/industries/business";
 
 export { ensureWebsiteEngineBootstrapped, resetWebsiteEngineBootstrapForTests } from "@/lib/core/bootstrap";
 export { verifyWebsiteEngineArchitecture } from "@/lib/core/verify-architecture";

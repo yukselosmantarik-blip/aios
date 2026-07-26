@@ -23,7 +23,7 @@ export function verifyIndustryRegistry(): IndustryRegistryVerificationResult {
 
   checks.push({
     name: "Built-in industries registered",
-    passed: snapshot.count === 4,
+    passed: snapshot.count === 5,
     detail: `count=${snapshot.count}`,
   });
 

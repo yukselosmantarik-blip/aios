@@ -1,6 +1,7 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
+import type { BusinessProfile } from "@/lib/website-blueprint-page-dna";
 
-export type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
+export type { BusinessProfile } from "@/lib/website-blueprint-page-dna";
 export type StyleTier = "premium" | "modern" | "default";
 
 export type DesignSystemContext = {

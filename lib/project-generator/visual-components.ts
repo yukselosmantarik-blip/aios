@@ -6,6 +6,11 @@ import {
   isPremiumRestaurantLanding,
   resolvePremiumOrderCtaHref,
 } from "@/lib/industries/restaurant/landing";
+import {
+  businessHeaderNavItems,
+  businessPrimaryCtaHref,
+  isBusinessServiceLanding,
+} from "@/lib/industries/business/landing";
 import { resolveFooterBusinessProfile } from "@/lib/project-generator/restaurant-business-profile";
 import {
   heroVariantForPage,
@@ -433,25 +438,36 @@ function generateMediaPlaceholder(): string {
 
 function generateSiteHeader(project: CompiledWebsiteProject): string {
   const headerVariant = headerVariantForProject(project);
-  const anchorNav = isPremiumRestaurantLanding(project);
-  const navItems = anchorNav
+  const premiumAnchor = isPremiumRestaurantLanding(project);
+  const businessAnchor = isBusinessServiceLanding(project);
+  const navItems = premiumAnchor
     ? [
         '  { label: "Startseite", href: "/" },',
         '  { label: "Speisekarte", href: "/#menu" },',
         '  { label: "Kontakt", href: "/#contact" },',
       ].join("\n")
-    : project.navigation.primaryNavigationItems
-        .map(
-          (item) =>
-            `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
-        )
-        .join("\n");
+    : businessAnchor
+      ? businessHeaderNavItems()
+          .map((item) => `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.href)} },`)
+          .join("\n")
+      : project.navigation.primaryNavigationItems
+          .map(
+            (item) =>
+              `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
+          )
+          .join("\n");
   const cta = project.navigation.ctaItem;
-  const ctaHref = anchorNav ? resolvePremiumOrderCtaHref(project) : cta.routePath;
+  const ctaHref = premiumAnchor
+    ? resolvePremiumOrderCtaHref(project)
+    : businessAnchor
+      ? businessPrimaryCtaHref(project)
+      : cta.routePath;
   const orderCtaLabel =
-    anchorNav && project.restaurantBusinessProfile?.landing?.orderCtaLabel
+    premiumAnchor && project.restaurantBusinessProfile?.landing?.orderCtaLabel
       ? project.restaurantBusinessProfile.landing.orderCtaLabel
-      : cta.label;
+      : businessAnchor && project.businessProfile?.primaryCta
+        ? project.businessProfile.primaryCta
+        : cta.label;
   const brandHref = "/";
   const headerClassMap: Record<string, string> = {
     static: "variants.headerStatic",
@@ -753,10 +769,19 @@ function generateSiteFooter(project: CompiledWebsiteProject): string {
 
 function generateMobileStickyCTA(project: CompiledWebsiteProject): string {
   const premium = isPremiumRestaurantLanding(project);
+  const business = isBusinessServiceLanding(project);
   const landing = project.restaurantBusinessProfile?.landing;
   const label =
-    premium && landing ? landing.orderCtaLabel : project.site.primaryCta;
-  const href = premium ? resolvePremiumOrderCtaHref(project) : "/";
+    premium && landing
+      ? landing.orderCtaLabel
+      : business && project.businessProfile
+        ? project.businessProfile.primaryCta
+        : project.site.primaryCta;
+  const href = premium
+    ? resolvePremiumOrderCtaHref(project)
+    : business
+      ? businessPrimaryCtaHref(project)
+      : "/";
 
   return [
     headerComment("MobileStickyCTA"),
@@ -1401,7 +1426,14 @@ function generateFAQSection(): string {
     "FAQSection",
     [
       "          {(() => {",
-      "            const items = section.contentBlocks.length > 0",
+      "            const items = (section.faqItems?.length ?? 0) > 0",
+      "              ? section.faqItems!.map((item) => ({",
+      "                  id: item.id,",
+      "                  question: item.question,",
+      "                  answer: item.answer,",
+      "                  isPlaceholder: section.isPlaceholder,",
+      "                }))",
+      "              : section.contentBlocks.length > 0",
       "              ? section.contentBlocks.map((block, index) => ({",
       "                  id: `${section.id}-faq-${index}`,",
       "                  question: section.title,",

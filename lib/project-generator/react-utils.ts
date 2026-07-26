@@ -10,6 +10,10 @@ import {
   isPremiumRestaurantLanding,
   premiumLandingContent,
 } from "@/lib/industries/restaurant/landing";
+import {
+  businessLandingContent,
+  isBusinessServiceLanding,
+} from "@/lib/industries/business/landing";
 import { joinProjectPath, routePathToAppSegment } from "@/lib/project-generator/tree";
 
 export const SECTION_COMPONENT_NAMES = [
@@ -232,7 +236,9 @@ export function buildPageConfig(page: CompiledPage, project: CompiledWebsiteProj
   const route = project.routes.find((entry) => entry.id === page.routeId);
   const sections = buildEnrichedPageSections(page, project);
   const landing = premiumLandingContent(project);
+  const businessLanding = businessLandingContent(project);
   const premiumHome = page.pageRole === "home" && isPremiumRestaurantLanding(project);
+  const businessHome = page.pageRole === "home" && isBusinessServiceLanding(project);
 
   const missingDataReferences = project.missingData
     .filter((entry) => entry.affectedPages.includes(page.id))
@@ -256,7 +262,24 @@ export function buildPageConfig(page: CompiledPage, project: CompiledWebsiteProj
             description: landing.homeMetaDescription,
           },
         }
-      : page.seo;
+      : businessHome && businessLanding
+        ? {
+            ...page.seo,
+            title: `Startseite | ${businessLanding.companyName}`,
+            metaDescription: businessLanding.description.slice(0, 160),
+            h1Direction: businessLanding.companyName,
+            openGraph: {
+              ...page.seo.openGraph,
+              title: `${businessLanding.companyName} — Startseite`,
+              description: businessLanding.description.slice(0, 160),
+            },
+            twitter: {
+              ...page.seo.twitter,
+              title: `${businessLanding.companyName} — Startseite`,
+              description: businessLanding.description.slice(0, 160),
+            },
+          }
+        : page.seo;
 
   return {
     pageId: page.id,

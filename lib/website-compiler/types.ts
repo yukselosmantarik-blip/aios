@@ -1,3 +1,4 @@
+import type { BusinessIndustryProfile } from "@/lib/industries/business/types";
 import type { RestaurantAssets } from "@/lib/assets/types";
 import type { RestaurantBusinessProfile } from "@/lib/business-profiles/types";
 import type { WebsiteTheme } from "@/lib/themes/types";
@@ -28,6 +29,8 @@ export type WebsiteCompilerInput = {
   websiteTheme?: WebsiteTheme;
   /** Optional verified business contact details for generated sites. */
   restaurantBusinessProfile?: RestaurantBusinessProfile;
+  /** Optional Business Website industry profile. */
+  businessProfile?: BusinessIndustryProfile;
 };
 
 export type DetectedCompilerInputSections = {
@@ -66,7 +69,7 @@ export type BusinessMetadata = {
   targetAudience: string;
   usp: string | null;
   services: string[];
-  profile: "restaurant" | "dentist" | "agency" | "default";
+  profile: "restaurant" | "dentist" | "agency" | "business" | "default";
 };
 
 export type SiteConfiguration = {
@@ -415,6 +418,8 @@ export type CompiledWebsiteProject = {
   websiteTheme?: WebsiteTheme;
   /** Carried from compiler input when provided; used by the project generator. */
   restaurantBusinessProfile?: RestaurantBusinessProfile;
+  /** Carried from compiler input when provided; used by the project generator. */
+  businessProfile?: BusinessIndustryProfile;
 };
 
 export type CompileResult = {
