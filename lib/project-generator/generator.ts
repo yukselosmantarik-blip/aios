@@ -1,4 +1,5 @@
 import { buildExportableWebsiteProject } from "@/lib/project-export/export-package";
+import { ensureIndustryModulesRegistered } from "@/lib/industries/bootstrap";
 import { buildAllVirtualFiles } from "@/lib/project-generator/files";
 import { buildAssetEngineFiles } from "@/lib/project-generator/asset-files";
 import { buildStyleEngineFiles } from "@/lib/project-generator/style-files";
@@ -41,6 +42,7 @@ const REQUIRED_FOLDERS = [
 ];
 
 export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGeneratorResult {
+  ensureIndustryModulesRegistered();
   const { project } = input;
   const generatedAt = input.generatedAt ?? project.metadata.generatedAt;
   const { files: baseFiles, routes, componentDescriptors } = buildAllVirtualFiles(project, {

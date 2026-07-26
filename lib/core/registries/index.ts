@@ -83,3 +83,27 @@ export {
   type ThemeRegistryVerificationCheck,
   type ThemeRegistryVerificationResult,
 } from "@/lib/core/registries/theme-verify";
+
+export type {
+  IndustryCompileAttachments,
+  IndustryCompileResolver,
+  IndustryModuleRegistration,
+  IndustryModuleRegistrySnapshot,
+} from "@/lib/core/registries/industry-module-types";
+
+export {
+  ensureIndustryModuleRegistryBootstrapped,
+  registerIndustryModule,
+  getIndustryModule,
+  listIndustryModules,
+  getIndustryModuleRegistrySnapshot,
+  isIndustryModuleRegistered,
+  resolveIndustryCompileAttachments,
+  resetIndustryModuleRegistryForTests,
+} from "@/lib/core/registries/industry-module-registry";
+
+export {
+  verifyIndustryModuleRegistry,
+  type IndustryModuleRegistryVerificationCheck,
+  type IndustryModuleRegistryVerificationResult,
+} from "@/lib/core/registries/industry-module-verify";

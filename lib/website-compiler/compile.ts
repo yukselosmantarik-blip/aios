@@ -1,6 +1,7 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
-import { resolveRestaurantAssets } from "@/lib/assets";
-import { resolveRestaurantBusinessProfile } from "@/lib/business-profiles";
+import { resolveIndustryCompileAttachments } from "@/lib/core/registries/industry-module-registry";
+import { resolveIndustryIdFromBrief } from "@/lib/core/registries/industry-registry";
+import { ensureIndustryModulesRegistered } from "@/lib/industries/bootstrap";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import {
   createPageDnaContext,
@@ -894,8 +895,11 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
   const designTokens = buildDesignTokens(brief, tier);
   const navigation = compileNavigation(routes, primaryCta);
   const footer = compileFooter(routes, primaryCta);
-  const resolvedRestaurantAssets = resolveRestaurantAssets(input);
-  const resolvedRestaurantBusinessProfile = resolveRestaurantBusinessProfile(input);
+  ensureIndustryModulesRegistered();
+  const industryId = resolveIndustryIdFromBrief(brief);
+  const industryAttachments = resolveIndustryCompileAttachments(input, industryId);
+  const resolvedRestaurantAssets = industryAttachments.restaurantAssets;
+  const resolvedRestaurantBusinessProfile = industryAttachments.restaurantBusinessProfile;
 
   const project: CompiledWebsiteProject = {
     metadata: {

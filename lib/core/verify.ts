@@ -1,3 +1,4 @@
+import { verifyIndustryModuleRegistry } from "@/lib/core/registries/industry-module-verify";
 import { verifyIndustryRegistry } from "@/lib/core/registries/verify";
 import { verifySectionRegistry } from "@/lib/core/registries/section-verify";
 import { verifyThemeRegistry } from "@/lib/core/registries/theme-verify";
@@ -15,6 +16,7 @@ export type CoreEngineSmokeReport = {
   industryRegistryPassed: boolean;
   sectionRegistryPassed: boolean;
   themeRegistryPassed: boolean;
+  industryModuleRegistryPassed: boolean;
 };
 
 /**
@@ -37,5 +39,6 @@ export async function runCoreEngineSmokeChecks(): Promise<CoreEngineSmokeReport>
     industryRegistryPassed: verifyIndustryRegistry().passed,
     sectionRegistryPassed: verifySectionRegistry().passed,
     themeRegistryPassed: verifyThemeRegistry().passed,
+    industryModuleRegistryPassed: verifyIndustryModuleRegistry().passed,
   };
 }
