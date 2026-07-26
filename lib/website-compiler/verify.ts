@@ -1,4 +1,5 @@
 import { BY_NANIS_RESTAURANT_ASSETS } from "@/lib/assets/by-nanis";
+import { BY_NANIS_BUSINESS_PROFILE } from "@/lib/business-profiles/by-nanis";
 import {
   collectRestaurantAssetPaths,
   verifyRestaurantAssetsOnDisk,
@@ -273,7 +274,7 @@ export function verifyDeterministicCompilation(input: WebsiteCompilerInput): Com
   ];
 
   const inputWithoutOptionalThemeAssets: WebsiteCompilerInput = {
-    brief: input.brief,
+    brief: { ...input.brief, id: "00000000-0000-0000-0000-000000000099" },
     blueprint: input.blueprint,
     sourceBlueprintId: input.sourceBlueprintId,
     sourceBriefId: input.sourceBriefId,
@@ -288,7 +289,8 @@ export function verifyDeterministicCompilation(input: WebsiteCompilerInput): Com
     name: "Compile succeeds without optional theme or assets",
     passed: withoutOptional.metadata.projectName.length > 0 &&
       withoutOptional.websiteTheme === undefined &&
-      withoutOptional.restaurantAssets === undefined,
+      withoutOptional.restaurantAssets === undefined &&
+      withoutOptional.restaurantBusinessProfile === undefined,
     detail: "Optional websiteTheme and restaurantAssets must not be required",
   });
 
@@ -307,10 +309,10 @@ export function createSmashburgerCompilerInput(
     agent_id: "9a7f18a6-1e7a-4ca7-8ff2-b9dd7f8f1f5a",
     customer_id: null,
     project_id: null,
-    business_name: "by Nanis`s Smashburger",
+    business_name: "by Nani's",
     industry: "Smashburger Restaurant",
-    location: null,
-    website_goal: "Mehr Kunden gewinnen und online bestellungen ermöglichen",
+    location: "Blaubeuren",
+    website_goal: "Gäste informieren und zur Speisekarte sowie zum Besuch vor Ort einladen",
     target_audience: "Burger liebhaber, familien, studenten",
     services:
       "Smashburger\r\nHot Dogs\r\nPommes\r\nDesserts\r\nKaffee\r\nCocktails\r\nGetränke\r\nTake-Away",
@@ -341,6 +343,7 @@ export function createSmashburgerCompilerInput(
     generationMode: "deterministic",
     restaurantAssets: BY_NANIS_RESTAURANT_ASSETS,
     websiteTheme: BY_NANIS_WEBSITE_THEME,
+    restaurantBusinessProfile: BY_NANIS_BUSINESS_PROFILE,
   };
 }
 

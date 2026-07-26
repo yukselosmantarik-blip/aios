@@ -2,7 +2,8 @@ import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 import { buildVirtualFile } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
 import { buildStyleSystem } from "@/lib/project-generator/style-engine";
-import { buildPremiumHeroStylesheet } from "@/lib/project-generator/website-theme-css";
+import { buildPremiumHeroStylesheet, buildPremiumLandingSectionStyles } from "@/lib/project-generator/website-theme-css";
+import { isPremiumRestaurantLanding } from "@/lib/project-generator/premium-restaurant-landing";
 
 function serializeObjectExport(name: string, value: unknown, typeName?: string): string {
   const lines = [
@@ -22,7 +23,7 @@ function serializeObjectExport(name: string, value: unknown, typeName?: string):
 export function buildGlobalsCss(
   cssVariables: Record<string, string>,
   theme: ReturnType<typeof buildStyleSystem>["theme"],
-  options?: { includePremiumHeroStyles?: boolean },
+  options?: { includePremiumLandingStyles?: boolean },
 ): string {
   const rootVars = Object.entries(cssVariables)
     .map(([key, value]) => `  ${key}: ${value};`)
@@ -54,7 +55,8 @@ export function buildGlobalsCss(
     "  color: var(--color-text-primary);",
     "  background: var(--color-background);",
     "}",
-    buildPremiumHeroStylesheet(Boolean(options?.includePremiumHeroStyles)),
+    buildPremiumHeroStylesheet(Boolean(options?.includePremiumLandingStyles)),
+    buildPremiumLandingSectionStyles(Boolean(options?.includePremiumLandingStyles)),
   ].join("\n");
 }
 
@@ -260,7 +262,8 @@ export function buildStyleEngineFiles(project: CompiledWebsiteProject): VirtualF
       "styles/globals.css",
       "styles",
       buildGlobalsCss(styleSystem.cssVariables, styleSystem.theme, {
-        includePremiumHeroStyles: Boolean(project.websiteTheme && project.restaurantAssets),
+        includePremiumLandingStyles:
+          isPremiumRestaurantLanding(project) || Boolean(project.restaurantBusinessProfile),
       }),
       {
         description: "Generated global stylesheet with CSS variables",

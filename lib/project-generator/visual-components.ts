@@ -2,6 +2,12 @@ import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 import { buildVirtualFile } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
 import {
+  businessProfileForComponentExport,
+  isPremiumRestaurantLanding,
+  resolvePremiumOrderCtaHref,
+} from "@/lib/project-generator/premium-restaurant-landing";
+import { resolveFooterBusinessProfile } from "@/lib/project-generator/restaurant-business-profile";
+import {
   heroVariantForPage,
   isClientComponent,
   placeholderLabel,
@@ -275,6 +281,7 @@ function generatePlaceholder(): string {
     "    <span",
     "      className={cn(",
     "        variants.placeholder,",
+    "        'max-w-full break-words',",
     "        launchBlocking && 'border-[var(--color-error)]',",
     "        className,",
     "      )}",
@@ -409,12 +416,14 @@ function generateMediaPlaceholder(): string {
     "          data-replace-before-production={String(asset.replaceBeforeProduction)}",
     "        />",
     "      </MediaFrame>",
-    "      <figcaption className=\"mt-2 space-y-1\">",
-    "        <Placeholder label={media.label} category=\"image\" />",
-    "        <span className=\"block text-[length:var(--font-size-sm)] text-[var(--color-text-muted)]\">",
-    "          {media.altText ?? asset.altText}",
-    "        </span>",
-    "      </figcaption>",
+    "      {asset.placeholder ? (",
+    "        <figcaption className=\"mt-2 space-y-1\">",
+    "          <Placeholder label={media.label} category=\"image\" />",
+    "          <span className=\"block text-[length:var(--font-size-sm)] text-[var(--color-text-muted)]\">",
+    "            {media.altText ?? asset.altText}",
+    "          </span>",
+    "        </figcaption>",
+    "      ) : null}",
     "    </figure>",
     "  );",
     "}",
@@ -424,13 +433,26 @@ function generateMediaPlaceholder(): string {
 
 function generateSiteHeader(project: CompiledWebsiteProject): string {
   const headerVariant = headerVariantForProject(project);
-  const navItems = project.navigation.primaryNavigationItems
-    .map(
-      (item) =>
-        `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
-    )
-    .join("\n");
+  const anchorNav = isPremiumRestaurantLanding(project);
+  const navItems = anchorNav
+    ? [
+        '  { label: "Startseite", href: "/" },',
+        '  { label: "Speisekarte", href: "/#menu" },',
+        '  { label: "Kontakt", href: "/#contact" },',
+      ].join("\n")
+    : project.navigation.primaryNavigationItems
+        .map(
+          (item) =>
+            `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
+        )
+        .join("\n");
   const cta = project.navigation.ctaItem;
+  const ctaHref = anchorNav ? resolvePremiumOrderCtaHref(project) : cta.routePath;
+  const orderCtaLabel =
+    anchorNav && project.restaurantBusinessProfile?.landing?.orderCtaLabel
+      ? project.restaurantBusinessProfile.landing.orderCtaLabel
+      : cta.label;
+  const brandHref = "/";
   const headerClassMap: Record<string, string> = {
     static: "variants.headerStatic",
     sticky: "variants.header",
@@ -483,7 +505,7 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
     `      <header className={cn(${headerClassExpr}, variants.motionSafe)} data-header-variant={headerVariant}>`,
     "        <Container>",
     '          <div className="flex items-center justify-between gap-[var(--spacing-md)] py-[var(--spacing-sm)] md:py-[var(--spacing-md)]">',
-    '            <Link href="/" className="flex items-center gap-[var(--spacing-sm)] focus-visible:outline-none">',
+    '            <Link href=' + JSON.stringify(brandHref) + ' className="flex items-center gap-[var(--spacing-sm)] focus-visible:outline-none">',
     "              <img",
     "                src={logoAsset.path}",
     "                alt={logoAsset.altText}",
@@ -493,7 +515,7 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
     "                data-replace-before-production={String(logoAsset.replaceBeforeProduction)}",
     "              />",
     `              <span className=${JSON.stringify(wordmarkClassName)}>`,
-    `                ${JSON.stringify(project.business.businessName)}`,
+    `                {${JSON.stringify(project.business.businessName)}}`,
     "              </span>",
     "            </Link>",
     '            <button',
@@ -520,7 +542,7 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
     "              </ul>",
     "            </nav>",
     '            <div className="hidden md:block">',
-    "              <ButtonLink cta={{ label: " + JSON.stringify(cta.label) + ", href: " + JSON.stringify(cta.routePath) + ", variant: 'primary' }} />",
+    "              <ButtonLink cta={{ label: " + JSON.stringify(orderCtaLabel) + ", href: " + JSON.stringify(ctaHref) + ", variant: 'primary' }} />",
     "            </div>",
     "          </div>",
     "        </Container>",
@@ -553,108 +575,161 @@ function generateSiteHeader(project: CompiledWebsiteProject): string {
   ].join("\n");
 }
 
-function generateSiteFooter(project: CompiledWebsiteProject): string {
-  const footerVariant = footerVariantForProject(project);
-  const footerGroups = project.footer.navigationGroups
-    .map((group) => {
-      const items = group.items
+function generateBusinessProfileSiteFooter(
+  project: CompiledWebsiteProject,
+  profile: import("@/lib/business-profiles/types").RestaurantBusinessProfile,
+): string {
+  const landing = profile.landing;
+  const businessLiteral = JSON.stringify(businessProfileForComponentExport(profile), null, 2);
+  const anchorNav = isPremiumRestaurantLanding(project);
+  const footerNavItems = anchorNav
+    ? [
+        '  { label: "Startseite", href: "/" },',
+        '  { label: "Speisekarte", href: "/#menu" },',
+        '  { label: "Kontakt", href: "/#contact" },',
+      ].join("\n")
+    : project.footer.navigationGroups[0]?.items
         .map(
           (item) =>
-            `          { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
+            `  { label: ${JSON.stringify(item.label)}, href: ${JSON.stringify(item.routePath)} },`,
         )
-        .join("\n");
-      return [
-        "    {",
-        `      title: ${JSON.stringify(group.title)},`,
-        "      items: [",
-        items,
-        "      ],",
-        "    },",
-      ].join("\n");
-    })
-    .join("\n");
-  const footerCtaHref =
-    project.routes.find((route) => route.id === project.footer.ctaArea.routeId)?.routePath ?? "/";
+        .join("\n") ?? "";
+  const orderLabel = landing.orderCtaLabel;
+  const orderHref = resolvePremiumOrderCtaHref(project);
+  const footerVariant = footerVariantForProject(project);
+  const brandName = landing.brandName;
+  const socialNavBlock =
+    profile.socialLinks.length > 0
+      ? [
+          '              <nav aria-label="Social Media" className="site-footer-business__social">',
+          ...profile.socialLinks.map(
+            (item) =>
+              [
+                "                    <a",
+                `                      key=${JSON.stringify(item.href)}`,
+                '                      className="site-footer-business__link"',
+                `                      href=${JSON.stringify(item.href)}`,
+                '                      target="_blank"',
+                '                      rel="noopener noreferrer"',
+                "                    >",
+                `                      ${JSON.stringify(item.label)}`,
+                "                    </a>",
+              ].join("\n"),
+          ),
+          "              </nav>",
+        ].join("\n")
+      : "";
 
   return [
     headerComment("SiteFooter"),
     STYLE_IMPORT,
     "import Link from 'next/link';",
     "import { ButtonLink } from './ButtonLink';",
-    "import { Cluster } from './Cluster';",
     "import { Container } from './Container';",
-    "import { Placeholder } from './Placeholder';",
     "import { Stack } from './Stack';",
     "",
     `const footerVariant = ${JSON.stringify(footerVariant)} as const;`,
     "",
-    "const footerGroups = [",
-    footerGroups,
-    "] as const;",
+    `const businessProfile = ${businessLiteral};`,
     "",
-    "const contactPlaceholders = [",
-    ...project.footer.contactPlaceholders.map((item) => `  ${JSON.stringify(item)},`),
-    "] as const;",
+    `const brandName = ${JSON.stringify(brandName)};`,
     "",
-    "const legalPlaceholders = [",
-    ...project.footer.legalPlaceholders.map((item) => `  ${JSON.stringify(item)},`),
-    "] as const;",
-    "",
-    "const socialPlaceholders = [",
-    ...project.footer.socialPlaceholders.map((item) => `  ${JSON.stringify(item)},`),
+    "const footerNavItems = [",
+    footerNavItems,
     "] as const;",
     "",
     "export function SiteFooter() {",
+    "  const mapsQuery = encodeURIComponent(businessProfile.address);",
+    "  const year = new Date().getFullYear();",
+    "",
     "  return (",
-    '    <footer className={cn(variants.footer, variants.motionSafe)} data-footer-variant={footerVariant}>',
+    '    <footer className={cn(variants.footer, "site-footer-business", variants.motionSafe)} data-footer-variant={footerVariant}>',
     "      <Container>",
-    "        <Stack gap=\"lg\" className=\"py-[var(--spacing-xl)]\">",
-    '          <div className="grid gap-[var(--spacing-lg)] md:grid-cols-2 lg:grid-cols-4">',
-    "            {footerGroups.map((group) => (",
-    '              <section key={group.title} aria-label={group.title}>',
-    '                <h2 className="mb-3 text-sm font-[var(--font-weight-semibold)] uppercase tracking-wide">',
-    "                  {group.title}",
-    "                </h2>",
-    '                <ul className="space-y-2">',
-    "                  {group.items.map((item) => (",
-    '                    <li key={item.href}>',
-    "                      <Link href={item.href} className=\"text-sm hover:underline\">",
-    "                        {item.label}",
-    "                      </Link>",
-    "                    </li>",
-    "                  ))}",
-    "                </ul>",
-    "              </section>",
-    "            ))}",
+    '        <Stack gap="lg" className="py-[var(--spacing-xl)]">',
+    '          <div className="site-footer-business__grid">',
+    '            <section className="site-footer-business__brand" aria-label="Unternehmen">',
+    '              <p className="site-footer-business__name">{brandName}</p>',
+    '              <p className="site-footer-business__tagline">{' + JSON.stringify(landing.heroTagline) + '}</p>',
+    "            </section>",
+    '            <section aria-label="Navigation">',
+    '              <h2 className="site-footer-business__heading">Navigation</h2>',
+    '              <ul className="site-footer-business__list">',
+    "                {footerNavItems.map((item) => (",
+    '                  <li key={item.href}>',
+    "                    <Link href={item.href} className=\"site-footer-business__link\">",
+    "                      {item.label}",
+    "                    </Link>",
+    "                  </li>",
+    "                ))}",
+    "              </ul>",
+    "            </section>",
     '            <section aria-label="Kontakt">',
-    '              <h2 className="mb-3 text-sm font-[var(--font-weight-semibold)] uppercase tracking-wide">Kontakt</h2>',
-    '              <Cluster gap="sm">',
-    "                {contactPlaceholders.map((label) => (",
-    '                  <Placeholder key={label} label={label} category="phone" />',
-    "                ))}",
-    "              </Cluster>",
+    '              <h2 className="site-footer-business__heading">Kontakt</h2>',
+    '              <ul className="site-footer-business__list">',
+    "                {businessProfile.address.trim() ? (",
+    "                  <li>",
+    "                    <a",
+    '                      className="site-footer-business__link"',
+    "                      href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}",
+    "                      target=\"_blank\"",
+    "                      rel=\"noopener noreferrer\"",
+    "                    >",
+    "                      {businessProfile.addressLines.filter(Boolean).map((line) => (",
+    '                        <span key={line} className="block">',
+    "                          {line}",
+    "                        </span>",
+    "                      ))}",
+    "                    </a>",
+    "                  </li>",
+    "                ) : null}",
+    "                {businessProfile.phone && businessProfile.phoneTelHref ? (",
+    "                  <li>",
+    '                    <a className="site-footer-business__link" href={businessProfile.phoneTelHref}>',
+    "                      {businessProfile.phone}",
+    "                    </a>",
+    "                  </li>",
+    "                ) : null}",
+    "                {businessProfile.email && businessProfile.emailMailtoHref ? (",
+    "                  <li>",
+    '                    <a className="site-footer-business__link" href={businessProfile.emailMailtoHref}>',
+    "                      {businessProfile.email}",
+    "                    </a>",
+    "                  </li>",
+    "                ) : null}",
+    "              </ul>",
     "            </section>",
-    '            <section aria-label="Rechtliches">',
-    '              <h2 className="mb-3 text-sm font-[var(--font-weight-semibold)] uppercase tracking-wide">Rechtliches</h2>',
-    '              <Cluster gap="sm">',
-    "                {legalPlaceholders.map((label) => (",
-    '                  <Placeholder key={label} label={label} category="legal" />',
+    "            {businessProfile.openingHours.length > 0 ? (",
+    '            <section aria-label="Öffnungszeiten">',
+    '              <h2 className="site-footer-business__heading">Öffnungszeiten</h2>',
+    '              <ul className="site-footer-business__hours">',
+    "                {businessProfile.openingHours.map((entry) => (",
+    '                  <li key={`${entry.days}-${entry.hours}`}>',
+    "                    <span>{entry.days}</span>",
+    "                    <span>{entry.hours}</span>",
+    "                  </li>",
     "                ))}",
-    "              </Cluster>",
+    "              </ul>",
     "            </section>",
+    "            ) : null}",
     "          </div>",
-    '          <div className={cn("border-t pt-[var(--spacing-md)]", variants.borderDefault)}>',
-    '            <div className="flex flex-col gap-[var(--spacing-md)] md:flex-row md:items-center md:justify-between">',
-    '              <Cluster gap="sm" aria-label="Social Links">',
-    "                {socialPlaceholders.map((label) => (",
-    '                  <Placeholder key={label} label={label} category="social-link" />',
+    '          <div className={cn("site-footer-business__bottom", variants.borderDefault)}>',
+    '            <div className="site-footer-business__bottom-inner">',
+    '              <p className="site-footer-business__copyright">',
+    "                {`© ${year} ${brandName}`}",
+    "              </p>",
+    '              <nav aria-label="Rechtliches" className="site-footer-business__legal">',
+    "                {businessProfile.legalLinks.map((item) => (",
+    '                  <Link key={item.href} href={item.href} className="site-footer-business__link">',
+    "                    {item.label}",
+    "                  </Link>",
     "                ))}",
-    "              </Cluster>",
+    "              </nav>",
+    socialNavBlock,
     "              <ButtonLink",
     "                cta={{",
-    "                  label: " + JSON.stringify(project.footer.ctaArea.label) + ",",
-    "                  href: " + JSON.stringify(footerCtaHref) + ",",
-    "                  variant: 'secondary',",
+    "                  label: " + JSON.stringify(orderLabel) + ",",
+    "                  href: " + JSON.stringify(orderHref) + ",",
+    "                  variant: 'primary',",
     "                }}",
     "              />",
     "            </div>",
@@ -668,7 +743,21 @@ function generateSiteFooter(project: CompiledWebsiteProject): string {
   ].join("\n");
 }
 
+function generateSiteFooter(project: CompiledWebsiteProject): string {
+  const profile = resolveFooterBusinessProfile(project);
+  return generateBusinessProfileSiteFooter(
+    { ...project, restaurantBusinessProfile: profile },
+    profile,
+  );
+}
+
 function generateMobileStickyCTA(project: CompiledWebsiteProject): string {
+  const premium = isPremiumRestaurantLanding(project);
+  const landing = project.restaurantBusinessProfile?.landing;
+  const label =
+    premium && landing ? landing.orderCtaLabel : project.site.primaryCta;
+  const href = premium ? resolvePremiumOrderCtaHref(project) : "/";
+
   return [
     headerComment("MobileStickyCTA"),
     STYLE_IMPORT,
@@ -681,8 +770,8 @@ function generateMobileStickyCTA(project: CompiledWebsiteProject): string {
     "      <Container>",
     "        <ButtonLink",
     "          cta={{",
-    `            label: ${JSON.stringify(project.site.primaryCta)},`,
-    '            href: "/",',
+    `            label: ${JSON.stringify(label)},`,
+    `            href: ${JSON.stringify(href)},`,
     "            variant: 'primary',",
     "          }}",
     '          className="w-full justify-center"',
@@ -821,6 +910,23 @@ function legacyHeroSectionSource(project: CompiledWebsiteProject): string {
 function generatePremiumRestaurantHeroSection(project: CompiledWebsiteProject): string {
   const addressPlaceholder = placeholderLabel("Adresse");
   const phonePlaceholder = placeholderLabel("Telefon");
+  const showContactMeta = !project.restaurantBusinessProfile;
+  const contactMetaBlock = showContactMeta
+    ? [
+        '            <div className="hero-premium__meta hero-premium__animate">',
+        "              {section.address ? (",
+        '                <p>{section.address}</p>',
+        "              ) : (",
+        "                <Placeholder label=" + JSON.stringify(addressPlaceholder) + " category=\"address\" />",
+        "              )}",
+        "              {section.phone ? (",
+        '                <p><a href={`tel:${section.phone.replace(/\\s+/g, "")}`}>{section.phone}</a></p>',
+        "              ) : (",
+        "                <Placeholder label=" + JSON.stringify(phonePlaceholder) + " category=\"phone\" />",
+        "              )}",
+        "            </div>",
+      ]
+    : [];
 
   return [
     headerComment("HeroSection"),
@@ -860,18 +966,7 @@ function generatePremiumRestaurantHeroSection(project: CompiledWebsiteProject): 
     '                <p className="hero-premium__description">{section.description}</p>',
     "              ) : null}",
     "            </div>",
-    '            <div className="hero-premium__meta hero-premium__animate">',
-    "              {section.address ? (",
-    '                <p>{section.address}</p>',
-    "              ) : (",
-    "                <Placeholder label=" + JSON.stringify(addressPlaceholder) + " category=\"address\" />",
-    "              )}",
-    "              {section.phone ? (",
-    '                <p><a href={`tel:${section.phone.replace(/\\s+/g, "")}`}>{section.phone}</a></p>',
-    "              ) : (",
-    "                <Placeholder label=" + JSON.stringify(phonePlaceholder) + " category=\"phone\" />",
-    "              )}",
-    "            </div>",
+    ...contactMetaBlock,
     '            <div className="hero-premium__actions hero-premium__animate">',
     "              {section.primaryCTA ? (",
     "                <a className=\"hero-premium__cta-primary\" href={primaryHref}>",
@@ -966,6 +1061,143 @@ function generateFeatureGridSection(): string {
     "            );",
     "          })()}",
   ], ["import { Card } from './Card';", "import { Placeholder } from './Placeholder';", "import { ResponsiveGrid } from './ResponsiveGrid';"]);
+}
+
+function generateMenuImageSection(project: CompiledWebsiteProject): string {
+  if (!project.restaurantAssets?.menu) {
+    return generateMenuSection(project);
+  }
+
+  return [
+    headerComment("MenuImageSection"),
+    ...premiumSectionImports(["import { resolveAsset } from '@/lib/assets/resolve-asset';"]),
+    "",
+    "export function MenuImageSection({ section }: SectionComponentProps) {",
+    "  const menuAsset = resolveAsset('menu');",
+    "",
+    "  return (",
+    "    <SectionShell id={section.id} headingId={`${section.id}-heading`} className=\"landing-menu-section\">",
+    "      <Container>",
+    '        <Stack gap="md">',
+    "          <SectionHeading section={section} />",
+    "          {section.description ? (",
+    '            <p className="landing-section-lead">{section.description}</p>',
+    "          ) : null}",
+    '          <figure className="landing-menu-figure">',
+    "            <img",
+    "              src={menuAsset.path}",
+    "              alt={menuAsset.altText}",
+    '              className="landing-menu-image"',
+    "              loading=\"lazy\"",
+    "              decoding=\"async\"",
+    '              data-asset-id="menu"',
+    "              data-asset-type={menuAsset.assetType}",
+    "            />",
+    "          </figure>",
+    '          <p className="landing-menu-actions">',
+    "            <a",
+    "              className=\"landing-link-button\"",
+    "              href={menuAsset.path}",
+    "              target=\"_blank\"",
+    "              rel=\"noopener noreferrer\"",
+    "            >",
+    "              Speisekarte öffnen",
+    "            </a>",
+    "          </p>",
+    "        </Stack>",
+    "      </Container>",
+    "    </SectionShell>",
+    "  );",
+    "}",
+    "",
+  ].join("\n");
+}
+
+function generateBusinessInfoSection(project: CompiledWebsiteProject): string {
+  const profile = project.restaurantBusinessProfile;
+  if (!profile) {
+    return generateContactSection();
+  }
+
+  const profileLiteral = JSON.stringify(businessProfileForComponentExport(profile), null, 2);
+
+  return [
+    headerComment("BusinessInfoSection"),
+    ...premiumSectionImports([]),
+    "",
+    `const businessProfile = ${profileLiteral};`,
+    "",
+    "export function BusinessInfoSection({ section }: SectionComponentProps) {",
+    "  const telHref = businessProfile.phoneTelHref;",
+    "  const mapsQuery = encodeURIComponent(businessProfile.address);",
+    "",
+    "  return (",
+    "    <SectionShell id={section.id} headingId={`${section.id}-heading`} className=\"landing-business-section\">",
+    "      <Container>",
+    '        <div className="landing-business-grid">',
+    '          <div className="landing-business-copy">',
+    "            <SectionHeading section={section} />",
+    "            {section.description ? (",
+    '              <p className="landing-section-lead">{section.description}</p>',
+    "            ) : null}",
+    "          </div>",
+    '          <dl className="landing-business-details">',
+    '            <div className="landing-business-row">',
+    '              <dt>Adresse</dt>',
+    "              <dd>",
+    "                <a",
+    '                  className="landing-business-link"',
+    "                  href={`https://www.google.com/maps/search/?api=1&query=${mapsQuery}`}",
+    "                  target=\"_blank\"",
+    "                  rel=\"noopener noreferrer\"",
+    "                >",
+    "                  {businessProfile.addressLines.map((line) => (",
+    '                    <span key={line} className="block">',
+    "                      {line}",
+    "                    </span>",
+    "                  ))}",
+    "                </a>",
+    "              </dd>",
+    "            </div>",
+    '            <div className="landing-business-row">',
+    '              <dt>Telefon</dt>',
+    "              <dd>",
+    '                <a className="landing-business-link" href={telHref}>',
+    "                  {businessProfile.phone}",
+    "                </a>",
+    "              </dd>",
+    "            </div>",
+    "            {businessProfile.email && businessProfile.emailMailtoHref ? (",
+    '              <div className="landing-business-row">',
+    '                <dt>E-Mail</dt>',
+    "                <dd>",
+    '                  <a className="landing-business-link" href={businessProfile.emailMailtoHref}>',
+    "                    {businessProfile.email}",
+    "                  </a>",
+    "                </dd>",
+    "              </div>",
+    "            ) : null}",
+    '            <div className="landing-business-row">',
+    '              <dt>Öffnungszeiten</dt>',
+    "              <dd>",
+    '                <ul className="landing-hours-list">',
+    "                  {businessProfile.openingHours.map((entry) => (",
+    '                    <li key={`${entry.days}-${entry.hours}`}>',
+    "                      <span>{entry.days}</span>",
+    "                      <span>{entry.hours}</span>",
+    "                    </li>",
+    "                  ))}",
+    "                </ul>",
+    "              </dd>",
+    "            </div>",
+    "          </dl>",
+    "        </div>",
+    "      </Container>",
+    "    </SectionShell>",
+    "  );",
+    "}",
+    "",
+  ].join("\n");
 }
 
 function generateMenuSection(project: CompiledWebsiteProject): string {
@@ -1484,6 +1716,10 @@ function generateVisualComponentContent(
       return generateFeatureGridSection();
     case "MenuSection":
       return generateMenuSection(project);
+    case "MenuImageSection":
+      return generateMenuImageSection(project);
+    case "BusinessInfoSection":
+      return generateBusinessInfoSection(project);
     case "ProductGridSection":
       return generateProductGridSection(project);
     case "GallerySection":

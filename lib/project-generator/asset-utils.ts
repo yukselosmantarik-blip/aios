@@ -1,6 +1,27 @@
 export const ASSET_SPRINT = "8.4";
 
-export type AssetType = "logo" | "favicon" | "hero" | "gallery" | "product" | "map" | "avatar";
+export type AssetType =
+  | "logo"
+  | "favicon"
+  | "hero"
+  | "gallery"
+  | "product"
+  | "map"
+  | "avatar"
+  | "menu";
+
+export const ASSET_IDS = [
+  "logo",
+  "favicon",
+  "hero",
+  "gallery",
+  "product",
+  "map",
+  "avatar",
+  "menu",
+] as const;
+
+export type AssetId = (typeof ASSET_IDS)[number];
 
 export type AssetDefinition = {
   id: AssetId;
@@ -13,10 +34,6 @@ export type AssetDefinition = {
   viewBox: string;
   label: string;
 };
-
-export const ASSET_IDS = ["logo", "favicon", "hero", "gallery", "product", "map", "avatar"] as const;
-
-export type AssetId = (typeof ASSET_IDS)[number];
 
 export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
   {
@@ -95,6 +112,17 @@ export const ASSET_DEFINITIONS: readonly AssetDefinition[] = [
     altText: "Avatar image missing",
     viewBox: "0 0 128 128",
     label: "AVATAR REQUIRED",
+  },
+  {
+    id: "menu",
+    fileName: "menu-placeholder.svg",
+    publicPath: "/images/menu-placeholder.svg",
+    assetType: "menu",
+    placeholder: true,
+    replaceBeforeProduction: true,
+    altText: "Menu image missing — MENU IMAGE REQUIRED",
+    viewBox: "0 0 480 640",
+    label: "MENU IMAGE REQUIRED",
   },
 ] as const;
 

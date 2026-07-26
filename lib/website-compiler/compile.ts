@@ -1,4 +1,6 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
+import { resolveRestaurantAssets } from "@/lib/assets";
+import { resolveRestaurantBusinessProfile } from "@/lib/business-profiles";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import {
   createPageDnaContext,
@@ -607,9 +609,9 @@ function compileFooter(routes: RouteDefinition[], primaryCta: string): FooterMod
         })),
       },
     ],
-    contactPlaceholders: ["[PLACEHOLDER: address]", "[PLACEHOLDER: phone]", "[PLACEHOLDER: email]"],
-    legalPlaceholders: ["[PLACEHOLDER: Impressum]", "[PLACEHOLDER: Datenschutz]"],
-    socialPlaceholders: ["[PLACEHOLDER: social profile URLs]"],
+    contactPlaceholders: [],
+    legalPlaceholders: [],
+    socialPlaceholders: [],
     ctaArea: {
       label: primaryCta,
       routeId: routes.find((route) => route.pageRole === "contact")?.id ?? routes[0].id,
@@ -892,6 +894,8 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
   const designTokens = buildDesignTokens(brief, tier);
   const navigation = compileNavigation(routes, primaryCta);
   const footer = compileFooter(routes, primaryCta);
+  const resolvedRestaurantAssets = resolveRestaurantAssets(input);
+  const resolvedRestaurantBusinessProfile = resolveRestaurantBusinessProfile(input);
 
   const project: CompiledWebsiteProject = {
     metadata: {
@@ -975,8 +979,11 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
     warnings,
     missingData,
     detectedInputSections: detectInputSections(brief, blueprint),
-    ...(input.restaurantAssets ? { restaurantAssets: input.restaurantAssets } : {}),
+    ...(resolvedRestaurantAssets ? { restaurantAssets: resolvedRestaurantAssets } : {}),
     ...(input.websiteTheme ? { websiteTheme: input.websiteTheme } : {}),
+    ...(resolvedRestaurantBusinessProfile
+      ? { restaurantBusinessProfile: resolvedRestaurantBusinessProfile }
+      : {}),
   };
 
   return { project, warnings };

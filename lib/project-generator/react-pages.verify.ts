@@ -87,7 +87,16 @@ export function findDeadInternalLinks(
     let match: RegExpExecArray | null = hrefPattern.exec(file.content);
     while (match) {
       const href = match[1];
-      if (href.startsWith("/") && !href.startsWith("//") && !knownRoutes.has(href)) {
+      if (!href.startsWith("/") || href.startsWith("//")) {
+        match = hrefPattern.exec(file.content);
+        continue;
+      }
+      const pathOnly = href.split("#")[0] || "/";
+      const hash = href.includes("#") ? href.slice(href.indexOf("#")) : "";
+      const pathKnown = knownRoutes.has(pathOnly);
+      const homeAnchorKnown =
+        pathOnly === "/" && (hash === "#home" || hash === "#menu" || hash === "#contact");
+      if (!pathKnown && !homeAnchorKnown) {
         deadLinks.push(`${file.path}: ${href}`);
       }
       match = hrefPattern.exec(file.content);
@@ -133,6 +142,22 @@ export function verifyGeneratedReactPages(
         return generated.files.some((file) => file.path === expected && file.kind === "react-page");
       }),
     detail: routePaths.filter((path) => path !== "/").join(", "),
+  });
+
+  checks.push({
+    name: "All legal routes have generated page files",
+    passed: generated.routes
+      .filter((route) => route.pageRole === "legal")
+      .every((route) =>
+        generated.files.some(
+          (file) => file.path === route.pageFilePath && file.kind === "react-page",
+        ),
+      ),
+    detail:
+      generated.routes
+        .filter((route) => route.pageRole === "legal")
+        .map((route) => route.routePath)
+        .join(", ") || "none",
   });
 
   const unresolvedImports = findUnresolvedImports(generated.files);

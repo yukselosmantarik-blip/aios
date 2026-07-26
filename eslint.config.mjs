@@ -12,6 +12,9 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "by-nanis-s-smashburger-export/**",
+    "by-nanis-s-smashburger-export-tmp/**",
+    "by-nani-s-export.zip",
   ]),
 ]);
 
