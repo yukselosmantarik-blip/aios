@@ -52,3 +52,34 @@ export {
   type SectionRegistryVerificationCheck,
   type SectionRegistryVerificationResult,
 } from "@/lib/core/registries/section-verify";
+
+export type {
+  ThemePresetId,
+  ThemeStyleTier,
+  ThemeColorMode,
+  ThemeMotionLevel,
+  ThemeLayoutDensity,
+  ThemeCapabilities,
+  ThemeRegistration,
+  ThemeRegistrySnapshot,
+} from "@/lib/core/registries/theme-types";
+
+export {
+  ensureThemeRegistryBootstrapped,
+  registerTheme,
+  getThemeRegistration,
+  listThemeRegistrations,
+  listThemeRegistrationsByLegacyStyleTier,
+  getThemeRegistrySnapshot,
+  isThemeRegistered,
+  suggestThemePresetsForBrief,
+  resetThemeRegistryForTests,
+} from "@/lib/core/registries/theme-registry";
+
+export { BUILTIN_THEME_DEFINITIONS } from "@/lib/core/registries/theme-definitions";
+
+export {
+  verifyThemeRegistry,
+  type ThemeRegistryVerificationCheck,
+  type ThemeRegistryVerificationResult,
+} from "@/lib/core/registries/theme-verify";
