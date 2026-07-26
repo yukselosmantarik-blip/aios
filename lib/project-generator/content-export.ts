@@ -5,6 +5,7 @@ import type {
   ContentBlock,
 } from "@/lib/website-compiler/types";
 import type { PageSectionConfig } from "@/lib/project-generator/react-utils";
+import { isPremiumRestaurantLanding, premiumLandingContent } from "@/lib/project-generator/premium-restaurant-landing";
 import {
   buildPageSectionConfig,
   shouldIncludeSectionInPage,
@@ -268,13 +269,86 @@ export function resolveHeroCtaHref(
   return contactPath ?? menuPath ?? "/";
 }
 
-function extractPhoneFromProject(): string | null {
-  return null;
+function extractPhoneFromProject(project: CompiledWebsiteProject): string | null {
+  return project.restaurantBusinessProfile?.phone ?? null;
 }
 
 function extractAddressFromProject(project: CompiledWebsiteProject): string | null {
-  const location = sanitizeCompiledText(project.business.location);
-  return location || null;
+  const profileAddress = project.restaurantBusinessProfile?.address;
+  if (profileAddress) {
+    return sanitizeCompiledText(profileAddress);
+  }
+  return sanitizeCompiledText(project.business.location) || null;
+}
+
+export function buildMenuImageSection(project: CompiledWebsiteProject): PageSectionConfig {
+  const landing = premiumLandingContent(project);
+
+  return {
+    id: "menu",
+    title: "Unsere Speisekarte",
+    name: "MenuImageSection",
+    eyebrow: null,
+    description:
+      landing?.menuDescription ??
+      "Burger, Hotdogs, Beilagen, Getränke und mehr – entdecke unser aktuelles Angebot.",
+    type: "menu-grid",
+    order: 2,
+    priority: 90,
+    hierarchyLevel: "primary",
+    visualWeight: "high",
+    purpose: "Present the full menu image",
+    componentName: "MenuImageSection",
+    isPlaceholder: false,
+    missingData: [],
+    contentBlocks: [],
+    primaryCTA: null,
+    secondaryCTA: null,
+    media: [],
+    ctaReferences: [],
+    mediaReferences: [],
+    headingLevel: 2,
+    sourcePatternIds: ["menu-grid"],
+    contentBody: "",
+    contentLines: [],
+    trustBadges: [],
+    menuItems: [],
+    faqItems: [],
+  };
+}
+
+export function buildBusinessInfoSection(project: CompiledWebsiteProject): PageSectionConfig {
+  const landing = premiumLandingContent(project);
+
+  return {
+    id: "contact",
+    title: landing?.contactHeading ?? "Standort & Öffnungszeiten",
+    name: "BusinessInfoSection",
+    eyebrow: null,
+    description: landing?.contactLead ?? "Besuchen Sie uns in Blaubeuren oder rufen Sie uns an.",
+    type: "contact-details",
+    order: 3,
+    priority: 85,
+    hierarchyLevel: "primary",
+    visualWeight: "high",
+    purpose: "Business contact and opening hours",
+    componentName: "BusinessInfoSection",
+    isPlaceholder: false,
+    missingData: [],
+    contentBlocks: [],
+    primaryCTA: null,
+    secondaryCTA: null,
+    media: [],
+    ctaReferences: [],
+    mediaReferences: [],
+    headingLevel: 2,
+    sourcePatternIds: ["location"],
+    contentBody: "",
+    contentLines: [],
+    trustBadges: [],
+    menuItems: [],
+    faqItems: [],
+  };
 }
 
 export function buildHeroSectionForPage(
@@ -282,14 +356,20 @@ export function buildHeroSectionForPage(
   project: CompiledWebsiteProject,
 ): PageSectionConfig {
   const uspLines = splitUspStatements(project.business.usp);
-  const tagline = sanitizeCompiledText(uspLines[0] ?? project.business.usp?.split(",")[0] ?? "");
-  const title = sanitizeCompiledText(project.business.businessName);
-  const description = sanitizeCompiledText(project.business.websiteGoal);
-  const premiumHome =
-    page.pageRole === "home" && Boolean(project.websiteTheme && project.restaurantAssets);
+  const premiumHome = page.pageRole === "home" && isPremiumRestaurantLanding(project);
+  const landing = premiumHome ? premiumLandingContent(project) : undefined;
+  const title = landing
+    ? landing.heroHeading
+    : sanitizeCompiledText(project.business.businessName);
+  const tagline = landing
+    ? landing.heroTagline
+    : sanitizeCompiledText(uspLines[0] ?? project.business.usp?.split(",")[0] ?? "");
+  const description = landing
+    ? landing.heroDescription
+    : sanitizeCompiledText(project.business.websiteGoal);
 
   return {
-    id: `section:${page.id.replace(/^page:/, "")}-hero`,
+    id: premiumHome ? "home" : `section:${page.id.replace(/^page:/, "")}-hero`,
     title,
     name: "HeroSection",
     eyebrow: tagline || null,
@@ -304,26 +384,32 @@ export function buildHeroSectionForPage(
     isPlaceholder: false,
     missingData: [],
     contentBlocks: [],
-    primaryCTA: page.primaryCta,
+    primaryCTA: landing?.orderCtaLabel ?? page.primaryCta,
     secondaryCTA: page.secondaryCta,
     media: [],
-    ctaReferences: [
-      resolveHeroCtaHref(project, page.primaryCta, "primary"),
-      resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
-    ],
+    ctaReferences: premiumHome
+      ? ["#menu", "#contact"]
+      : [
+          resolveHeroCtaHref(project, page.primaryCta, "primary"),
+          resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
+        ],
     mediaReferences: [],
     headingLevel: 1,
     sourcePatternIds: ["hero"],
     contentBody: description,
-    contentLines: uspLines,
-    trustBadges: uspLines,
+    contentLines: landing ? [landing.heroTagline] : uspLines,
+    trustBadges: landing ? [landing.heroTagline] : uspLines,
     menuItems: [],
     faqItems: [],
     heroLayout: premiumHome ? "premium-restaurant" : "legacy",
     tagline: tagline || null,
-    primaryCtaHref: resolveHeroCtaHref(project, page.primaryCta, "primary"),
-    secondaryCtaHref: resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
-    phone: extractPhoneFromProject(),
+    primaryCtaHref: premiumHome
+      ? "#menu"
+      : resolveHeroCtaHref(project, page.primaryCta, "primary"),
+    secondaryCtaHref: premiumHome
+      ? "#contact"
+      : resolveHeroCtaHref(project, page.secondaryCta, "secondary"),
+    phone: extractPhoneFromProject(project),
     address: extractAddressFromProject(project),
     className: premiumHome ? "hero-premium" : undefined,
   };
@@ -333,6 +419,15 @@ export function buildEnrichedPageSections(
   page: CompiledPage,
   project: CompiledWebsiteProject,
 ): PageSectionConfig[] {
+  if (page.pageRole === "home" && isPremiumRestaurantLanding(project)) {
+    return [buildHeroSectionForPage(page, project), buildMenuImageSection(project), buildBusinessInfoSection(project)].map(
+      (section, index) => ({
+        ...section,
+        order: index + 1,
+      }),
+    );
+  }
+
   const visibleSections = page.orderedSections.filter(shouldIncludeSectionInPage);
   const hero = buildHeroSectionForPage(page, project);
   let firstVisible = true;

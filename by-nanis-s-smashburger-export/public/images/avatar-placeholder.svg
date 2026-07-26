@@ -1,0 +1,7 @@
+<!-- ASSET_METADATA:{"assetType":"avatar","placeholder":true,"replaceBeforeProduction":true} -->
+<!-- GENERATED PLACEHOLDER: avatar-placeholder.svg -->
+<!-- Sprint 8.4 — deterministic asset engine -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128" role="img" aria-label="Avatar image missing">
+  <rect width="128" height="128" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">AVATAR REQUIRED</text>
+</svg>

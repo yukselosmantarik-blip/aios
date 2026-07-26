@@ -1,4 +1,5 @@
 import type { RestaurantAssets } from "@/lib/assets/types";
+import type { RestaurantBusinessProfile } from "@/lib/business-profiles/types";
 import type { WebsiteTheme } from "@/lib/themes/types";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
@@ -25,6 +26,8 @@ export type WebsiteCompilerInput = {
   restaurantAssets?: RestaurantAssets;
   /** Optional brand theme tokens for generated sites; not inferred at runtime. */
   websiteTheme?: WebsiteTheme;
+  /** Optional verified business contact details for generated sites. */
+  restaurantBusinessProfile?: RestaurantBusinessProfile;
 };
 
 export type DetectedCompilerInputSections = {
@@ -410,6 +413,8 @@ export type CompiledWebsiteProject = {
   restaurantAssets?: RestaurantAssets;
   /** Carried from compiler input when provided; used by the project generator. */
   websiteTheme?: WebsiteTheme;
+  /** Carried from compiler input when provided; used by the project generator. */
+  restaurantBusinessProfile?: RestaurantBusinessProfile;
 };
 
 export type CompileResult = {

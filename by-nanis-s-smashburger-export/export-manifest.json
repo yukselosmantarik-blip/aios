@@ -1,0 +1,21 @@
+{
+  "projectId": "project:by-nani-s",
+  "projectName": "by Nani's",
+  "exportVersion": "8.5.0",
+  "compilerVersion": "8.1.0",
+  "generatorVersion": "8.5.0",
+  "sourceBlueprintId": "sample-blueprint-nanis",
+  "sourceBriefId": "adcc1216-b477-41d3-be47-5b5ec2ea05ec",
+  "generatedAt": "1970-01-01T00:00:00.000Z",
+  "fileCount": 102,
+  "directoryCount": 19,
+  "routeCount": 7,
+  "componentCount": 31,
+  "assetCount": 8,
+  "totalTextBytes": 2113935,
+  "checksumAlgorithm": "sha256",
+  "checksum": "860db82cb1742a93e37306784ef1bcc0cf4fa81c40249da5ce6b3c4221487055",
+  "missingDataCount": 4,
+  "warningCount": 1,
+  "launchBlockingPlaceholderCount": 4
+}

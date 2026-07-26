@@ -1,0 +1,7 @@
+<!-- ASSET_METADATA:{"assetType":"favicon","placeholder":true,"replaceBeforeProduction":true} -->
+<!-- GENERATED PLACEHOLDER: favicon.svg -->
+<!-- Sprint 8.4 — deterministic asset engine -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" role="img" aria-label="Favicon asset missing">
+  <rect width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-dasharray="6 4" />
+  <text x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-family="system-ui, sans-serif" font-size="12" fill="currentColor">FAVICON REQUIRED</text>
+</svg>

@@ -1,0 +1,1662 @@
+[
+  {
+    "id": "placeholder-1",
+    "category": "legal",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "warning",
+    "blocksLaunch": true,
+    "replacementInstruction": "Replace [PLACEHOLDER: Datenschutz-Link] with confirmed legal content."
+  },
+  {
+    "id": "placeholder-10",
+    "category": "address",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Adresse] with confirmed address content."
+  },
+  {
+    "id": "placeholder-100",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-101",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-102",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-103",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-104",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-105",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-106",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-107",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-108",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-109",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-11",
+    "category": "phone",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Telefon] with confirmed phone content."
+  },
+  {
+    "id": "placeholder-110",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-111",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-112",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-113",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-114",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-115",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-116",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-117",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-118",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-119",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-12",
+    "category": "email",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: E-Mail] with confirmed email content."
+  },
+  {
+    "id": "placeholder-120",
+    "category": "image",
+    "filePath": "content/pages/page-kontakt.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-121",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-122",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-123",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-124",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-125",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-126",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-127",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-128",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-129",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-13",
+    "category": "address",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace address placeholder in components/generated/ContactSection.tsx."
+  },
+  {
+    "id": "placeholder-130",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-131",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-132",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-133",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-134",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-135",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-136",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-137",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-138",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-139",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-14",
+    "category": "phone",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace phone placeholder in components/generated/ContactSection.tsx."
+  },
+  {
+    "id": "placeholder-140",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-141",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-142",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-143",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-144",
+    "category": "image",
+    "filePath": "content/pages/page-speisekarte.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-145",
+    "category": "image",
+    "filePath": "content/pages/page-startseite.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-146",
+    "category": "image",
+    "filePath": "content/pages/page-startseite.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-147",
+    "category": "image",
+    "filePath": "content/pages/page-startseite.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-148",
+    "category": "image",
+    "filePath": "content/pages/page-startseite.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-149",
+    "category": "image",
+    "filePath": "content/pages/page-startseite.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-15",
+    "category": "email",
+    "filePath": "components/generated/ContactSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace email placeholder in components/generated/ContactSection.tsx."
+  },
+  {
+    "id": "placeholder-150",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-151",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-152",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-153",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-154",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-155",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-156",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-157",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-158",
+    "category": "image",
+    "filePath": "content/pages/page-uber-uns.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-159",
+    "category": "price",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR] with confirmed price content."
+  },
+  {
+    "id": "placeholder-16",
+    "category": "other",
+    "filePath": "components/generated/ContentSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContentSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Rich text content] with confirmed other content."
+  },
+  {
+    "id": "placeholder-160",
+    "category": "phone",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: phone] with confirmed phone content."
+  },
+  {
+    "id": "placeholder-161",
+    "category": "email",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: email] with confirmed email content."
+  },
+  {
+    "id": "placeholder-162",
+    "category": "opening-hours",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: opening hours] with confirmed opening-hours content."
+  },
+  {
+    "id": "placeholder-163",
+    "category": "testimonial",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "warning",
+    "blocksLaunch": true,
+    "replacementInstruction": "Replace [PLACEHOLDER: testimonials] with confirmed testimonial content."
+  },
+  {
+    "id": "placeholder-164",
+    "category": "legal",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "warning",
+    "blocksLaunch": true,
+    "replacementInstruction": "Replace [PLACEHOLDER: Impressum & Datenschutz] with confirmed legal content."
+  },
+  {
+    "id": "placeholder-165",
+    "category": "product-data",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: production domain] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-166",
+    "category": "price",
+    "filePath": "lib/site-config.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR prices] with confirmed price content."
+  },
+  {
+    "id": "placeholder-17",
+    "category": "other",
+    "filePath": "components/generated/ContentSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContentSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/ContentSection.tsx."
+  },
+  {
+    "id": "placeholder-18",
+    "category": "other",
+    "filePath": "components/generated/FeatureGridSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "FeatureGridSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Feature] with confirmed other content."
+  },
+  {
+    "id": "placeholder-19",
+    "category": "other",
+    "filePath": "components/generated/FeatureGridSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "FeatureGridSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Icon] with confirmed other content."
+  },
+  {
+    "id": "placeholder-2",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Loading] with confirmed other content."
+  },
+  {
+    "id": "placeholder-20",
+    "category": "other",
+    "filePath": "components/generated/FeatureGridSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "FeatureGridSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/FeatureGridSection.tsx."
+  },
+  {
+    "id": "placeholder-21",
+    "category": "other",
+    "filePath": "components/generated/FeatureGridSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "FeatureGridSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/FeatureGridSection.tsx."
+  },
+  {
+    "id": "placeholder-22",
+    "category": "image",
+    "filePath": "components/generated/GallerySection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "GallerySection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Produktbild] with confirmed image content."
+  },
+  {
+    "id": "placeholder-23",
+    "category": "other",
+    "filePath": "components/generated/GenericSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "GenericSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/GenericSection.tsx."
+  },
+  {
+    "id": "placeholder-24",
+    "category": "other",
+    "filePath": "components/generated/GenericSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "GenericSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/GenericSection.tsx."
+  },
+  {
+    "id": "placeholder-25",
+    "category": "image",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Hero media] with confirmed image content."
+  },
+  {
+    "id": "placeholder-26",
+    "category": "other",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Trust cue] with confirmed other content."
+  },
+  {
+    "id": "placeholder-27",
+    "category": "other",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Trust cue] with confirmed other content."
+  },
+  {
+    "id": "placeholder-28",
+    "category": "address",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Adresse] with confirmed address content."
+  },
+  {
+    "id": "placeholder-29",
+    "category": "phone",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Telefon] with confirmed phone content."
+  },
+  {
+    "id": "placeholder-3",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: timeframe] with confirmed other content."
+  },
+  {
+    "id": "placeholder-30",
+    "category": "opening-hours",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Öffnungszeiten] with confirmed opening-hours content."
+  },
+  {
+    "id": "placeholder-31",
+    "category": "other",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace trust placeholder in components/generated/HeroSection.tsx."
+  },
+  {
+    "id": "placeholder-32",
+    "category": "other",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace trust placeholder in components/generated/HeroSection.tsx."
+  },
+  {
+    "id": "placeholder-33",
+    "category": "address",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace address placeholder in components/generated/HeroSection.tsx."
+  },
+  {
+    "id": "placeholder-34",
+    "category": "phone",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace phone placeholder in components/generated/HeroSection.tsx."
+  },
+  {
+    "id": "placeholder-35",
+    "category": "opening-hours",
+    "filePath": "components/generated/HeroSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "HeroSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace opening-hours placeholder in components/generated/HeroSection.tsx."
+  },
+  {
+    "id": "placeholder-36",
+    "category": "other",
+    "filePath": "components/generated/LocationSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "LocationSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Parking or transit info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-37",
+    "category": "other",
+    "filePath": "components/generated/LocationSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "LocationSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/LocationSection.tsx."
+  },
+  {
+    "id": "placeholder-38",
+    "category": "map",
+    "filePath": "components/generated/MapSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MapSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Map] with confirmed map content."
+  },
+  {
+    "id": "placeholder-39",
+    "category": "map",
+    "filePath": "components/generated/MapSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MapSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace map placeholder in components/generated/MapSection.tsx."
+  },
+  {
+    "id": "placeholder-4",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Error message] with confirmed other content."
+  },
+  {
+    "id": "placeholder-40",
+    "category": "image",
+    "filePath": "components/generated/MediaPlaceholder.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MediaPlaceholder",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace image placeholder in components/generated/MediaPlaceholder.tsx."
+  },
+  {
+    "id": "placeholder-41",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-42",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-43",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-44",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-45",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-46",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-47",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-48",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-49",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-5",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: timeframe] with confirmed other content."
+  },
+  {
+    "id": "placeholder-50",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-51",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-52",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-53",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-54",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-55",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-56",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-57",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-58",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-59",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-6",
+    "category": "legal",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": true,
+    "replacementInstruction": "Replace legal placeholder in components/generated/ContactForm.tsx."
+  },
+  {
+    "id": "placeholder-60",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-61",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-62",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-63",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-64",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-65",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-66",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-67",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-68",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-69",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-7",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/ContactForm.tsx."
+  },
+  {
+    "id": "placeholder-70",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-71",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-72",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-73",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-74",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-75",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-76",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Description] with confirmed other content."
+  },
+  {
+    "id": "placeholder-77",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-78",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-79",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-8",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/ContactForm.tsx."
+  },
+  {
+    "id": "placeholder-80",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-81",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: EUR price] with confirmed price content."
+  },
+  {
+    "id": "placeholder-82",
+    "category": "other",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Dietary info] with confirmed other content."
+  },
+  {
+    "id": "placeholder-83",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Allergens] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-84",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Availability] with confirmed product-data content."
+  },
+  {
+    "id": "placeholder-85",
+    "category": "price",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace price placeholder in components/generated/MenuSection.tsx."
+  },
+  {
+    "id": "placeholder-86",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace product-data placeholder in components/generated/MenuSection.tsx."
+  },
+  {
+    "id": "placeholder-87",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace product-data placeholder in components/generated/MenuSection.tsx."
+  },
+  {
+    "id": "placeholder-88",
+    "category": "product-data",
+    "filePath": "components/generated/MenuSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "MenuSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace product-data placeholder in components/generated/MenuSection.tsx."
+  },
+  {
+    "id": "placeholder-89",
+    "category": "opening-hours",
+    "filePath": "components/generated/OpeningHours.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "OpeningHours",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Öffnungszeiten] with confirmed opening-hours content."
+  },
+  {
+    "id": "placeholder-9",
+    "category": "other",
+    "filePath": "components/generated/ContactForm.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "ContactForm",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace other placeholder in components/generated/ContactForm.tsx."
+  },
+  {
+    "id": "placeholder-90",
+    "category": "opening-hours",
+    "filePath": "components/generated/OpeningHours.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "OpeningHours",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace opening-hours placeholder in components/generated/OpeningHours.tsx."
+  },
+  {
+    "id": "placeholder-91",
+    "category": "other",
+    "filePath": "components/generated/TrustSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "TrustSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: Trust proof] with confirmed other content."
+  },
+  {
+    "id": "placeholder-92",
+    "category": "other",
+    "filePath": "components/generated/TrustSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "TrustSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace trust placeholder in components/generated/TrustSection.tsx."
+  },
+  {
+    "id": "placeholder-93",
+    "category": "other",
+    "filePath": "components/generated/TrustSection.tsx",
+    "affectedRoute": null,
+    "affectedComponent": "TrustSection",
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace trust placeholder in components/generated/TrustSection.tsx."
+  },
+  {
+    "id": "placeholder-94",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-95",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-96",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-97",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-98",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  },
+  {
+    "id": "placeholder-99",
+    "category": "image",
+    "filePath": "content/pages/page-galerie.ts",
+    "affectedRoute": null,
+    "affectedComponent": null,
+    "severity": "info",
+    "blocksLaunch": false,
+    "replacementInstruction": "Replace [PLACEHOLDER: media asset] with confirmed image content."
+  }
+]

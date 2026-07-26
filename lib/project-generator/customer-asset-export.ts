@@ -19,11 +19,17 @@ export {
   exportVirtualPathForRole,
 } from "@/lib/project-generator/customer-asset-paths";
 
-const CUSTOMER_EXPORT_ROLES: CustomerAssetRole[] = ["logo", "hero"];
+type CustomerAssetSpec = {
+  role: CustomerAssetRole;
+  assetId: AssetId;
+  pickPath: (assets: RestaurantAssets) => string | undefined;
+};
 
-function sourcePathForRole(assets: RestaurantAssets, role: CustomerAssetRole): string {
-  return role === "logo" ? assets.logo : assets.hero;
-}
+const CUSTOMER_ASSET_SPECS: CustomerAssetSpec[] = [
+  { role: "logo", assetId: "logo", pickPath: (assets) => assets.logo },
+  { role: "hero", assetId: "hero", pickPath: (assets) => assets.hero },
+  { role: "menu", assetId: "menu", pickPath: (assets) => assets.menu },
+];
 
 function absolutePublicAssetPath(sourcePublicPath: string): string {
   const relative = sourcePublicPath.replace(/^\//, "");
@@ -43,7 +49,7 @@ function uploadedRegistryEntry(
   return {
     id,
     path: exportPublicPathForRole(sourcePublicPath, role),
-    assetType: role,
+    assetType: role === "logo" ? "logo" : role === "hero" ? "hero" : "menu",
     placeholder: false,
     replaceBeforeProduction: false,
     altText,
@@ -75,12 +81,28 @@ export function buildCustomerAssetRegistryOverrides(
   project: CompiledWebsiteProject,
   assets: RestaurantAssets,
 ): Partial<Record<AssetId, RegistryAssetEntry>> {
-  const businessName = project.business.businessName;
-
-  return {
-    logo: uploadedRegistryEntry("logo", "logo", assets.logo, `${businessName} Logo`),
-    hero: uploadedRegistryEntry("hero", "hero", assets.hero, `${businessName} — Hero`),
+  const landing = project.restaurantBusinessProfile?.landing;
+  const brandName = landing?.brandName ?? project.business.businessName;
+  const overrides: Partial<Record<AssetId, RegistryAssetEntry>> = {
+    logo: uploadedRegistryEntry("logo", "logo", assets.logo, `${brandName} Logo`),
+    hero: uploadedRegistryEntry(
+      "hero",
+      "hero",
+      assets.hero,
+      `${landing?.heroHeading ?? brandName} — Hero`,
+    ),
   };
+
+  if (assets.menu) {
+    overrides.menu = uploadedRegistryEntry(
+      "menu",
+      "menu",
+      assets.menu,
+      landing?.menuImageAlt ?? `Speisekarte von ${brandName}`,
+    );
+  }
+
+  return overrides;
 }
 
 export function buildCustomerAssetVirtualFiles(
@@ -88,9 +110,13 @@ export function buildCustomerAssetVirtualFiles(
   assets: RestaurantAssets,
 ): VirtualFile[] {
   void project;
-  return CUSTOMER_EXPORT_ROLES.map((role) =>
-    buildBase64AssetVirtualFile(role, sourcePathForRole(assets, role)),
-  );
+  return CUSTOMER_ASSET_SPECS.flatMap((spec) => {
+    const sourcePath = spec.pickPath(assets);
+    if (!sourcePath) {
+      return [];
+    }
+    return [buildBase64AssetVirtualFile(spec.role, sourcePath)];
+  });
 }
 
 export function skippedPlaceholderAssetIds(
@@ -99,5 +125,10 @@ export function skippedPlaceholderAssetIds(
   if (!assets) {
     return new Set();
   }
-  return new Set(CUSTOMER_EXPORT_ROLES);
+
+  const skipped = new Set<AssetId>(["logo", "hero"]);
+  if (assets.menu) {
+    skipped.add("menu");
+  }
+  return skipped;
 }

@@ -49,7 +49,7 @@ function buildSmashburgerContext(
     agent_id: "1",
     customer_id: null,
     project_id: null,
-    business_name: "by Nanis`s Smashburger",
+    business_name: "by Nani's",
     industry: "Smashburger Restaurant",
     location: null,
     website_goal: "Mehr Kunden gewinnen und online bestellungen ermöglichen",

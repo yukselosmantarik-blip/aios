@@ -162,7 +162,7 @@ export function buildVisualSharedTypesFile(): string {
     "  | 'placeholder'",
     "  | 'interactive';",
     "",
-    "export type MediaAssetId = 'logo' | 'favicon' | 'hero' | 'gallery' | 'product' | 'map' | 'avatar';",
+    "export type MediaAssetId = 'logo' | 'favicon' | 'hero' | 'gallery' | 'product' | 'map' | 'avatar' | 'menu';",
     "",
     "export type MediaPlaceholderModel = {",
     "  id: string;",

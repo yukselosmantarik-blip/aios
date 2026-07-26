@@ -13,6 +13,8 @@ export const ALL_GENERATED_COMPONENTS = [
   "TrustSection",
   "FeatureGridSection",
   "MenuSection",
+  "MenuImageSection",
+  "BusinessInfoSection",
   "ProductGridSection",
   "GallerySection",
   "TestimonialSection",

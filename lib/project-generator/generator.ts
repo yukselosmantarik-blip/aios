@@ -9,6 +9,10 @@ import {
   countVisualComponentFiles,
 } from "@/lib/project-generator/visual-components";
 import {
+  buildLegalReactPageFiles,
+  buildLegalRouteDescriptors,
+} from "@/lib/project-generator/react-legal-pages";
+import {
   buildReactPageFiles,
   countPageConfigFiles,
   countReactPages,
@@ -48,6 +52,8 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
   const componentFiles = buildVisualComponentFiles(project);
   const registryFile = buildVisualComponentRegistry(project);
   const reactFiles = buildReactPageFiles(project);
+  const legalPageFiles = buildLegalReactPageFiles(project);
+  const legalRoutes = buildLegalRouteDescriptors(project);
   const sortedFiles = sortVirtualFiles([
     ...baseFiles,
     ...styleFiles,
@@ -55,6 +61,7 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
     ...componentFiles,
     registryFile,
     ...reactFiles,
+    ...legalPageFiles,
   ]);
 
   assertUniqueFilePaths(sortedFiles);
@@ -70,7 +77,9 @@ export function generateNextJsProject(input: ProjectGeneratorInput): ProjectGene
     rootDirectories: [...REQUIRED_FOLDERS],
     directories,
     files: sortedFiles,
-    routes,
+    routes: [...routes, ...legalRoutes].sort((left, right) =>
+      left.routePath.localeCompare(right.routePath),
+    ),
     componentDescriptors,
     requiredFolders: [...REQUIRED_FOLDERS],
   };

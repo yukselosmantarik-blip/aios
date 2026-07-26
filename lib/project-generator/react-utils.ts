@@ -6,6 +6,10 @@ import type {
   PageSeoModel,
 } from "@/lib/website-compiler/types";
 import { buildEnrichedPageSections } from "@/lib/project-generator/content-export";
+import {
+  isPremiumRestaurantLanding,
+  premiumLandingContent,
+} from "@/lib/project-generator/premium-restaurant-landing";
 import { joinProjectPath, routePathToAppSegment } from "@/lib/project-generator/tree";
 
 export const SECTION_COMPONENT_NAMES = [
@@ -13,6 +17,8 @@ export const SECTION_COMPONENT_NAMES = [
   "TrustSection",
   "FeatureGridSection",
   "MenuSection",
+  "MenuImageSection",
+  "BusinessInfoSection",
   "ProductGridSection",
   "GallerySection",
   "TestimonialSection",
@@ -225,19 +231,41 @@ export function buildPageSectionConfig(
 export function buildPageConfig(page: CompiledPage, project: CompiledWebsiteProject): GeneratedPageConfig {
   const route = project.routes.find((entry) => entry.id === page.routeId);
   const sections = buildEnrichedPageSections(page, project);
+  const landing = premiumLandingContent(project);
+  const premiumHome = page.pageRole === "home" && isPremiumRestaurantLanding(project);
 
   const missingDataReferences = project.missingData
     .filter((entry) => entry.affectedPages.includes(page.id))
     .map((entry) => entry.field);
 
+  const seo =
+    premiumHome && landing
+      ? {
+          ...page.seo,
+          title: `Startseite | ${landing.brandName}`,
+          metaDescription: landing.homeMetaDescription,
+          h1Direction: landing.heroHeading,
+          openGraph: {
+            ...page.seo.openGraph,
+            title: `${landing.heroHeading} — Startseite`,
+            description: landing.homeMetaDescription,
+          },
+          twitter: {
+            ...page.seo.twitter,
+            title: `${landing.heroHeading} — Startseite`,
+            description: landing.homeMetaDescription,
+          },
+        }
+      : page.seo;
+
   return {
     pageId: page.id,
     pageName: page.pageName,
     pageRole: page.pageRole,
-    title: page.seo.title,
-    description: page.seo.metaDescription,
+    title: seo.title,
+    description: seo.metaDescription,
     route: route?.routePath ?? "/",
-    h1Direction: page.seo.h1Direction,
+    h1Direction: seo.h1Direction,
     primaryCta: page.primaryCta,
     secondaryCta: page.secondaryCta,
     selectedPatternIds: page.selectedPatternIds,
@@ -247,7 +275,7 @@ export function buildPageConfig(page: CompiledPage, project: CompiledWebsiteProj
       secondary: page.secondaryCta,
     },
     mediaPlaceholders: page.mediaRequirements,
-    seo: page.seo,
+    seo,
     missingDataReferences,
     internalLinks: page.seo.internalLinks.filter((link) =>
       project.routes.some((entry) => entry.routePath === link),
