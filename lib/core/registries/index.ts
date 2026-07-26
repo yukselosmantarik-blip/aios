@@ -23,3 +23,32 @@ export {
   type IndustryRegistryVerificationCheck,
   type IndustryRegistryVerificationResult,
 } from "@/lib/core/registries/verify";
+
+export type {
+  SectionId,
+  SectionCategory,
+  SectionKind,
+  SectionRegistration,
+  SectionRegistrySnapshot,
+  SectionComponentBinding,
+} from "@/lib/core/registries/section-types";
+
+export {
+  ensureSectionRegistryBootstrapped,
+  registerSection,
+  getSectionRegistration,
+  listSectionRegistrations,
+  listSectionRegistrationsByCategory,
+  listSectionRegistrationsByKind,
+  getSectionRegistrySnapshot,
+  isSectionRegistered,
+  resetSectionRegistryForTests,
+} from "@/lib/core/registries/section-registry";
+
+export { BUILTIN_SECTION_DEFINITIONS } from "@/lib/core/registries/section-definitions";
+
+export {
+  verifySectionRegistry,
+  type SectionRegistryVerificationCheck,
+  type SectionRegistryVerificationResult,
+} from "@/lib/core/registries/section-verify";

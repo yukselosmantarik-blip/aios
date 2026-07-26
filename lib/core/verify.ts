@@ -1,4 +1,5 @@
 import { verifyIndustryRegistry } from "@/lib/core/registries/verify";
+import { verifySectionRegistry } from "@/lib/core/registries/section-verify";
 import { stableSerializeGeneratedProjectTreeJson } from "@/lib/project-generator/serializer";
 import { generateSmashburgerZipExportSample } from "@/lib/project-export/zip-export.verify";
 import { compileSmashburgerSampleProject } from "@/lib/website-compiler/verify";
@@ -11,6 +12,7 @@ export type CoreEngineSmokeReport = {
   zipVerificationPassed: boolean;
   pipelineDeterministic: boolean;
   industryRegistryPassed: boolean;
+  sectionRegistryPassed: boolean;
 };
 
 /**
@@ -31,5 +33,6 @@ export async function runCoreEngineSmokeChecks(): Promise<CoreEngineSmokeReport>
       stableSerializeGeneratedProjectTreeJson(first.generated) ===
       stableSerializeGeneratedProjectTreeJson(second.generated),
     industryRegistryPassed: verifyIndustryRegistry().passed,
+    sectionRegistryPassed: verifySectionRegistry().passed,
   };
 }
