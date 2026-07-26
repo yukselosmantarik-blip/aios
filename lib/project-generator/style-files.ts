@@ -3,7 +3,7 @@ import { buildVirtualFile } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
 import { buildStyleSystem } from "@/lib/project-generator/style-engine";
 import { buildPremiumHeroStylesheet, buildPremiumLandingSectionStyles } from "@/lib/project-generator/website-theme-css";
-import { isPremiumRestaurantLanding } from "@/lib/project-generator/premium-restaurant-landing";
+import { isPremiumRestaurantLanding } from "@/lib/industries/restaurant/landing";
 
 function serializeObjectExport(name: string, value: unknown, typeName?: string): string {
   const lines = [

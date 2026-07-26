@@ -21,6 +21,12 @@ export * as samples from "@/lib/core/samples";
 export * as registries from "@/lib/core/registries";
 export * as industries from "@/lib/industries";
 
+export { ensureWebsiteEngineBootstrapped, resetWebsiteEngineBootstrapForTests } from "@/lib/core/bootstrap";
+export { verifyWebsiteEngineArchitecture } from "@/lib/core/verify-architecture";
+export type {
+  ArchitectureVerificationCheck,
+  ArchitectureVerificationResult,
+} from "@/lib/core/verify-architecture";
 export { runCoreEngineSmokeChecks } from "@/lib/core/verify";
 export type { CoreEngineSmokeReport } from "@/lib/core/verify";
 export { runBuildVerification } from "@/lib/core/verify-build";

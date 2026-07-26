@@ -9,7 +9,7 @@ import { buildEnrichedPageSections } from "@/lib/project-generator/content-expor
 import {
   isPremiumRestaurantLanding,
   premiumLandingContent,
-} from "@/lib/project-generator/premium-restaurant-landing";
+} from "@/lib/industries/restaurant/landing";
 import { joinProjectPath, routePathToAppSegment } from "@/lib/project-generator/tree";
 
 export const SECTION_COMPONENT_NAMES = [

@@ -1,10 +1,10 @@
-import { BY_NANIS_RESTAURANT_ASSETS } from "@/lib/assets/by-nanis";
-import { BY_NANIS_BUSINESS_PROFILE } from "@/lib/business-profiles/by-nanis";
+import { BY_NANIS_RESTAURANT_ASSETS } from "@/lib/industries/restaurant/fixtures/by-nanis-assets";
+import { BY_NANIS_BUSINESS_PROFILE } from "@/lib/industries/restaurant/fixtures/by-nanis-profile";
 import {
   collectRestaurantAssetPaths,
   verifyRestaurantAssetsOnDisk,
-} from "@/lib/assets/verify";
-import { BY_NANIS_WEBSITE_THEME } from "@/lib/themes/by-nanis";
+} from "@/lib/industries/restaurant/assets-verify";
+import { BY_NANIS_WEBSITE_THEME } from "@/lib/industries/restaurant/fixtures/by-nanis-theme";
 import { verifyWebsiteThemeSerializable } from "@/lib/themes/verify";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";

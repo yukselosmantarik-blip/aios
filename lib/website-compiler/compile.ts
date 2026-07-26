@@ -1,7 +1,7 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import { resolveIndustryCompileAttachments } from "@/lib/core/registries/industry-module-registry";
 import { resolveIndustryIdFromBrief } from "@/lib/core/registries/industry-registry";
-import { ensureIndustryModulesRegistered } from "@/lib/industries/bootstrap";
+import { ensureWebsiteEngineBootstrapped } from "@/lib/core/bootstrap";
 import type { WebsiteBlueprintContent } from "@/lib/website-blueprints.types";
 import {
   createPageDnaContext,
@@ -803,8 +803,9 @@ function compileStructuredData(
 }
 
 export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResult {
+  ensureWebsiteEngineBootstrapped();
   const { brief, blueprint } = input;
-  const profile = detectBusinessProfile(brief.industry, brief.business_name);
+  const profile = resolveIndustryIdFromBrief(brief);
   const sitemap = blueprint.recommendedSitemap.length
     ? blueprint.recommendedSitemap
     : ["Home"];
@@ -895,7 +896,6 @@ export function compileWebsiteProject(input: WebsiteCompilerInput): CompileResul
   const designTokens = buildDesignTokens(brief, tier);
   const navigation = compileNavigation(routes, primaryCta);
   const footer = compileFooter(routes, primaryCta);
-  ensureIndustryModulesRegistered();
   const industryId = resolveIndustryIdFromBrief(brief);
   const industryAttachments = resolveIndustryCompileAttachments(input, industryId);
   const resolvedRestaurantAssets = industryAttachments.restaurantAssets;

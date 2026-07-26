@@ -1,3 +1,4 @@
+import { ensureWebsiteEngineBootstrapped } from "@/lib/core/bootstrap";
 import { createZipExport } from "@/lib/project-export/zip-export";
 import { generateNextJsProject } from "@/lib/project-generator/generator";
 import type { ProjectGeneratorResult } from "@/lib/project-generator/types";
@@ -11,6 +12,7 @@ import type {
  * Compile a website brief + blueprint into a structured project model.
  */
 export function compileWebsite(input: WebsiteCompilerInput): CompileResult {
+  ensureWebsiteEngineBootstrapped();
   return compileWebsiteProject(input);
 }
 
@@ -21,6 +23,7 @@ export function generateWebsite(
   input: WebsiteCompilerInput,
   generatedAt?: string,
 ): ProjectGeneratorResult {
+  ensureWebsiteEngineBootstrapped();
   const { project } = compileWebsiteProject(input);
   return generateNextJsProject({
     project,
@@ -50,6 +53,7 @@ export async function compileGenerateAndZipWebsite(
   input: WebsiteCompilerInput,
   options: ZipWebsiteExportOptions = {},
 ) {
+  ensureWebsiteEngineBootstrapped();
   const generatedAt = options.generationTime ?? input.generatedAt ?? new Date().toISOString();
   const compileResult = compileWebsiteProject(input);
   const generatorResult = generateNextJsProject({

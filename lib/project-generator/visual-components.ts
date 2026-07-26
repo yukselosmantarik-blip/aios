@@ -5,7 +5,7 @@ import {
   businessProfileForComponentExport,
   isPremiumRestaurantLanding,
   resolvePremiumOrderCtaHref,
-} from "@/lib/project-generator/premium-restaurant-landing";
+} from "@/lib/industries/restaurant/landing";
 import { resolveFooterBusinessProfile } from "@/lib/project-generator/restaurant-business-profile";
 import {
   heroVariantForPage,

@@ -1,7 +1,7 @@
 import type { CompiledWebsiteProject } from "@/lib/website-compiler/types";
 import { buildVirtualFile, routePathToPageFilePath } from "@/lib/project-generator/tree";
 import type { VirtualFile } from "@/lib/project-generator/types";
-import { isPremiumRestaurantLanding } from "@/lib/project-generator/premium-restaurant-landing";
+import { isPremiumRestaurantLanding } from "@/lib/industries/restaurant/landing";
 import { buildRootLayoutFile } from "@/lib/project-generator/react-layout";
 import { buildRouteBoundaryFiles } from "@/lib/project-generator/react-route-files";
 import {

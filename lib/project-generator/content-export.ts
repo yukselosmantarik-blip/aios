@@ -5,7 +5,7 @@ import type {
   ContentBlock,
 } from "@/lib/website-compiler/types";
 import type { PageSectionConfig } from "@/lib/project-generator/react-utils";
-import { isPremiumRestaurantLanding, premiumLandingContent } from "@/lib/project-generator/premium-restaurant-landing";
+import { isPremiumRestaurantLanding, premiumLandingContent } from "@/lib/industries/restaurant/landing";
 import {
   buildPageSectionConfig,
   shouldIncludeSectionInPage,

@@ -9,6 +9,7 @@ import { verifyDeterministicReactPageGeneration } from "@/lib/project-generator/
 import { verifyDeterministicReactComponentGeneration } from "@/lib/project-generator/react-components.verify";
 import { generateNextJsProject } from "@/lib/project-generator/generator";
 import { verifyDeterministicProjectGeneration } from "@/lib/project-generator/verify";
+import { verifyWebsiteEngineArchitecture } from "@/lib/core/verify-architecture";
 import { verifyDeterministicCompilation } from "@/lib/website-compiler/verify";
 import type { ProjectGeneratorInput } from "@/lib/project-generator/types";
 
@@ -45,7 +46,9 @@ function flattenSuite(
 export function runBuildVerification(): BuildVerificationReport {
   const checks: BuildVerificationCheck[] = [];
 
+  const architecture = verifyWebsiteEngineArchitecture();
   checks.push(
+    ...flattenSuite("engine-architecture", architecture),
     ...flattenSuite("industry-registry", verifyIndustryRegistry()),
     ...flattenSuite("section-registry", verifySectionRegistry()),
     ...flattenSuite("theme-registry", verifyThemeRegistry()),

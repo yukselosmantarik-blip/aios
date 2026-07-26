@@ -4,7 +4,7 @@ import type { VirtualFile } from "@/lib/project-generator/types";
 import {
   isPremiumRestaurantLanding,
   premiumLandingContent,
-} from "@/lib/project-generator/premium-restaurant-landing";
+} from "@/lib/industries/restaurant/landing";
 import {
   isFeatureEnabled,
   primaryLanguageCopy,

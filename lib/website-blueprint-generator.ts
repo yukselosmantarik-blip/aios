@@ -27,6 +27,8 @@ import {
   buildVisualHierarchyEngineOverview,
 } from "@/lib/website-blueprint-visual-hierarchy";
 import { resolveIndustryRegistrationFromBrief } from "@/lib/core/registries/industry-registry";
+import { ensureWebsiteEngineBootstrapped } from "@/lib/core/bootstrap";
+import { detectBusinessProfile } from "@/lib/website-compiler/normalize";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -154,28 +156,6 @@ function normalizePageKey(page: string): string {
 function detectPageRole(page: string): PageRole {
   const key = normalizePageKey(page);
   return PAGE_ROLE_ALIASES[key] ?? "generic";
-}
-
-function detectBusinessProfile(brief: WebsiteBrief): BusinessProfile {
-  const haystack = `${brief.industry} ${brief.business_name}`.toLowerCase();
-
-  if (/burger|restaurant|imbiss|gastro|café|cafe|bistro|food|smashburger/.test(
-    haystack,
-  )) {
-    return "restaurant";
-  }
-
-  if (/dentist|zahnarzt|dental|zahn|orthodont/.test(haystack)) {
-    return "dentist";
-  }
-
-  if (/agency|agentur|marketing|design studio|studio|consulting|beratung/.test(
-    haystack,
-  )) {
-    return "agency";
-  }
-
-  return "default";
 }
 
 function resolveSitemap(brief: WebsiteBrief): string[] {
@@ -1264,7 +1244,8 @@ function buildMasterPrompt(
 export function generateWebsiteBlueprintContent(
   brief: WebsiteBrief,
 ): WebsiteBlueprintContent {
-  const profile = detectBusinessProfile(brief);
+  ensureWebsiteEngineBootstrapped();
+  const profile = detectBusinessProfile(brief.industry, brief.business_name);
   const recommendedSitemap = resolveSitemap(brief);
   const recommendedPageSections = buildPageSpecifications(
     brief,
