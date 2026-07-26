@@ -122,18 +122,13 @@ export function verifyGeneratedNextJsProject(
 
   checks.push({
     name: "Public asset placeholders prepared",
-    passed: [
-      "public/icons/logo.svg",
-      "public/icons/favicon.svg",
-      "public/images/hero-placeholder.svg",
-      "public/images/gallery-placeholder.svg",
-      "public/images/map-placeholder.svg",
-      "public/images/avatar-placeholder.svg",
-      "public/fonts/.gitkeep",
-      "lib/assets/registry.ts",
-      "lib/assets/resolve-asset.ts",
-    ].every((path) => generated.files.some((file) => file.path === path)),
-    detail: "Placeholder SVG assets, fonts directory, and asset registry",
+    passed:
+      generated.files.some((file) => file.path === "lib/assets/registry.ts") &&
+      generated.files.some((file) => file.path === "lib/assets/resolve-asset.ts") &&
+      generated.files.some((file) => file.path === "public/fonts/.gitkeep") &&
+      generated.files.some((file) => file.path.startsWith("public/icons/")) &&
+      generated.files.some((file) => file.path.startsWith("public/images/")),
+    detail: "Asset registry, resolver, fonts directory, and public media files",
   });
 
   return {

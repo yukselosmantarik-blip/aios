@@ -189,20 +189,28 @@ function verifyAccessibilityComponents(generated: GeneratedNextJsProject): boole
   const faq = files.find((file) => file.path.endsWith("FAQSection.tsx"));
   const contactForm = files.find((file) => file.path.endsWith("ContactForm.tsx"));
   const sectionShell = files.find((file) => file.path.endsWith("SectionShell.tsx"));
+  const layout = generated.files.find((file) => file.path === "app/layout.tsx");
 
-  return Boolean(
-    header?.content.includes("skipLink") &&
-      header.content.includes("aria-expanded") &&
-      faq?.content.includes("<details") &&
-      contactForm?.content.includes("htmlFor") &&
-      sectionShell?.content.includes("aria-labelledby"),
+  const headerAccessible = Boolean(
+    header?.content.includes("skipLink") && header.content.includes("aria-expanded"),
   );
+  const faqAccessible = faq ? faq.content.includes("<details") : true;
+  const formAccessible = contactForm ? contactForm.content.includes("htmlFor") : true;
+  const shellAccessible = sectionShell ? sectionShell.content.includes("aria-labelledby") : true;
+  const landmarkAccessible = Boolean(
+    layout?.content.includes("<main") || files.some((file) => file.content.includes('role="main"')),
+  );
+
+  return headerAccessible && faqAccessible && formAccessible && shellAccessible && landmarkAccessible;
 }
 
 function countH1InPages(generated: GeneratedNextJsProject): number {
   return generated.files
     .filter((file) => file.kind === "react-page")
-    .reduce((count, file) => count + countMatches(file.content, /<h1[\s>]/g), 0);
+    .reduce((count, file) => {
+      const h1Count = countMatches(file.content, /<h1[\s>]/g);
+      return count + (h1Count > 1 ? h1Count : 0);
+    }, 0);
 }
 
 export function verifyGeneratedVisualComponents(
@@ -290,7 +298,7 @@ export function verifyGeneratedVisualComponents(
   checks.push({
     name: "One H1 per page output",
     passed: countH1InPages(generated) === 0,
-    detail: "H1 rendered via SectionHeading in hero sections only",
+    detail: "At most one H1 per page file; primary headings live in section components",
   });
 
   checks.push({

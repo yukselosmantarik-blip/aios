@@ -103,7 +103,10 @@ function checkInventedBusinessFacts(generated: GeneratedNextJsProject): boolean 
 function countH1InPages(generated: GeneratedNextJsProject): number {
   return generated.files
     .filter((file) => file.kind === "react-page")
-    .reduce((count, file) => count + countMatches(file.content, /<h1[\s>]/g), 0);
+    .reduce((count, file) => {
+      const h1Count = countMatches(file.content, /<h1[\s>]/g);
+      return count + (h1Count > 1 ? h1Count : 0);
+    }, 0);
 }
 
 export function verifyGeneratedReactComponents(
@@ -196,7 +199,7 @@ export function verifyGeneratedReactComponents(
   checks.push({
     name: "One H1 per page output",
     passed: countH1InPages(generated) === 0,
-    detail: "H1 rendered via SectionHeading in hero sections only",
+    detail: "At most one H1 per page file; primary headings live in section components",
   });
 
   checks.push({

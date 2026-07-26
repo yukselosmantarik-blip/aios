@@ -6,7 +6,9 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "verify:build": "npx tsx lib/core/run-verify-build.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

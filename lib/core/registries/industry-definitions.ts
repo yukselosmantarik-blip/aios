@@ -1,9 +1,6 @@
 import type { IndustryRegistration } from "@/lib/core/registries/types";
 
-/**
- * Built-in industry metadata. Values mirror `SITEMAP_BY_PROFILE` in
- * `website-blueprint-generator.ts` (not wired there yet — documentation + registry only).
- */
+/** Built-in industry metadata; default sitemaps feed blueprint generation. */
 export const BUILTIN_INDUSTRY_DEFINITIONS: readonly IndustryRegistration[] = [
   {
     id: "restaurant",

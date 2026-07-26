@@ -69,11 +69,7 @@ export function isIndustryRegistered(id: IndustryId): boolean {
   return industries.has(id);
 }
 
-/**
- * Resolve industry id from a website brief using the same rules as the compiler
- * (`detectBusinessProfile`). Does not alter blueprint or compile pipelines until
- * those modules opt in to the registry.
- */
+/** Resolve industry id from a brief using the same rules as the compiler. */
 export function resolveIndustryIdFromBrief(brief: WebsiteBrief): IndustryId {
   ensureIndustryRegistryBootstrapped();
   return detectBusinessProfile(brief.industry, brief.business_name);

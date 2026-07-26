@@ -23,3 +23,8 @@ export * as industries from "@/lib/industries";
 
 export { runCoreEngineSmokeChecks } from "@/lib/core/verify";
 export type { CoreEngineSmokeReport } from "@/lib/core/verify";
+export { runBuildVerification } from "@/lib/core/verify-build";
+export type {
+  BuildVerificationCheck,
+  BuildVerificationReport,
+} from "@/lib/core/verify-build";

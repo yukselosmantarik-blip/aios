@@ -26,6 +26,7 @@ import {
   buildPatternLibraryHierarchyIntegration,
   buildVisualHierarchyEngineOverview,
 } from "@/lib/website-blueprint-visual-hierarchy";
+import { resolveIndustryRegistrationFromBrief } from "@/lib/core/registries/industry-registry";
 
 type BusinessProfile = "restaurant" | "dentist" | "agency" | "default";
 type PageRole =
@@ -41,13 +42,6 @@ type PageRole =
   | "team"
   | "treatments"
   | "generic";
-
-const SITEMAP_BY_PROFILE: Record<BusinessProfile, string[]> = {
-  restaurant: ["Home", "Menu", "About", "Gallery", "Contact"],
-  dentist: ["Home", "Treatments", "Team", "Reviews", "Contact"],
-  agency: ["Home", "Services", "Portfolio", "About", "Contact"],
-  default: ["Home", "About", "Services", "Contact"],
-};
 
 const PAGE_ROLE_ALIASES: Record<string, PageRole> = {
   home: "home",
@@ -191,7 +185,7 @@ function resolveSitemap(brief: WebsiteBrief): string[] {
     return requestedPages;
   }
 
-  return SITEMAP_BY_PROFILE[detectBusinessProfile(brief)];
+  return [...resolveIndustryRegistrationFromBrief(brief).defaultSitemap];
 }
 
 function briefServices(brief: WebsiteBrief): string[] {
