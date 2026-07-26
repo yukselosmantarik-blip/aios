@@ -18,6 +18,7 @@ export * as generator from "@/lib/core/generator";
 export * as exportEngine from "@/lib/core/export";
 
 export * as samples from "@/lib/core/samples";
+export * as registries from "@/lib/core/registries";
 
 export { runCoreEngineSmokeChecks } from "@/lib/core/verify";
 export type { CoreEngineSmokeReport } from "@/lib/core/verify";
