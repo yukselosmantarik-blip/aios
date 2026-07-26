@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
-    "verify:build": "npx tsx lib/core/run-verify-build.ts"
+    "verify:build": "npx tsx lib/core/run-verify-build.ts",
+    "verify:export": "npx tsx lib/core/run-verify-export.ts"
   },
   "dependencies": {
     "@supabase/ssr": "^0.12.3",

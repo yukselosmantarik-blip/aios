@@ -364,21 +364,35 @@ function countUnknownTokens(files: VirtualFile[]): number {
 
 function validateAssets(files: VirtualFile[]): { valid: boolean; unresolved: number } {
   let unresolved = 0;
+  const registry = files.find((file) => file.path === "lib/assets/registry.ts")?.content ?? "";
+  const registryPaths = [
+    ...registry.matchAll(/path:\s*"(\/[^"]+)"/g),
+  ].map((match) => match[1]);
 
-  for (const asset of ASSET_DEFINITIONS) {
-    const virtualPath =
-      asset.id === "logo" || asset.id === "favicon"
-        ? `public/icons/${asset.fileName}`
-        : `public/images/${asset.fileName}`;
+  if (registryPaths.length === 0) {
+    for (const asset of ASSET_DEFINITIONS) {
+      const virtualPath =
+        asset.id === "logo" || asset.id === "favicon"
+          ? `public/icons/${asset.fileName}`
+          : `public/images/${asset.fileName}`;
 
-    const assetFile = files.find((file) => file.path === virtualPath);
-    if (!assetFile) {
-      unresolved += 1;
-      continue;
+      const assetFile = files.find((file) => file.path === virtualPath);
+      if (!assetFile || !assetFile.content.includes("ASSET_METADATA:")) {
+        unresolved += 1;
+      }
     }
-
-    if (!assetFile.content.includes("ASSET_METADATA:")) {
-      unresolved += 1;
+  } else {
+    for (const publicPath of registryPaths) {
+      const virtualPath = `public${publicPath}`;
+      const assetFile = files.find((file) => file.path === virtualPath);
+      const hasUploadedAsset =
+        assetFile?.contentEncoding === "base64" && assetFile.content.length > 0;
+      const hasPlaceholderAsset =
+        Boolean(assetFile?.content.includes("ASSET_METADATA:")) ||
+        Boolean(assetFile?.content.includes("<!-- ASSET_METADATA:"));
+      if (!assetFile || (!hasUploadedAsset && !hasPlaceholderAsset)) {
+        unresolved += 1;
+      }
     }
   }
 

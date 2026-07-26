@@ -28,3 +28,6 @@ export type {
   BuildVerificationCheck,
   BuildVerificationReport,
 } from "@/lib/core/verify-build";
+export { runExportVerification } from "@/lib/core/verify-export";
+export type { ExportVerificationReport } from "@/lib/core/verify-export";
+export type { ExportVerificationCheck } from "@/lib/core/export-verify-suites";
