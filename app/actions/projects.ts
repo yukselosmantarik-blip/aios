@@ -178,6 +178,7 @@ export async function createProjectAction(
 
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath(`/customers/${parsed.data.customer_id}`);
     return { success: true };
   } catch (error) {
     const message =
@@ -206,9 +207,18 @@ export async function updateProjectAction(
   }
 
   try {
+    const existing = await getProjectById(id, user.id);
+    if (!existing) {
+      return { error: "Projekt wurde nicht gefunden." };
+    }
+
     await updateProject(id, user.id, parsed.data);
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath(`/customers/${parsed.data.customer_id}`);
+    if (existing.customer_id !== parsed.data.customer_id) {
+      revalidatePath(`/customers/${existing.customer_id}`);
+    }
     return {
       success: true,
       message: "Projekt wurde erfolgreich aktualisiert.",
@@ -241,6 +251,7 @@ export async function deleteProjectAction(
     await deleteProject(trimmedId, user.id);
     revalidatePath("/projects");
     revalidatePath("/");
+    revalidatePath(`/customers/${project.customer_id}`);
 
     return {
       success: true,

@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import DeleteProjectDialog from "@/components/projects/DeleteProjectDialog";
@@ -139,7 +140,12 @@ export default function ProjectsTable({
                     {project.name}
                   </td>
                   <td className="px-4 py-3 text-sm text-zinc-300">
-                    {project.customer_company_name}
+                    <Link
+                      href={`/customers/${project.customer_id}`}
+                      className="text-blue-400 hover:text-blue-300"
+                    >
+                      {project.customer_company_name}
+                    </Link>
                   </td>
                   <td className="px-4 py-3">
                     <ProjectStatusBadge status={project.status} />

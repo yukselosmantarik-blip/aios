@@ -2,8 +2,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import Sidebar from "@/components/Sidebar";
 import CustomerDetailPageContent from "@/components/customers/CustomerDetailPageContent";
+import CustomerProjectsSection from "@/components/customers/CustomerProjectsSection";
 import { listCustomerNotes } from "@/lib/customer-notes";
-import { getCustomerById } from "@/lib/customers";
+import { getCustomers, getCustomerById } from "@/lib/customers";
+import { getProjectsByCustomerId } from "@/lib/projects";
 import { createClient } from "@/lib/supabase/server";
 
 export const dynamic = "force-dynamic";
@@ -39,6 +41,18 @@ export default async function CustomerDetailPage({
   }
 
   const notes = await listCustomerNotes(customerId, user.id);
+  const [linkedProjects, allCustomers] = await Promise.all([
+    getProjectsByCustomerId(customerId, user.id),
+    getCustomers(),
+  ]);
+  const customerOptions = allCustomers.map((entry) => ({
+    id: entry.id,
+    company_name: entry.company_name,
+  }));
+  const projectsWithCustomer = linkedProjects.map((project) => ({
+    ...project,
+    customer_company_name: customer.company_name,
+  }));
   const ownerLabel =
     user.user_metadata?.full_name?.toString() ||
     user.email?.split("@")[0] ||
@@ -61,6 +75,13 @@ export default async function CustomerDetailPage({
             customer={customer}
             notes={notes}
             ownerLabel={ownerLabel}
+          />
+          <CustomerProjectsSection
+            key={`projects-${projectsWithCustomer.length}-${customer.updated_at}`}
+            customerId={customer.id}
+            customerCompanyName={customer.company_name}
+            projects={projectsWithCustomer}
+            customerOptions={customerOptions}
           />
         </div>
       </section>

@@ -96,6 +96,26 @@ export async function updateProject(
   return data as Project;
 }
 
+export async function getProjectsByCustomerId(
+  customerId: string,
+  ownerId: string,
+): Promise<Project[]> {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from("projects")
+    .select("*")
+    .eq("customer_id", customerId)
+    .eq("owner_id", ownerId)
+    .order("updated_at", { ascending: false });
+
+  if (error) {
+    throw new Error(error.message);
+  }
+
+  return (data ?? []) as Project[];
+}
+
 export async function getProjectById(
   id: string,
   ownerId: string,

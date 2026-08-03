@@ -35,10 +35,14 @@ const labelClassName = "mb-1.5 block text-sm font-medium text-zinc-300";
 
 type CreateProjectDialogProps = {
   customers: CustomerOption[];
+  defaultCustomerId?: string;
+  triggerLabel?: string;
 };
 
 export default function CreateProjectDialog({
   customers,
+  defaultCustomerId,
+  triggerLabel = "Neues Projekt",
 }: CreateProjectDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -47,6 +51,11 @@ export default function CreateProjectDialog({
   const formRef = useRef<HTMLFormElement>(null);
   const titleId = useId();
   const canCreate = customers.length > 0;
+  const initialCustomerId =
+    defaultCustomerId &&
+    customers.some((customer) => customer.id === defaultCustomerId)
+      ? defaultCustomerId
+      : (customers[0]?.id ?? "");
 
   useEffect(() => {
     if (!open) {
@@ -104,7 +113,7 @@ export default function CreateProjectDialog({
         }
         className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50"
       >
-        + Neues Projekt
+        {`+ ${triggerLabel}`}
       </button>
 
       {open ? (
@@ -167,7 +176,7 @@ export default function CreateProjectDialog({
                     id="customer_id"
                     name="customer_id"
                     required
-                    defaultValue={customers[0]?.id ?? ""}
+                    defaultValue={initialCustomerId}
                     className={fieldClassName}
                   >
                     {customers.map((customer) => (
