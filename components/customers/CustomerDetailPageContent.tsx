@@ -8,11 +8,12 @@ import {
 } from "@/app/actions/customers";
 import CustomerStatusBadge from "@/components/customers/CustomerStatusBadge";
 import DeleteCustomerDialog from "@/components/customers/DeleteCustomerDialog";
-import type { CustomerNote } from "@/lib/customer-notes";
+import { CUSTOMER_NOTES_MIGRATION_FILE } from "@/lib/customer-notes.constants";
 import {
   CUSTOMER_SOURCE_OPTIONS,
   CUSTOMER_STATUS_OPTIONS,
   type Customer,
+  type CustomerNote,
 } from "@/lib/customers.types";
 import {
   formatCustomerContactName,
@@ -29,6 +30,7 @@ const labelClassName = "mb-1.5 block text-sm font-medium text-zinc-300";
 type CustomerDetailPageContentProps = {
   customer: Customer;
   notes: CustomerNote[];
+  notesAvailable: boolean;
   ownerLabel: string;
 };
 
@@ -45,6 +47,7 @@ function formatDateTime(iso: string): string {
 export default function CustomerDetailPageContent({
   customer,
   notes,
+  notesAvailable,
   ownerLabel,
 }: CustomerDetailPageContentProps) {
   const router = useRouter();
@@ -384,6 +387,18 @@ export default function CustomerDetailPageContent({
             Zeitgestempelte Aktivitäten zu diesem Kunden.
           </p>
 
+          {!notesAvailable ? (
+            <p
+              role="status"
+              className="mt-4 rounded-lg border border-amber-900/50 bg-amber-950/20 px-4 py-3 text-sm text-amber-200"
+            >
+              Notizen sind in Supabase noch nicht verfügbar. Führe die Migration{" "}
+              <code className="text-amber-100">{CUSTOMER_NOTES_MIGRATION_FILE}</code>{" "}
+              im SQL Editor aus (danach ggf. kurz warten, bis der Schema-Cache
+              aktualisiert ist).
+            </p>
+          ) : (
+            <>
           <form onSubmit={handleAddNote} className="mt-4 space-y-3">
             <label htmlFor="note_body" className={labelClassName}>
               Neue Notiz
@@ -424,6 +439,8 @@ export default function CustomerDetailPageContent({
                 </li>
               ))}
             </ul>
+          )}
+            </>
           )}
         </section>
       </div>

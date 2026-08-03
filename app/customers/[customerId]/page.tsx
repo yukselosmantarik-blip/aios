@@ -40,7 +40,10 @@ export default async function CustomerDetailPage({
     notFound();
   }
 
-  const notes = await listCustomerNotes(customerId, user.id);
+  const { notes, notesAvailable } = await listCustomerNotes(
+    customerId,
+    user.id,
+  );
   const [linkedProjects, allCustomers] = await Promise.all([
     getProjectsByCustomerId(customerId, user.id),
     getCustomers(),
@@ -71,9 +74,10 @@ export default async function CustomerDetailPage({
             ← Zurück zur Kundenliste
           </Link>
           <CustomerDetailPageContent
-            key={`${customer.id}-${customer.updated_at}-${notes.length}`}
+            key={`${customer.id}-${customer.updated_at}-${notes.length}-${notesAvailable}`}
             customer={customer}
             notes={notes}
+            notesAvailable={notesAvailable}
             ownerLabel={ownerLabel}
           />
           <CustomerProjectsSection

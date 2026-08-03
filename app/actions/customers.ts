@@ -11,7 +11,7 @@ import {
   updateCustomer,
   type CustomerStatus,
 } from "@/lib/customers";
-import { createCustomerNote } from "@/lib/customer-notes";
+import { createCustomerNote, isCustomerNotesSetupError } from "@/lib/customer-notes";
 import type { UpdateCustomerInput } from "@/lib/customers.types";
 import { createClient } from "@/lib/supabase/server";
 
@@ -138,11 +138,17 @@ export async function createCustomerAction(
 
     const initialNote = optionalText(formData.get("initial_note"));
     if (initialNote) {
-      await createCustomerNote({
-        customer_id: customer.id,
-        owner_id: user.id,
-        body: initialNote,
-      });
+      try {
+        await createCustomerNote({
+          customer_id: customer.id,
+          owner_id: user.id,
+          body: initialNote,
+        });
+      } catch (error) {
+        if (!isCustomerNotesSetupError(error)) {
+          throw error;
+        }
+      }
     }
 
     revalidateCustomerPaths(customer.id);
