@@ -3,7 +3,7 @@
 import { useState } from "react";
 import CreateCustomerDialog from "@/components/customers/CreateCustomerDialog";
 import CustomersEmptyState from "@/components/customers/CustomersEmptyState";
-import CustomersTable from "@/components/customers/CustomersTable";
+import CustomersList from "@/components/customers/CustomersList";
 import LogoutButton from "@/components/LogoutButton";
 import type { Customer } from "@/lib/customers.types";
 
@@ -42,7 +42,7 @@ export default function CustomersPageContent({
       {customers.length === 0 ? (
         <CustomersEmptyState />
       ) : (
-        <CustomersTable
+        <CustomersList
           customers={customers}
           onCustomerDeleted={() =>
             setCustomerCount((count) => Math.max(0, count - 1))

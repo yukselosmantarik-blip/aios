@@ -4,10 +4,14 @@ import type {
   Customer,
   UpdateCustomerInput,
 } from "@/lib/customers.types";
+import { normalizeCustomerStatus } from "@/lib/customers.types";
 
 export type {
   CreateCustomerInput,
   Customer,
+  CustomerCrmStats,
+  CustomerNote,
+  CustomerSortOption,
   CustomerStatus,
   UpdateCustomerInput,
 } from "@/lib/customers.types";
@@ -15,7 +19,16 @@ export type {
 export {
   CUSTOMER_SOURCE_OPTIONS,
   CUSTOMER_STATUSES,
+  CUSTOMER_STATUS_OPTIONS,
+  normalizeCustomerStatus,
 } from "@/lib/customers.types";
+
+function mapCustomer(row: Customer): Customer {
+  return {
+    ...row,
+    status: normalizeCustomerStatus(row.status),
+  };
+}
 
 export async function getCustomers(): Promise<Customer[]> {
   const supabase = await createClient();
@@ -29,7 +42,7 @@ export async function getCustomers(): Promise<Customer[]> {
     throw new Error(error.message);
   }
 
-  return (data ?? []) as Customer[];
+  return (data ?? []).map((row) => mapCustomer(row as Customer));
 }
 
 export async function createCustomer(
@@ -47,7 +60,7 @@ export async function createCustomer(
     throw new Error(error.message);
   }
 
-  return data as Customer;
+  return mapCustomer(data as Customer);
 }
 
 export async function updateCustomer(
@@ -69,7 +82,7 @@ export async function updateCustomer(
     throw new Error(error.message);
   }
 
-  return data as Customer;
+  return mapCustomer(data as Customer);
 }
 
 export async function getCustomerById(
@@ -89,7 +102,11 @@ export async function getCustomerById(
     throw new Error(error.message);
   }
 
-  return (data as Customer | null) ?? null;
+  if (!data) {
+    return null;
+  }
+
+  return mapCustomer(data as Customer);
 }
 
 export async function deleteCustomer(

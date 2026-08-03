@@ -4,18 +4,9 @@ import { useEffect, useId, useState, useTransition } from "react";
 import { updateCustomerAction } from "@/app/actions/customers";
 import {
   CUSTOMER_SOURCE_OPTIONS,
-  CUSTOMER_STATUSES,
+  CUSTOMER_STATUS_OPTIONS,
   type Customer,
 } from "@/lib/customers.types";
-
-const statusLabels: Record<(typeof CUSTOMER_STATUSES)[number], string> = {
-  lead: "Lead",
-  contacted: "Kontaktiert",
-  meeting: "Meeting",
-  proposal: "Angebot",
-  customer: "Kunde",
-  inactive: "Inaktiv",
-};
 
 const fieldClassName =
   "w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
@@ -50,9 +41,9 @@ type EditCustomerFormProps = {
 function toFormValues(customer: Customer): CustomerFormValues {
   return {
     company_name: customer.company_name,
-    contact_first_name: customer.contact_first_name,
-    contact_last_name: customer.contact_last_name,
-    email: customer.email,
+    contact_first_name: customer.contact_first_name ?? "",
+    contact_last_name: customer.contact_last_name ?? "",
+    email: customer.email ?? "",
     website: customer.website ?? "",
     industry: customer.industry ?? "",
     phone: customer.phone ?? "",
@@ -311,9 +302,9 @@ function EditCustomerForm({
                 }
                 className={fieldClassName}
               >
-                {CUSTOMER_STATUSES.map((status) => (
-                  <option key={status} value={status}>
-                    {statusLabels[status]}
+                {CUSTOMER_STATUS_OPTIONS.map((option) => (
+                  <option key={option.value} value={option.value}>
+                    {option.label}
                   </option>
                 ))}
               </select>

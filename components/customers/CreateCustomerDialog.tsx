@@ -7,20 +7,12 @@ import {
   useState,
   useTransition,
 } from "react";
+import { useRouter } from "next/navigation";
 import { createCustomerAction } from "@/app/actions/customers";
 import {
   CUSTOMER_SOURCE_OPTIONS,
-  CUSTOMER_STATUSES,
+  CUSTOMER_STATUS_OPTIONS,
 } from "@/lib/customers.types";
-
-const statusLabels: Record<(typeof CUSTOMER_STATUSES)[number], string> = {
-  lead: "Lead",
-  contacted: "Kontaktiert",
-  meeting: "Meeting",
-  proposal: "Angebot",
-  customer: "Kunde",
-  inactive: "Inaktiv",
-};
 
 const fieldClassName =
   "w-full rounded-lg border border-zinc-700 bg-zinc-950 px-3 py-2 text-sm text-zinc-100 placeholder:text-zinc-500 outline-none transition-colors focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20";
@@ -28,6 +20,7 @@ const fieldClassName =
 const labelClassName = "mb-1.5 block text-sm font-medium text-zinc-300";
 
 export default function CreateCustomerDialog() {
+  const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | undefined>();
   const [isPending, startTransition] = useTransition();
@@ -73,6 +66,10 @@ export default function CreateCustomerDialog() {
       setError(undefined);
       setOpen(false);
       formRef.current?.reset();
+      router.refresh();
+      if (result.customerId) {
+        router.push(`/customers/${result.customerId}`);
+      }
     });
   }
 
@@ -83,7 +80,7 @@ export default function CreateCustomerDialog() {
         onClick={handleOpen}
         className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
       >
-        + Neuer Kunde
+        Kunde anlegen
       </button>
 
       {open ? (
@@ -147,13 +144,12 @@ export default function CreateCustomerDialog() {
                       htmlFor="contact_first_name"
                       className={labelClassName}
                     >
-                      Vorname *
+                      Vorname
                     </label>
                     <input
                       id="contact_first_name"
                       name="contact_first_name"
                       type="text"
-                      required
                       className={fieldClassName}
                     />
                   </div>
@@ -162,13 +158,12 @@ export default function CreateCustomerDialog() {
                       htmlFor="contact_last_name"
                       className={labelClassName}
                     >
-                      Nachname *
+                      Nachname
                     </label>
                     <input
                       id="contact_last_name"
                       name="contact_last_name"
                       type="text"
-                      required
                       className={fieldClassName}
                     />
                   </div>
@@ -176,13 +171,12 @@ export default function CreateCustomerDialog() {
 
                 <div>
                   <label htmlFor="email" className={labelClassName}>
-                    E-Mail *
+                    E-Mail
                   </label>
                   <input
                     id="email"
                     name="email"
                     type="email"
-                    required
                     autoComplete="email"
                     className={fieldClassName}
                   />
@@ -256,12 +250,25 @@ export default function CreateCustomerDialog() {
                     defaultValue="lead"
                     className={fieldClassName}
                   >
-                    {CUSTOMER_STATUSES.map((status) => (
-                      <option key={status} value={status}>
-                        {statusLabels[status]}
+                    {CUSTOMER_STATUS_OPTIONS.map((option) => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
                       </option>
                     ))}
                   </select>
+                </div>
+
+                <div>
+                  <label htmlFor="initial_note" className={labelClassName}>
+                    Notiz
+                  </label>
+                  <textarea
+                    id="initial_note"
+                    name="initial_note"
+                    rows={3}
+                    className={fieldClassName}
+                    placeholder="Erste Notiz zum Kunden (optional)"
+                  />
                 </div>
               </div>
 

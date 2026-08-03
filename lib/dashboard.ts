@@ -1,6 +1,7 @@
 import { getAgents } from "@/lib/agents";
 import { getCustomers } from "@/lib/customers";
-import type { Customer } from "@/lib/customers.types";
+import type { Customer, CustomerCrmStats } from "@/lib/customers.types";
+import { computeCustomerCrmStats } from "@/lib/customers-display";
 import { getProjects } from "@/lib/projects";
 import {
   PROJECT_STATUSES,
@@ -15,6 +16,7 @@ export type DashboardStats = {
   projects: number;
   aiAgents: number;
   tasks: number;
+  crm: CustomerCrmStats;
 };
 
 export type TaskInsights = {
@@ -132,6 +134,7 @@ export async function getDashboardData(): Promise<DashboardData> {
       projects: projects.length,
       aiAgents: agents.length,
       tasks: tasks.length,
+      crm: computeCustomerCrmStats(customers),
     },
     taskInsights: countTaskInsights(tasks),
     upcomingTasks: getUpcomingTasks(

@@ -1,14 +1,11 @@
 import Link from "next/link";
 import CustomerStatusBadge from "@/components/customers/CustomerStatusBadge";
 import type { Customer } from "@/lib/customers.types";
+import { formatCustomerContactName } from "@/lib/customers-display";
 
 type RecentCustomersPanelProps = {
   customers: Customer[];
 };
-
-function formatContactName(customer: Customer): string {
-  return `${customer.contact_first_name} ${customer.contact_last_name}`.trim();
-}
 
 function formatCreatedAt(iso: string): string {
   return new Intl.DateTimeFormat("de-DE", {
@@ -52,11 +49,14 @@ export default function RecentCustomersPanel({
               className="flex flex-col gap-2 py-4 first:pt-0 last:pb-0 sm:flex-row sm:items-center sm:justify-between"
             >
               <div className="min-w-0">
-                <p className="truncate text-sm font-medium text-zinc-50">
+                <Link
+                  href={`/customers/${customer.id}`}
+                  className="truncate text-sm font-medium text-zinc-50 hover:text-blue-400"
+                >
                   {customer.company_name}
-                </p>
+                </Link>
                 <p className="mt-0.5 truncate text-sm text-zinc-400">
-                  {formatContactName(customer)}
+                  {formatCustomerContactName(customer)}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-3 sm:justify-end">

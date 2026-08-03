@@ -1,4 +1,5 @@
 import type { CustomerStatus } from "@/lib/customers.types";
+import { CUSTOMER_STATUS_OPTIONS } from "@/lib/customers.types";
 
 const statusConfig: Record<
   CustomerStatus,
@@ -12,32 +13,38 @@ const statusConfig: Record<
     label: "Kontaktiert",
     className: "bg-[#1E3A5F] text-blue-400",
   },
-  meeting: {
-    label: "Meeting",
+  qualified: {
+    label: "Qualifiziert",
     className: "bg-[#1E3A5F] text-blue-300",
   },
   proposal: {
     label: "Angebot",
     className: "bg-[#78350F] text-amber-400",
   },
-  customer: {
-    label: "Kunde",
+  won: {
+    label: "Gewonnen",
     className: "bg-[#14532D] text-green-400",
   },
-  inactive: {
-    label: "Inaktiv",
+  lost: {
+    label: "Verloren",
     className: "bg-zinc-800/80 text-zinc-500",
   },
 };
 
 type CustomerStatusBadgeProps = {
-  status: CustomerStatus;
+  status: CustomerStatus | string;
 };
 
 export default function CustomerStatusBadge({
   status,
 }: CustomerStatusBadgeProps) {
-  const config = statusConfig[status];
+  const option = CUSTOMER_STATUS_OPTIONS.find((entry) => entry.value === status);
+  const config =
+    statusConfig[status as CustomerStatus] ??
+    ({
+      label: option?.label ?? String(status),
+      className: "bg-zinc-800 text-zinc-300",
+    } as const);
 
   return (
     <span

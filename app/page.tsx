@@ -30,10 +30,28 @@ export default async function Home() {
 
           <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <StatsCard
-              title="Kunden"
-              value={dashboard.stats.customers}
+              title="Kunden gesamt"
+              value={dashboard.stats.crm.total}
               icon={<CustomersIcon className="h-5 w-5" />}
             />
+            <StatsCard
+              title="Offene Leads"
+              value={dashboard.stats.crm.openLeads}
+              icon={<CustomersIcon className="h-5 w-5" />}
+            />
+            <StatsCard
+              title="Angebote"
+              value={dashboard.stats.crm.proposals}
+              icon={<CustomersIcon className="h-5 w-5" />}
+            />
+            <StatsCard
+              title="Gewonnen"
+              value={dashboard.stats.crm.won}
+              icon={<CustomersIcon className="h-5 w-5" />}
+            />
+          </div>
+
+          <div className="mt-4 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             <StatsCard
               title="Projekte"
               value={dashboard.stats.projects}
