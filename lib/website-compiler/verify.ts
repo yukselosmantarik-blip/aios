@@ -7,6 +7,7 @@ import {
 import { BY_NANIS_WEBSITE_THEME } from "@/lib/industries/restaurant/fixtures/by-nanis-theme";
 import { verifyWebsiteThemeSerializable } from "@/lib/themes/verify";
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
+import { WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS } from "@/lib/website-briefs.types";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import { compileWebsiteProject, serializeCompiledWebsiteProject } from "@/lib/website-compiler/compile";
 import { stableStringify } from "@/lib/website-compiler/normalize";
@@ -326,6 +327,7 @@ export function createSmashburgerCompilerInput(
     reference_websites: "https://www.fiveguys.de, https://www.shakeshack.com",
     additional_notes:
       "Logo und Bilder folgen. Fokus auf mobile Bestellung und schnelle Ladezeiten.",
+    ...WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS,
     status: "ready",
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",

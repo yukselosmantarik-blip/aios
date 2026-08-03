@@ -75,6 +75,11 @@ function toUpdateInput(brief: WebsiteBrief): UpdateWebsiteBriefInput {
     required_features: brief.required_features,
     reference_websites: brief.reference_websites,
     additional_notes: brief.additional_notes,
+    contact_phone: brief.contact_phone,
+    contact_email: brief.contact_email,
+    contact_address: brief.contact_address,
+    social_media: brief.social_media,
+    logo_storage_path: brief.logo_storage_path,
     status: brief.status,
   };
 }

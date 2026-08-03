@@ -12,6 +12,15 @@ export const WEBSITE_BRIEF_STATUS_OPTIONS = [
   { value: "completed", label: "Abgeschlossen" },
 ] as const;
 
+/** Default wizard intake columns when not collected (e.g. legacy briefs). */
+export const WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS = {
+  contact_phone: null,
+  contact_email: null,
+  contact_address: null,
+  social_media: null,
+  logo_storage_path: null,
+} as const;
+
 export type WebsiteBrief = {
   id: string;
   user_id: string;
@@ -32,6 +41,11 @@ export type WebsiteBrief = {
   required_features: string | null;
   reference_websites: string | null;
   additional_notes: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  contact_address: string | null;
+  social_media: string | null;
+  logo_storage_path: string | null;
   status: WebsiteBriefStatus;
   created_at: string;
   updated_at: string;
@@ -56,6 +70,11 @@ export type CreateWebsiteBriefInput = {
   required_features: string | null;
   reference_websites: string | null;
   additional_notes: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  contact_address: string | null;
+  social_media: string | null;
+  logo_storage_path: string | null;
   status: WebsiteBriefStatus;
 };
 
@@ -76,5 +95,10 @@ export type UpdateWebsiteBriefInput = {
   required_features: string | null;
   reference_websites: string | null;
   additional_notes: string | null;
+  contact_phone: string | null;
+  contact_email: string | null;
+  contact_address: string | null;
+  social_media: string | null;
+  logo_storage_path: string | null;
   status: WebsiteBriefStatus;
 };

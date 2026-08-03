@@ -341,16 +341,32 @@ export default function AgentDetailPageContent({
               </p>
             </div>
             {!brief ? (
-              <CreateWebsiteBriefDialog
-                agentId={agent.id}
-                onSuccess={handleCreateBriefSuccess}
-              />
+              <div className="flex flex-wrap gap-2 self-start">
+                <Link
+                  href={`/agents/${agent.id}/wizard`}
+                  className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
+                >
+                  AI Website Wizard
+                </Link>
+                <CreateWebsiteBriefDialog
+                  agentId={agent.id}
+                  onSuccess={handleCreateBriefSuccess}
+                />
+              </div>
             ) : (
-              <CreateWebsiteBriefDialog
-                agentId={agent.id}
-                brief={brief}
-                onSuccess={handleEditBriefSuccess}
-              />
+              <div className="flex flex-wrap gap-2 self-start">
+                <Link
+                  href={`/agents/${agent.id}/wizard`}
+                  className="rounded-lg border border-zinc-700 px-4 py-2 text-sm font-medium text-zinc-200 transition-colors hover:bg-zinc-800"
+                >
+                  Im Wizard bearbeiten
+                </Link>
+                <CreateWebsiteBriefDialog
+                  agentId={agent.id}
+                  brief={brief}
+                  onSuccess={handleEditBriefSuccess}
+                />
+              </div>
             )}
           </div>
 
@@ -403,6 +419,11 @@ export default function AgentDetailPageContent({
                   label="Zusätzliche Notizen"
                   value={brief.additional_notes}
                 />
+                <ReadOnlyField label="Telefon" value={brief.contact_phone} />
+                <ReadOnlyField label="E-Mail (Kontakt)" value={brief.contact_email} />
+                <ReadOnlyField label="Adresse" value={brief.contact_address} />
+                <ReadOnlyField label="Social Media" value={brief.social_media} />
+                <ReadOnlyField label="Logo (Storage)" value={brief.logo_storage_path} />
               </dl>
             </div>
           ) : (

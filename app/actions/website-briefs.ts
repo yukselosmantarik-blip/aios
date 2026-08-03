@@ -116,6 +116,11 @@ function parseWebsiteBriefFields(formData: FormData):
       required_features: optionalText(formData.get("required_features")),
       reference_websites: optionalText(formData.get("reference_websites")),
       additional_notes: optionalText(formData.get("additional_notes")),
+      contact_phone: optionalText(formData.get("contact_phone")),
+      contact_email: optionalText(formData.get("contact_email")),
+      contact_address: optionalText(formData.get("contact_address")),
+      social_media: optionalText(formData.get("social_media")),
+      logo_storage_path: optionalText(formData.get("logo_storage_path")),
       status: statusValue,
     },
   };

@@ -1,4 +1,5 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
+import { WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS } from "@/lib/website-briefs.types";
 import { createPageDnaContext } from "@/lib/website-blueprint-page-dna";
 import { VALID_PATTERN_IDS } from "@/lib/website-blueprint-visual-hierarchy";
 import {
@@ -63,6 +64,7 @@ function buildSmashburgerContext(
     required_features: "Online-Bestellung, Kontaktformular, Google Maps",
     reference_websites: "https://www.fiveguys.de",
     additional_notes: "Logo und Bilder folgen.",
+    ...WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS,
     status: "ready",
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",

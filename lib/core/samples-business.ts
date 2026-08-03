@@ -1,4 +1,5 @@
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
+import { WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS } from "@/lib/website-briefs.types";
 import type { WebsiteCompilerInput } from "@/lib/website-compiler/types";
 import { generateWebsiteBlueprintContent } from "@/lib/website-blueprint-generator";
 import {
@@ -33,6 +34,10 @@ export function createSampleBusinessCompilerInput(
     required_features: "Kontaktformular, FAQ, Social Media Links",
     reference_websites: "",
     additional_notes: "Fokus auf lokale Sichtbarkeit und schnelle Anfragen.",
+    ...WEBSITE_BRIEF_WIZARD_FIELD_DEFAULTS,
+    contact_phone: SAMPLE_MUELLER_BUSINESS_PROFILE.phone,
+    contact_email: SAMPLE_MUELLER_BUSINESS_PROFILE.email,
+    contact_address: SAMPLE_MUELLER_BUSINESS_PROFILE.address,
     status: "ready",
     created_at: "2026-01-01T00:00:00Z",
     updated_at: "2026-01-01T00:00:00Z",
