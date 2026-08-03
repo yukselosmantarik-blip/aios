@@ -244,6 +244,7 @@ export function buildVisualSharedTypesFile(): string {
     "  isPlaceholder: boolean;",
     "  missingData: readonly string[];",
     "  contentBlocks: readonly string[];",
+    "  contentLines?: readonly string[];",
     "  faqItems?: readonly { id: string; question: string; answer: string }[];",
     "  primaryCTA: string | null;",
     "  secondaryCTA: string | null;",

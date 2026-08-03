@@ -23,7 +23,9 @@ export const BUSINESS_SECTION_ANCHORS = {
 export function businessHeaderNavItems(): readonly { label: string; href: string }[] {
   return [
     { label: "Startseite", href: "/" },
+    { label: "Über uns", href: "/#about" },
     { label: "Leistungen", href: "/#services" },
+    { label: "FAQ", href: "/#faq" },
     { label: "Kontakt", href: "/#contact" },
   ] as const;
 }

@@ -55,8 +55,12 @@ export function buildBusinessHomeSections(
       sourcePatternIds: ["hero"],
       contentBody: profile.description,
       contentLines: [profile.tagline],
-      primaryCtaHref: `#${BUSINESS_SECTION_ANCHORS.contact}`,
+      primaryCtaHref: profile.email ? `mailto:${profile.email}` : `#${BUSINESS_SECTION_ANCHORS.contact}`,
       secondaryCtaHref: `#${BUSINESS_SECTION_ANCHORS.services}`,
+      ctaReferences: [
+        profile.email ? `mailto:${profile.email}` : `#${BUSINESS_SECTION_ANCHORS.contact}`,
+        `#${BUSINESS_SECTION_ANCHORS.services}`,
+      ],
       heroLayout: "legacy",
       tagline: profile.tagline,
       phone: profile.phone,
@@ -81,6 +85,10 @@ export function buildBusinessHomeSections(
       headingLevel: 2,
       sourcePatternIds: ["feature-grid"],
       contentBody: profile.description,
+      contentBlocks: profile.description
+        .split(". ")
+        .filter(Boolean)
+        .map((part) => (part.endsWith(".") ? part : `${part}.`)),
       contentLines: profile.description.split(". ").filter(Boolean),
     },
     {

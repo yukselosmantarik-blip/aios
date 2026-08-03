@@ -11,6 +11,13 @@ import {
   businessPrimaryCtaHref,
   isBusinessServiceLanding,
 } from "@/lib/industries/business/landing";
+import {
+  generateBusinessContactSectionSource,
+  generateBusinessContactFormSource,
+  generateBusinessContentSectionSource,
+  generateBusinessFeatureGridSectionSource,
+  generateBusinessTestimonialSectionSource,
+} from "@/lib/industries/business/visual-section-generators";
 import { resolveFooterBusinessProfile } from "@/lib/project-generator/restaurant-business-profile";
 import {
   heroVariantForPage,
@@ -840,10 +847,10 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     "            ) : null}",
     '            <Cluster gap="md" className="justify-center">',
     "              {section.primaryCTA ? (",
-    "                <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "                <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "              ) : null}",
     "              {section.secondaryCTA ? (",
-    "                <ButtonLink cta={{ label: section.secondaryCTA, href: '/', variant: 'secondary' }} />",
+    "                <ButtonLink cta={{ label: section.secondaryCTA, href: section.secondaryCtaHref ?? section.ctaReferences[1] ?? '/', variant: 'secondary' }} />",
     "              ) : null}",
     "            </Cluster>",
     "            <MediaPlaceholder media={{ id: `${section.id}-media`, label: mediaLabel, altText: mediaLabel, assetId: 'hero' }} />",
@@ -857,10 +864,10 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     "              ) : null}",
     '              <Cluster gap="md">',
     "                {section.primaryCTA ? (",
-    "                  <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "                  <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "                ) : null}",
     "                {section.secondaryCTA ? (",
-    "                  <ButtonLink cta={{ label: section.secondaryCTA, href: '/', variant: 'secondary' }} />",
+    "                  <ButtonLink cta={{ label: section.secondaryCTA, href: section.secondaryCtaHref ?? section.ctaReferences[1] ?? '/', variant: 'secondary' }} />",
     "                ) : null}",
     "              </Cluster>",
     "            </Stack>",
@@ -874,7 +881,7 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     '                <Stack gap="md" className="max-w-2xl">',
     "                  <SectionHeading section={section} />",
     "                  {section.primaryCTA ? (",
-    "                    <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "                    <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "                  ) : null}",
     "                </Stack>",
     "              </div>",
@@ -887,7 +894,7 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     "              <Badge>{section.eyebrow ?? 'Featured'}</Badge>",
     "              <SectionHeading section={section} />",
     "              {section.primaryCTA ? (",
-    "                <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "                <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "              ) : null}",
     "            </Stack>",
     "          </div>",
@@ -900,7 +907,7 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     "              <Placeholder label=" + JSON.stringify(placeholderLabel("Öffnungszeiten")) + " category=\"opening-hours\" />",
     "            </Cluster>",
     "            {section.primaryCTA ? (",
-    "              <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "              <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "            ) : null}",
     "          </Stack>",
     "        ) : (",
@@ -910,7 +917,7 @@ function generateLegacyHeroSection(project: CompiledWebsiteProject): string {
     '              <p className="text-[length:var(--font-size-lg)] leading-relaxed text-[var(--color-text-muted)]">{section.description}</p>',
     "            ) : null}",
     "            {section.primaryCTA ? (",
-    "              <ButtonLink cta={{ label: section.primaryCTA, href: section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
+    "              <ButtonLink cta={{ label: section.primaryCTA, href: section.primaryCtaHref ?? section.ctaReferences[0] ?? '/', variant: 'primary' }} />",
     "            ) : null}",
     "          </Stack>",
     "        )}",
@@ -1648,7 +1655,7 @@ function generateCTASection(): string {
     "                <ButtonLink cta={{ label: section.primaryCTA, href: '/', variant: 'primary' }} />",
     "              ) : null}",
     "              {section.secondaryCTA ? (",
-    "                <ButtonLink cta={{ label: section.secondaryCTA, href: '/', variant: 'secondary' }} />",
+    "                <ButtonLink cta={{ label: section.secondaryCTA, href: section.secondaryCtaHref ?? section.ctaReferences[1] ?? '/', variant: 'secondary' }} />",
     "              ) : null}",
     "            </Cluster>",
     "          </Card>",
@@ -1745,7 +1752,9 @@ function generateVisualComponentContent(
     case "TrustSection":
       return generateTrustSection();
     case "FeatureGridSection":
-      return generateFeatureGridSection();
+      return isBusinessServiceLanding(project)
+        ? generateBusinessFeatureGridSectionSource()
+        : generateFeatureGridSection();
     case "MenuSection":
       return generateMenuSection(project);
     case "MenuImageSection":
@@ -1757,13 +1766,19 @@ function generateVisualComponentContent(
     case "GallerySection":
       return generateGallerySection();
     case "TestimonialSection":
-      return generateTestimonialSection();
+      return isBusinessServiceLanding(project)
+        ? generateBusinessTestimonialSectionSource()
+        : generateTestimonialSection();
     case "FAQSection":
       return generateFAQSection();
     case "ContactForm":
-      return generateContactForm(project);
+      return isBusinessServiceLanding(project)
+        ? generateBusinessContactFormSource()
+        : generateContactForm(project);
     case "ContactSection":
-      return generateContactSection();
+      return isBusinessServiceLanding(project)
+        ? generateBusinessContactSectionSource(project)
+        : generateContactSection();
     case "LocationSection":
       return generateLocationSection();
     case "MapSection":
@@ -1773,7 +1788,9 @@ function generateVisualComponentContent(
     case "CTASection":
       return generateCTASection();
     case "ContentSection":
-      return generateContentSection();
+      return isBusinessServiceLanding(project)
+        ? generateBusinessContentSectionSource()
+        : generateContentSection();
     case "GenericSection":
       return generateGenericSection();
     default:

@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "verify:build": "npx tsx lib/core/run-verify-build.ts",
     "verify:export": "npx tsx lib/core/run-verify-export.ts",
+    "verify:business-export": "npx tsx lib/core/run-verify-business-export.ts",
     "verify:engine": "npm run verify:build && npm run verify:export",
     "generate:business-zip": "npx tsx lib/core/run-generate-business-zip.ts"
   },
