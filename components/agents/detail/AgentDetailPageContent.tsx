@@ -80,8 +80,8 @@ function BlueprintList({ items }: { items: string[] }) {
 
   return (
     <ul className="list-disc space-y-1 pl-5">
-      {items.map((item) => (
-        <li key={item}>{item}</li>
+      {items.map((item, index) => (
+        <li key={`${item}-${index}`}>{item}</li>
       ))}
     </ul>
   );

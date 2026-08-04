@@ -19,7 +19,28 @@ const fieldClassName =
 
 const labelClassName = "mb-1.5 block text-sm font-medium text-zinc-300";
 
-export default function CreateCustomerDialog() {
+function optionalText(value: FormDataEntryValue | null): string | null {
+  const trimmed = value?.toString().trim();
+  return trimmed ? trimmed : null;
+}
+
+type CreateCustomerDialogProps = {
+  suppressRedirect?: boolean;
+  triggerLabel?: string;
+  onCustomerCreated?: (customer: {
+    id: string;
+    company_name: string;
+    industry: string | null;
+    phone: string | null;
+    email: string | null;
+  }) => void;
+};
+
+export default function CreateCustomerDialog({
+  suppressRedirect = false,
+  triggerLabel = "Kunde anlegen",
+  onCustomerCreated,
+}: CreateCustomerDialogProps) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
   const [error, setError] = useState<string | undefined>();
@@ -68,7 +89,16 @@ export default function CreateCustomerDialog() {
       formRef.current?.reset();
       router.refresh();
       if (result.customerId) {
-        router.push(`/customers/${result.customerId}`);
+        onCustomerCreated?.({
+          id: result.customerId,
+          company_name: formData.get("company_name")?.toString().trim() ?? "",
+          industry: optionalText(formData.get("industry")),
+          phone: optionalText(formData.get("phone")),
+          email: optionalText(formData.get("email")),
+        });
+        if (!suppressRedirect) {
+          router.push(`/customers/${result.customerId}`);
+        }
       }
     });
   }
@@ -80,7 +110,7 @@ export default function CreateCustomerDialog() {
         onClick={handleOpen}
         className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-700"
       >
-        Kunde anlegen
+        {triggerLabel}
       </button>
 
       {open ? (

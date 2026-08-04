@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   useCallback,
+  useEffect,
   useMemo,
   useState,
   useTransition,
@@ -13,6 +14,7 @@ import { saveWebsiteBriefWizardAction } from "@/app/actions/website-brief-wizard
 import type { WebsiteBrief } from "@/lib/website-briefs.types";
 import { websiteBriefToWizardState } from "@/lib/website-brief-wizard/brief-to-wizard-state";
 import { buildCreateWebsiteBriefInputFromWizard } from "@/lib/website-brief-wizard/build-website-brief-input";
+import { normalizeWebsiteBriefWizardState } from "@/lib/website-brief-wizard/normalize-state";
 import { WIZARD_INDUSTRY_OPTIONS } from "@/lib/website-brief-wizard/industry-options";
 import { WEBSITE_BRIEF_STYLE_PRESETS } from "@/lib/website-brief-wizard/style-presets";
 import { WEBSITE_BRIEF_WIZARD_STEPS } from "@/lib/website-brief-wizard/steps";
@@ -42,12 +44,24 @@ export default function WebsiteBriefWizard({
   const router = useRouter();
   const [stepIndex, setStepIndex] = useState(0);
   const [state, setState] = useState<WebsiteBriefWizardState>(() =>
-    brief ? websiteBriefToWizardState(brief) : EMPTY_WIZARD_STATE,
+    normalizeWebsiteBriefWizardState(
+      brief ? websiteBriefToWizardState(brief) : EMPTY_WIZARD_STATE,
+    ),
+  );
+  const form = useMemo(
+    () => normalizeWebsiteBriefWizardState(state),
+    [state],
   );
   const [stepError, setStepError] = useState<string | undefined>();
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreviewUrl, setLogoPreviewUrl] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+
+  useEffect(() => {
+    if (brief) {
+      setState(normalizeWebsiteBriefWizardState(websiteBriefToWizardState(brief)));
+    }
+  }, [brief?.id, brief?.updated_at]);
 
   const currentStep = WEBSITE_BRIEF_WIZARD_STEPS[stepIndex];
   const isFirstStep = stepIndex === 0;
@@ -55,13 +69,13 @@ export default function WebsiteBriefWizard({
 
   const previewInput = useMemo(
     () =>
-      buildCreateWebsiteBriefInputFromWizard(state, {
+      buildCreateWebsiteBriefInputFromWizard(form, {
         user_id: "preview",
         agent_id: agentId,
         logo_storage_path: brief?.logo_storage_path ?? null,
         status: "ready",
       }),
-    [agentId, brief?.logo_storage_path, state],
+    [agentId, brief?.logo_storage_path, form],
   );
 
   const updateField = useCallback(
@@ -69,7 +83,9 @@ export default function WebsiteBriefWizard({
       field: K,
       value: WebsiteBriefWizardState[K],
     ) => {
-      setState((current) => ({ ...current, [field]: value }));
+      setState((current) =>
+        normalizeWebsiteBriefWizardState({ ...current, [field]: value }),
+      );
     },
     [],
   );
@@ -84,7 +100,7 @@ export default function WebsiteBriefWizard({
   }
 
   function goNext() {
-    const error = validateWebsiteBriefWizardStep(currentStep.id, state);
+    const error = validateWebsiteBriefWizardStep(currentStep.id, form);
     if (error) {
       setStepError(error);
       return;
@@ -99,7 +115,7 @@ export default function WebsiteBriefWizard({
   }
 
   function handleSubmit() {
-    const error = validateWebsiteBriefWizardStep("review", state);
+    const error = validateWebsiteBriefWizardStep("review", form);
     if (error) {
       setStepError(error);
       return;
@@ -110,7 +126,7 @@ export default function WebsiteBriefWizard({
     if (brief?.id) {
       formData.set("brief_id", brief.id);
     }
-    formData.set("wizard_state", JSON.stringify(state));
+    formData.set("wizard_state", JSON.stringify(form));
     if (logoFile) {
       formData.set("logo", logoFile);
     }
@@ -138,7 +154,7 @@ export default function WebsiteBriefWizard({
               id="business_name"
               type="text"
               autoFocus
-              value={state.business_name}
+              value={form.business_name}
               onChange={(event) =>
                 updateField("business_name", event.target.value)
               }
@@ -157,7 +173,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="industry"
                 list="wizard-industry-options"
-                value={state.industry}
+                value={form.industry}
                 onChange={(event) => updateField("industry", event.target.value)}
                 className={fieldClassName}
                 placeholder="Branche wählen oder eingeben"
@@ -175,7 +191,7 @@ export default function WebsiteBriefWizard({
                     type="button"
                     onClick={() => updateField("industry", option.value)}
                     className={`w-full rounded-lg border px-3 py-2 text-left text-sm transition-colors ${
-                      state.industry === option.value
+                      form.industry === option.value
                         ? "border-blue-500 bg-blue-950/30 text-zinc-50"
                         : "border-zinc-800 bg-zinc-950/50 text-zinc-300 hover:border-zinc-600"
                     }`}
@@ -203,7 +219,7 @@ export default function WebsiteBriefWizard({
                 <input
                   id="primary_color_picker"
                   type="color"
-                  value={state.primary_color}
+                  value={form.primary_color}
                   onChange={(event) =>
                     updateField("primary_color", event.target.value)
                   }
@@ -213,7 +229,7 @@ export default function WebsiteBriefWizard({
                 <input
                   id="primary_color"
                   type="text"
-                  value={state.primary_color}
+                  value={form.primary_color}
                   onChange={(event) =>
                     updateField("primary_color", event.target.value)
                   }
@@ -228,7 +244,7 @@ export default function WebsiteBriefWizard({
               <div className="flex gap-2">
                 <input
                   type="color"
-                  value={state.secondary_color}
+                  value={form.secondary_color}
                   onChange={(event) =>
                     updateField("secondary_color", event.target.value)
                   }
@@ -238,7 +254,7 @@ export default function WebsiteBriefWizard({
                 <input
                   id="secondary_color"
                   type="text"
-                  value={state.secondary_color}
+                  value={form.secondary_color}
                   onChange={(event) =>
                     updateField("secondary_color", event.target.value)
                   }
@@ -258,7 +274,7 @@ export default function WebsiteBriefWizard({
               <textarea
                 id="target_audience"
                 rows={4}
-                value={state.target_audience}
+                value={form.target_audience}
                 onChange={(event) =>
                   updateField("target_audience", event.target.value)
                 }
@@ -273,7 +289,7 @@ export default function WebsiteBriefWizard({
               <textarea
                 id="website_goal"
                 rows={2}
-                value={state.website_goal}
+                value={form.website_goal}
                 onChange={(event) =>
                   updateField("website_goal", event.target.value)
                 }
@@ -292,7 +308,7 @@ export default function WebsiteBriefWizard({
             <textarea
               id="services"
               rows={6}
-              value={state.services}
+              value={form.services}
               onChange={(event) => updateField("services", event.target.value)}
               className={fieldClassName}
               placeholder="Eine Leistung pro Zeile"
@@ -309,7 +325,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="contact_address"
                 type="text"
-                value={state.contact_address}
+                value={form.contact_address}
                 onChange={(event) =>
                   updateField("contact_address", event.target.value)
                 }
@@ -323,7 +339,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="location"
                 type="text"
-                value={state.location}
+                value={form.location}
                 onChange={(event) => updateField("location", event.target.value)}
                 className={fieldClassName}
               />
@@ -335,7 +351,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="contact_phone"
                 type="tel"
-                value={state.contact_phone}
+                value={form.contact_phone}
                 onChange={(event) =>
                   updateField("contact_phone", event.target.value)
                 }
@@ -349,7 +365,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="contact_email"
                 type="email"
-                value={state.contact_email}
+                value={form.contact_email}
                 onChange={(event) =>
                   updateField("contact_email", event.target.value)
                 }
@@ -368,7 +384,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="social_instagram"
                 type="url"
-                value={state.social_instagram}
+                value={form.social_instagram}
                 onChange={(event) =>
                   updateField("social_instagram", event.target.value)
                 }
@@ -383,7 +399,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="social_facebook"
                 type="url"
-                value={state.social_facebook}
+                value={form.social_facebook}
                 onChange={(event) =>
                   updateField("social_facebook", event.target.value)
                 }
@@ -397,7 +413,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="social_linkedin"
                 type="url"
-                value={state.social_linkedin}
+                value={form.social_linkedin}
                 onChange={(event) =>
                   updateField("social_linkedin", event.target.value)
                 }
@@ -411,7 +427,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="social_other"
                 type="text"
-                value={state.social_other}
+                value={form.social_other}
                 onChange={(event) =>
                   updateField("social_other", event.target.value)
                 }
@@ -461,7 +477,7 @@ export default function WebsiteBriefWizard({
                   type="button"
                   onClick={() => updateField("preferred_style", preset)}
                   className={`rounded-full border px-3 py-1.5 text-sm transition-colors ${
-                    state.preferred_style === preset
+                    form.preferred_style === preset
                       ? "border-blue-500 bg-blue-950/40 text-zinc-50"
                       : "border-zinc-700 text-zinc-300 hover:border-zinc-500"
                   }`}
@@ -477,7 +493,7 @@ export default function WebsiteBriefWizard({
               <input
                 id="preferred_style"
                 type="text"
-                value={state.preferred_style}
+                value={form.preferred_style}
                 onChange={(event) =>
                   updateField("preferred_style", event.target.value)
                 }

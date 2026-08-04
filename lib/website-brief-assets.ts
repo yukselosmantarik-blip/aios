@@ -1,3 +1,5 @@
+import "server-only";
+
 import { createClient } from "@/lib/supabase/server";
 
 const BUCKET_ID = "website-brief-logos";
@@ -69,4 +71,24 @@ export async function removeWebsiteBriefLogo(
 ): Promise<void> {
   const supabase = await createClient();
   await supabase.storage.from(BUCKET_ID).remove([objectPath]);
+}
+
+export async function getWebsiteBriefLogoSignedUrl(
+  objectPath: string | null,
+  expiresInSeconds = 3600,
+): Promise<string | null> {
+  if (!objectPath?.trim()) {
+    return null;
+  }
+
+  const supabase = await createClient();
+  const { data, error } = await supabase.storage
+    .from(BUCKET_ID)
+    .createSignedUrl(objectPath, expiresInSeconds);
+
+  if (error || !data?.signedUrl) {
+    return null;
+  }
+
+  return data.signedUrl;
 }

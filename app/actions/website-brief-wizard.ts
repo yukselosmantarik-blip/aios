@@ -10,6 +10,7 @@ import {
 } from "@/lib/website-brief-wizard/build-website-brief-input";
 import type { WebsiteBriefWizardState } from "@/lib/website-brief-wizard/types";
 import { validateWebsiteBriefWizardStep } from "@/lib/website-brief-wizard/validate-step";
+import { normalizeWebsiteBriefWizardState } from "@/lib/website-brief-wizard/normalize-state";
 import {
   createWebsiteBrief,
   getWebsiteBrief,
@@ -45,7 +46,7 @@ function parseWizardState(raw: string): WebsiteBriefWizardState | null {
     if (!parsed || typeof parsed !== "object") {
       return null;
     }
-    return parsed;
+    return normalizeWebsiteBriefWizardState(parsed);
   } catch {
     return null;
   }

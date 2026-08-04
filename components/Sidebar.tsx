@@ -9,6 +9,7 @@ const navItems = [
   { href: "/customers", label: "Kunden" },
   { href: "/tasks", label: "Aufgaben" },
   { href: "/agents", label: "AI Agents" },
+  { href: "/website-wizard", label: "Website Wizard" },
 ] as const;
 
 function isActive(pathname: string, href: string, exact = false): boolean {

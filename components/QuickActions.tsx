@@ -21,6 +21,11 @@ const actions = [
     disabled: false,
   },
   {
+    label: "Neue Website",
+    href: "/website-wizard",
+    disabled: false,
+  },
+  {
     label: "Neuer KI-Agent",
     href: null,
     disabled: true,
